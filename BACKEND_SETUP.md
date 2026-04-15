@@ -98,6 +98,49 @@ mysql> SELECT * FROM users;
 mysql> SELECT * FROM user_cert_status;
 ```
 
+### Step 4: 导入岗位和行业分类数据（新增）
+
+**可选但推荐**：导入标准化的岗位库和行业分类数据。
+
+#### 方式 A：使用 Python 导入脚本（推荐）
+
+```bash
+# 1. 安装依赖
+pip install mysql-connector-python
+
+# 2. 执行导入脚本
+python3 import-positions-data.py \
+  --host localhost \
+  --user root \
+  --password your_password \
+  --database lenovo_cert
+```
+
+#### 方式 B：直接导入 SQL 文件
+
+```bash
+# 方式1：命令行
+mysql -u root -p lenovo_cert < positions-database-init.sql
+
+# 方式2：MySQL 客户端
+mysql> USE lenovo_cert;
+mysql> source positions-database-init.sql;
+```
+
+#### 验证导入
+
+```sql
+-- 检查导入的数据
+SELECT COUNT(*) as 行业分类数 FROM industries;
+SELECT COUNT(*) as 职位分类数 FROM position_categories;
+SELECT COUNT(*) as 标准岗位数 FROM standard_positions;
+
+-- 查看样本岗位
+SELECT name FROM standard_positions LIMIT 5;
+```
+
+**详见**: [POSITIONS_DATABASE_README.md](./POSITIONS_DATABASE_README.md)
+
 ---
 
 ## 安装依赖
