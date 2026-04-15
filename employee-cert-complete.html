@@ -1013,20 +1013,184 @@
         let verifiedCompanyInfo = null;  // 已选择的企业信息
 
         // 标准岗位列表（用于职位建议）
-        const standardPositions = [
-            '产品经理', '产品总监', '产品助理', '产品运营',
-            '技术总监', '工程师', '开发工程师', '前端工程师', '后端工程师', '全栈工程师', '架构师', '技术主管',
-            '设计师', '平面设计师', 'UI设计师', '交互设计师', '视觉设计师', '用户体验设计师',
-            '销售经理', '销售总监', '业务经理', '客户经理', '渠道经理',
-            '市场经理', '市场总监', '品牌经理', '内容运营', '社区运营',
-            '人力资源', '行政', '财务', '财务经理', '成本会计', '税务经理',
-            '法律顾问', '法务', '律师', '合规经理',
-            '项目经理', '项目总监', '运营经理', '供应链经理',
-            '质量经理', '制造工程师', '工业工程师', '制造经理',
-            '采购经理', '采购总监', '物流经理', '仓储经理',
-            '部门经理', '总经理', '董事长', '总裁', '首席执行官',
-            '工程师', '程序员', '开发者', '实习生'
-        ];
+        // ========== 岗位管理器 (PositionManager) ==========
+        // 集中管理所有岗位数据，支持本地缓存和API调用
+        class PositionManager {
+            constructor() {
+                this.positions = [];
+                this.initialized = false;
+                this.cacheKey = 'standardPositions';
+                this.cacheTime = 24 * 60 * 60 * 1000; // 24小时缓存
+            }
+
+            // 获取岗位列表（优先使用缓存）
+            async getPositions() {
+                if (this.initialized && this.positions.length > 0) {
+                    return this.positions;
+                }
+
+                // 先检查本地缓存
+                const cached = this.getFromCache();
+                if (cached && !this.isCacheExpired()) {
+                    this.positions = cached;
+                    this.initialized = true;
+                    return this.positions;
+                }
+
+                // 尝试从后端API加载
+                const fromAPI = await this.loadFromAPI();
+                if (fromAPI) {
+                    this.saveToCache(fromAPI);
+                    this.positions = fromAPI;
+                    this.initialized = true;
+                    return this.positions;
+                }
+
+                // 后退方案：使用本地定义的岗位列表
+                this.positions = this.getDefaultPositions();
+                this.saveToCache(this.positions);
+                this.initialized = true;
+                return this.positions;
+            }
+
+            // 从API加载岗位
+            async loadFromAPI() {
+                try {
+                    const response = await fetch('/api/positions/search?limit=500');
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && Array.isArray(result.data)) {
+                            // 转换API返回的格式为标准格式
+                            return result.data.map(pos => ({
+                                name: pos.name,
+                                en_name: pos.en_name || '',
+                                category: pos.category_name || ''
+                            }));
+                        }
+                    }
+                } catch (error) {
+                    console.warn('从API加载岗位失败，使用缓存或默认数据:', error);
+                }
+                return null;
+            }
+
+            // 获取默认岗位列表
+            getDefaultPositions() {
+                const defaultPositions = [
+                    '产品经理', '产品总监', '产品助理', '产品运营',
+                    '技术总监', '工程师', '开发工程师', '前端工程师', '后端工程师', '全栈工程师', '架构师', '技术主管',
+                    '设计师', '平面设计师', 'UI设计师', '交互设计师', '视觉设计师', '用户体验设计师',
+                    '销售经理', '销售总监', '业务经理', '客户经理', '渠道经理',
+                    '市场经理', '市场总监', '品牌经理', '内容运营', '社区运营',
+                    '人力资源', '行政', '财务', '财务经理', '成本会计', '税务经理',
+                    '法律顾问', '法务', '律师', '合规经理',
+                    '项目经理', '项目总监', '运营经理', '供应链经理',
+                    '质量经理', '制造工程师', '工业工程师', '制造经理',
+                    '采购经理', '采购总监', '物流经理', '仓储经理',
+                    '部门经理', '总经理', '董事长', '总裁', '首席执行官',
+                    '工程师', '程序员', '开发者', '实习生'
+                ];
+                return defaultPositions.map(name => ({ name, en_name: '', category: '' }));
+            }
+
+            // 搜索岗位
+            async search(keyword, limit = 10) {
+                const positions = await this.getPositions();
+                if (!keyword || keyword.length < 2) {
+                    return [];
+                }
+
+                const scored = positions.map(position => ({
+                    ...position,
+                    similarity: this.calculateSimilarity(keyword, position.name)
+                }));
+
+                return scored
+                    .filter(item => item.similarity > 30)
+                    .sort((a, b) => b.similarity - a.similarity)
+                    .slice(0, limit);
+            }
+
+            // 计算相似度
+            calculateSimilarity(str1, str2) {
+                const s1 = str1.toLowerCase();
+                const s2 = str2.toLowerCase();
+
+                if (s1 === s2) return 100;
+                if (s2.startsWith(s1)) return 90;
+                if (s2.includes(s1)) return 70;
+
+                const len1 = s1.length;
+                const len2 = s2.length;
+                const dp = Array(len2 + 1).fill(0).map(() => Array(len1 + 1).fill(0));
+
+                for (let i = 0; i <= len1; i++) dp[0][i] = i;
+                for (let j = 0; j <= len2; j++) dp[j][0] = j;
+
+                for (let j = 1; j <= len2; j++) {
+                    for (let i = 1; i <= len1; i++) {
+                        if (s1[i - 1] === s2[j - 1]) {
+                            dp[j][i] = dp[j - 1][i - 1];
+                        } else {
+                            dp[j][i] = Math.min(dp[j - 1][i], dp[j][i - 1], dp[j - 1][i - 1]) + 1;
+                        }
+                    }
+                }
+
+                const maxLen = Math.max(len1, len2);
+                const distance = dp[len2][len1];
+                return Math.max(0, 100 - (distance / maxLen) * 100);
+            }
+
+            // 缓存管理
+            saveToCache(data) {
+                try {
+                    localStorage.setItem(this.cacheKey, JSON.stringify({
+                        data,
+                        timestamp: Date.now()
+                    }));
+                } catch (error) {
+                    console.warn('保存岗位缓存失败:', error);
+                }
+            }
+
+            getFromCache() {
+                try {
+                    const cached = localStorage.getItem(this.cacheKey);
+                    if (cached) {
+                        return JSON.parse(cached).data;
+                    }
+                } catch (error) {
+                    console.warn('读取岗位缓存失败:', error);
+                }
+                return null;
+            }
+
+            isCacheExpired() {
+                try {
+                    const cached = localStorage.getItem(this.cacheKey);
+                    if (!cached) return true;
+                    const { timestamp } = JSON.parse(cached);
+                    return Date.now() - timestamp > this.cacheTime;
+                } catch (error) {
+                    return true;
+                }
+            }
+
+            // 清除缓存
+            clearCache() {
+                try {
+                    localStorage.removeItem(this.cacheKey);
+                    this.positions = [];
+                    this.initialized = false;
+                } catch (error) {
+                    console.warn('清除岗位缓存失败:', error);
+                }
+            }
+        }
+
+        // 创建全局岗位管理器实例
+        const positionManager = new PositionManager();
 
         // 职业对应的行业和职位映射
         const specialtyMap = {
@@ -1269,44 +1433,8 @@
         }
 
         // 职位建议相关函数
-        // 计算两个字符串的相似度（0-100）
-        function calculateSimilarity(str1, str2) {
-            const s1 = str1.toLowerCase();
-            const s2 = str2.toLowerCase();
-
-            // 完全匹配
-            if (s1 === s2) return 100;
-
-            // 前缀匹配（权重最高）
-            if (s2.startsWith(s1)) return 90;
-
-            // 包含匹配
-            if (s2.includes(s1)) return 70;
-
-            // Levenshtein距离计算相似度
-            const len1 = s1.length;
-            const len2 = s2.length;
-            const dp = Array(len2 + 1).fill(0).map(() => Array(len1 + 1).fill(0));
-
-            for (let i = 0; i <= len1; i++) dp[0][i] = i;
-            for (let j = 0; j <= len2; j++) dp[j][0] = j;
-
-            for (let j = 1; j <= len2; j++) {
-                for (let i = 1; i <= len1; i++) {
-                    if (s1[i - 1] === s2[j - 1]) {
-                        dp[j][i] = dp[j - 1][i - 1];
-                    } else {
-                        dp[j][i] = Math.min(dp[j - 1][i], dp[j][i - 1], dp[j - 1][i - 1]) + 1;
-                    }
-                }
-            }
-
-            const maxLen = Math.max(len1, len2);
-            const distance = dp[len2][len1];
-            return Math.max(0, 100 - (distance / maxLen) * 100);
-        }
-
-        function filterPositions(keyword) {
+        // 使用岗位管理器搜索职位
+        async function filterPositions(keyword) {
             const suggestionsBox = document.getElementById('position-suggestions');
 
             if (!keyword.trim()) {
@@ -1314,24 +1442,16 @@
                 return;
             }
 
-            // 需要至少输入2个汉字才开始过滤
             const trimmedKeyword = keyword.trim();
+
+            // 需要至少输入2个汉字才开始过滤
             if (trimmedKeyword.length < 2) {
                 suggestionsBox.style.display = 'none';
                 return;
             }
 
-            // 计算每个职位与输入关键词的相似度
-            const scored = standardPositions.map(position => ({
-                name: position,
-                similarity: calculateSimilarity(trimmedKeyword, position)
-            }));
-
-            // 按相似度排序，取前5个
-            const filtered = scored
-                .filter(item => item.similarity > 30) // 过滤掉相似度太低的
-                .sort((a, b) => b.similarity - a.similarity)
-                .slice(0, 5);
+            // 使用岗位管理器搜索
+            const filtered = await positionManager.search(trimmedKeyword, 5);
 
             // 如果没有匹配结果，显示"使用自定义职位"
             if (filtered.length === 0) {
