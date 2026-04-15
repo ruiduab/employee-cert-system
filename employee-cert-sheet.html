@@ -1509,6 +1509,43 @@
         }
 
         // 职位建议相关函数
+        // 计算两个字符串的相似度（0-100）
+        function calculateSimilarity(str1, str2) {
+            const s1 = str1.toLowerCase();
+            const s2 = str2.toLowerCase();
+
+            // 完全匹配
+            if (s1 === s2) return 100;
+
+            // 前缀匹配（权重最高）
+            if (s2.startsWith(s1)) return 90;
+
+            // 包含匹配
+            if (s2.includes(s1)) return 70;
+
+            // Levenshtein距离计算相似度
+            const len1 = s1.length;
+            const len2 = s2.length;
+            const dp = Array(len2 + 1).fill(0).map(() => Array(len1 + 1).fill(0));
+
+            for (let i = 0; i <= len1; i++) dp[0][i] = i;
+            for (let j = 0; j <= len2; j++) dp[j][0] = j;
+
+            for (let j = 1; j <= len2; j++) {
+                for (let i = 1; i <= len1; i++) {
+                    if (s1[i - 1] === s2[j - 1]) {
+                        dp[j][i] = dp[j - 1][i - 1];
+                    } else {
+                        dp[j][i] = Math.min(dp[j - 1][i], dp[j][i - 1], dp[j - 1][i - 1]) + 1;
+                    }
+                }
+            }
+
+            const maxLen = Math.max(len1, len2);
+            const distance = dp[len2][len1];
+            return Math.max(0, 100 - (distance / maxLen) * 100);
+        }
+
         function filterPositions(keyword) {
             const suggestionsBox = document.getElementById('position-suggestions');
 
@@ -1517,20 +1554,49 @@
                 return;
             }
 
-            // 按输入的关键词过滤职位列表
-            const filtered = standardPositions.filter(position =>
-                position.toLowerCase().includes(keyword.toLowerCase())
-            );
-
-            if (filtered.length === 0) {
+            // 需要至少输入2个汉字才开始过滤
+            const trimmedKeyword = keyword.trim();
+            if (trimmedKeyword.length < 2) {
                 suggestionsBox.style.display = 'none';
                 return;
             }
 
-            // 显示建议列表（最多显示10条）
-            suggestionsBox.innerHTML = filtered.slice(0, 10).map(position =>
-                `<div style="padding: 10px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333;" onclick="selectPosition('${position}')">${position}</div>`
+            // 计算每个职位与输入关键词的相似度
+            const scored = standardPositions.map(position => ({
+                name: position,
+                similarity: calculateSimilarity(trimmedKeyword, position)
+            }));
+
+            // 按相似度排序，取前5个
+            const filtered = scored
+                .filter(item => item.similarity > 30) // 过滤掉相似度太低的
+                .sort((a, b) => b.similarity - a.similarity)
+                .slice(0, 5);
+
+            // 如果没有匹配结果，显示"使用自定义职位"
+            if (filtered.length === 0) {
+                suggestionsBox.innerHTML = `
+                    <div style="padding: 10px 12px; cursor: pointer; font-size: 13px; color: #1ABC9C; background: #f0fdf9;" onclick="selectPosition('${trimmedKeyword}'); document.getElementById('position-suggestions').style.display='none';">
+                        ✓ 使用自定义职位：<strong>${trimmedKeyword}</strong>
+                    </div>
+                `;
+                suggestionsBox.style.display = 'block';
+                return;
+            }
+
+            // 显示匹配的职位建议（最多5个）+ 自定义选项
+            let html = filtered.map(item =>
+                `<div style="padding: 10px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333; transition: background 0.2s;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='transparent'" onclick="selectPosition('${item.name}')">${item.name}</div>`
             ).join('');
+
+            // 添加自定义选项
+            html += `
+                <div style="padding: 10px 12px; cursor: pointer; font-size: 13px; color: #1ABC9C; background: #f0fdf9; transition: background 0.2s;" onmouseover="this.style.background='#e8f5f0'" onmouseout="this.style.background='#f0fdf9'" onclick="selectPosition('${trimmedKeyword}'); document.getElementById('position-suggestions').style.display='none';">
+                    ✓ 使用自定义职位：<strong>${trimmedKeyword}</strong>
+                </div>
+            `;
+
+            suggestionsBox.innerHTML = html;
             suggestionsBox.style.display = 'block';
         }
 
