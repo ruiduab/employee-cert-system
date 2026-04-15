@@ -1,0 +1,2788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联想在职认证后台管理系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 200px;
+            background: #ffffff;
+            color: #333;
+            padding: 12px 0;
+            padding-bottom: 120px;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+            border-right: 1px solid #e8e8e8;
+            position: relative;
+        }
+
+        .logo {
+            padding: 12px 12px 16px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 12px 0;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: #e74c3c;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 2px 6px;
+            border-radius: 4px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+        }
+
+        .menu-item.active {
+            background: #e8f5f0;
+            color: #1ABC9C;
+            border-left: 3px solid #1ABC9C;
+            padding-left: 13px;
+            font-weight: 500;
+        }
+
+        .menu-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .menu-label {
+            font-size: 14px;
+            flex: 1;
+        }
+
+        /* 一级菜单 */
+        .menu-group {
+            margin: 0;
+        }
+
+        .menu-group-title {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            user-select: none;
+            margin: 6px 6px 2px 6px;
+            border-radius: 4px;
+        }
+
+        .menu-group-title:hover {
+            background: #f0f0f0;
+        }
+
+        .menu-group-title.active {
+            background: #e8f5f0;
+            color: #1ABC9C;
+        }
+
+        .menu-group-toggle {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+            font-size: 12px;
+            color: #999;
+            margin-left: auto;
+        }
+
+        .menu-group-toggle.expanded {
+            transform: rotate(180deg);
+        }
+
+        /* 二级菜单 */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.expanded {
+            max-height: 500px;
+        }
+
+        .submenu-item {
+            padding: 8px 12px 8px 36px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #666;
+            margin: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .submenu-item:hover {
+            background: #f0f0f0;
+        }
+
+        .submenu-item.active {
+            background: #e8f5f0;
+            color: #1ABC9C;
+            border-left: 3px solid #1ABC9C;
+            padding-left: 33px;
+            font-weight: 500;
+        }
+
+        /* 用户信息区 */
+        .sidebar-user {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+        }
+
+        .user-avatar-sidebar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-info-sidebar {
+            flex: 1;
+            font-size: 12px;
+        }
+
+        .user-name-sidebar {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 1px;
+            font-size: 12px;
+        }
+
+        .user-role-sidebar {
+            color: #999;
+            font-size: 11px;
+        }
+
+        .user-logout-btn {
+            color: #666;
+            cursor: pointer;
+            font-size: 11px;
+            padding: 3px 6px;
+            border-radius: 3px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .user-logout-btn:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        /* 主内容区 */
+        .main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 260px;
+            grid-template-rows: auto 1fr;
+            gap: 0;
+        }
+
+        /* 顶部栏 */
+        .header {
+            background: white;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            grid-column: 1 / 3;
+            grid-row: 1;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #1ABC9C;
+            text-decoration: none;
+            margin: 0 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* 内容区 */
+        .content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            grid-column: 1;
+            grid-row: 2;
+            background: #f5f7fa;
+        }
+
+        /* AI助手面板 */
+        .main-assistant {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            background: #f8f9fa;
+            border-left: 1px solid #e8e8e8;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+            overflow-y: auto;
+        }
+
+        .assistant-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .assistant-placeholder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .assistant-btn {
+            background: #1ABC9C;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: auto;
+        }
+
+        .assistant-btn:hover {
+            background: #16a085;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .page-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1ABC9C, #16A085);
+            padding: 16px 14px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 3px;
+            line-height: 1;
+        }
+
+        .stat-change {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* 筛选栏 */
+        .filter-bar {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .filter-input, .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #1ABC9C;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+        }
+
+        .filter-button {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* 按钮 */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #1ABC9C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052a3;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #d9d9d9;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        .btn-danger {
+            background: #ff4d4f;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff7875;
+        }
+
+        .btn-success {
+            background: #52c41a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #73d13d;
+        }
+
+        .btn-small {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        /* 表格 */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: #f5f5f5;
+            border-top: 1px solid #e8e8e8;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:hover {
+            background: #fafafa;
+        }
+
+        /* 标签 */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+
+        .badge-warning {
+            background: #fffbe6;
+            color: #d48806;
+            border: 1px solid #ffe58f;
+        }
+
+        .badge-danger {
+            background: #fff1f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+
+        .badge-info {
+            background: #e6f7ff;
+            color: #1ABC9C;
+            border: 1px solid #91d5ff;
+        }
+
+        /* 操作链接 */
+        .action-link {
+            color: #1ABC9C;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 12px;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        /* 详情页面 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .user-avatar-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 auto 16px;
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .user-meta {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .user-action {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        /* 表单 */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #1ABC9C;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* 审核区域 */
+        .review-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .review-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .review-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-checkbox {
+            margin-right: 12px;
+        }
+
+        /* 材料预览 */
+        .material-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .material-item {
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .material-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .material-thumb {
+            width: 100%;
+            height: 100px;
+            background: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #999;
+        }
+
+        .material-name {
+            padding: 8px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 24px;
+            color: #999;
+            background: none;
+            border: none;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        /* 标签页 */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e8e8e8;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #1ABC9C;
+        }
+
+        .tab.active {
+            color: #1ABC9C;
+            border-bottom-color: #1ABC9C;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.show {
+            display: block;
+        }
+
+        /* 隐藏页面 */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 实用工具类 */
+        .mt-16 {
+            margin-top: 16px;
+        }
+
+        .mb-16 {
+            margin-bottom: 16px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #999;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e8e8e8;
+            margin: 16px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧导航 -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">L</div>
+                <div class="logo-text">联想乐享</div>
+            </div>
+
+            <!-- 数据中心菜单组 -->
+            <div class="menu-group">
+                <div class="menu-group-title" onclick="toggleMenuGroup(this)">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-label">数据中心</span>
+                    <span class="menu-group-toggle">▼</span>
+                </div>
+                <div class="submenu expanded">
+                    <div class="submenu-item" onclick="showPage('data-overview')">运营总览</div>
+                    <div class="submenu-item" onclick="showPage('data-geo')">GEO 监控</div>
+                    <div class="submenu-item" onclick="showPage('data-query')">Query 分析</div>
+                </div>
+            </div>
+
+            <!-- 在职员工管理菜单组 -->
+            <div class="menu-group">
+                <div class="menu-group-title active" onclick="toggleMenuGroup(this)">
+                    <span class="menu-icon">👥</span>
+                    <span class="menu-label">在职员工管理</span>
+                    <span class="menu-group-toggle expanded">▼</span>
+                </div>
+                <div class="submenu expanded">
+                    <div class="submenu-item active" onclick="showPage('employee-list')">员工列表</div>
+                    <div class="submenu-item" onclick="showPage('review-list')">认证审核</div>
+                </div>
+            </div>
+
+            <!-- 电商管理菜单组 -->
+            <div class="menu-group">
+                <div class="menu-group-title" onclick="toggleMenuGroup(this)">
+                    <span class="menu-icon">🛍️</span>
+                    <span class="menu-label">电商管理</span>
+                    <span class="menu-group-toggle">▼</span>
+                </div>
+                <div class="submenu">
+                    <div class="submenu-item" onclick="showPage('product-mgmt')">商品管理</div>
+                    <div class="submenu-item" onclick="showPage('order-mgmt')">订单管理</div>
+                    <div class="submenu-item" onclick="showPage('activity-mgmt')">活动管理</div>
+                </div>
+            </div>
+
+            <!-- 底部用户信息 -->
+            <div class="sidebar-user">
+                <div class="user-avatar-sidebar">A</div>
+                <div class="user-info-sidebar">
+                    <div class="user-name-sidebar">admin</div>
+                    <div class="user-role-sidebar">平台管理员</div>
+                </div>
+                <div class="user-logout-btn" onclick="alert('登出功能')">退出</div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main">
+            <!-- 顶部栏 -->
+            <div class="header">
+                <div class="breadcrumb">
+                    <span id="breadcrumb">首页</span>
+                </div>
+                <div class="user-info">
+                    <div>👤 管理员 (admin)</div>
+                    <div class="user-avatar">A</div>
+                </div>
+            </div>
+
+            <!-- 内容区 -->
+            <div class="content">
+
+                <!-- ============ 首页 ============ -->
+                <!-- ============ 在职员工管理 ============ -->
+                <div id="page-employee-list" class="page">
+                    <div class="page-header">
+                        <div class="page-title">👥 在职员工管理</div>
+                        <div class="page-desc">查询和管理所有在职员工信息</div>
+                    </div>
+
+                    <!-- 📊 统计卡片区 -->
+                    <div class="stats-grid">
+                        <div class="stat-card" onclick="filterByCard('total')" style="cursor: pointer;">
+                            <div class="stat-label">总在职员工数</div>
+                            <div class="stat-value">2,847</div>
+                            <div class="stat-change">↑ 8% 较上月</div>
+                        </div>
+                        <div class="stat-card" onclick="filterByCard('certified')" style="cursor: pointer;">
+                            <div class="stat-label">已认证员工</div>
+                            <div class="stat-value">2,341</div>
+                            <div class="stat-change">82.3% 认证率</div>
+                        </div>
+                        <div class="stat-card" onclick="filterByCard('expired')" style="cursor: pointer;">
+                            <div class="stat-label">已失效员工</div>
+                            <div class="stat-value">45</div>
+                            <div class="stat-change">需重新认证</div>
+                        </div>
+                        <div class="stat-card" onclick="filterByCard('new')" style="cursor: pointer;">
+                            <div class="stat-label">本月新增</div>
+                            <div class="stat-value">187</div>
+                            <div class="stat-change">↑ 12% 环比</div>
+                        </div>
+                    </div>
+
+                    <!-- 📊 职员认证状态分布 -->
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">职员认证状态分布</h3>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; font-size: 14px;">
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certType', '普通职员')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">1,850</div>
+                                <div style="color: #666; margin-top: 4px;">普通职员</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certType', '法律')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">186</div>
+                                <div style="color: #666; margin-top: 4px;">法律</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certType', '工业设计')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">198</div>
+                                <div style="color: #666; margin-top: 4px;">工业设计</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certType', '媒体设计')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">89</div>
+                                <div style="color: #666; margin-top: 4px;">媒体设计</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certType', '编程开发')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">38</div>
+                                <div style="color: #666; margin-top: 4px;">编程开发</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 📊 认证方式分布 -->
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">认证方式分布</h3>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 14px;">
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certMethod', '企业邮箱')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">1,051</div>
+                                <div style="color: #666; margin-top: 4px;">企业邮箱</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">45%</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certMethod', '劳动合同')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">703</div>
+                                <div style="color: #666; margin-top: 4px;">劳动合同</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">30%</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certMethod', '个人所得税')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">422</div>
+                                <div style="color: #666; margin-top: 4px;">个人所得税</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">18%</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center; cursor: pointer;" onclick="filterByCard('certMethod', '其他材料')">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">165</div>
+                                <div style="color: #666; margin-top: 4px;">其他材料</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">7%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <span class="filter-label">账号/姓名</span>
+                                <input type="text" class="filter-input" placeholder="搜索账号或姓名">
+                            </div>
+                            <div class="filter-group">
+                                <span class="filter-label">是否实名</span>
+                                <select class="filter-select">
+                                    <option>全部</option>
+                                    <option>已认证</option>
+                                    <option>未认证</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <span class="filter-label">职员认证状态</span>
+                                <select class="filter-select">
+                                    <option>全部</option>
+                                    <option>普通职员</option>
+                                    <option>专业：法律</option>
+                                    <option>专业：工业设计</option>
+                                    <option>专业：媒体设计</option>
+                                    <option>专业：编程开发</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <span class="filter-label">认证方式</span>
+                                <select class="filter-select">
+                                    <option>全部</option>
+                                    <option>企业邮箱</option>
+                                    <option>劳动合同/在职证明</option>
+                                    <option>个人所得税</option>
+                                    <option>其他材料</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <span class="filter-label">当前状态</span>
+                                <select class="filter-select">
+                                    <option>全部</option>
+                                    <option>已认证</option>
+                                    <option>已失效</option>
+                                </select>
+                            </div>
+                            <div class="filter-button">
+                                <button class="btn btn-primary" onclick="handleSearch()">🔍 搜索</button>
+                                <button class="btn btn-secondary" onclick="handleReset()">↻ 重置</button>
+                                <button class="btn btn-secondary" onclick="handleExport()">⬇ 导出</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; padding: 12px 16px; background: #fff7e6; border-left: 3px solid #ff9800; border-radius: 4px; font-size: 13px; color: #d46b08;">
+                            <strong>📋 温馨提示：</strong>职工认证周期为365天，已过期限期内的员工可以向员工提醒进行重新认证。其中可以按"当前状态"筛选已失效的员工，及时提醒进行重新认证。
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox"></th>
+                                        <th>账号</th>
+                                        <th>真实姓名</th>
+                                        <th>LenovoID</th>
+                                        <th>关联手机号</th>
+                                        <th>是否实名</th>
+                                        <th>所属企业</th>
+                                        <th>职员认证状态</th>
+                                        <th>认证方式</th>
+                                        <th>认证时间</th>
+                                        <th>当前状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 由JavaScript动态生成50条示例数据 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f9f9f9; border-radius: 4px;">
+                            <div style="color: #999; font-size: 13px;">
+                                共 <span id="total-records">247</span> 条记录 | 第 <span id="current-page">1</span> 页 / 共 <span id="total-pages">25</span> 页
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button class="btn btn-secondary" onclick="goToPage(-1)" style="padding: 6px 12px; font-size: 12px;">上一页</button>
+                                <div style="display: flex; gap: 4px; align-items: center;">
+                                    <input type="number" id="page-input" value="1" min="1" style="width: 50px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; text-align: center;">
+                                    <span style="color: #999; font-size: 12px;">页</span>
+                                </div>
+                                <button class="btn btn-secondary" onclick="goToPageInput()" style="padding: 6px 12px; font-size: 12px;">跳转</button>
+                                <button class="btn btn-secondary" onclick="goToPage(1)" style="padding: 6px 12px; font-size: 12px;">下一页</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ 员工详情页 - 张三 ============ -->
+                <div id="page-employee-detail-1" class="page">
+                    <div class="page-header">
+                        <div class="page-title">👥 员工详情</div>
+                        <div class="page-desc">用户：张三 (170****2837) | LenovoID：10227200481</div>
+                    </div>
+
+                    <div class="detail-container" style="grid-template-columns: 320px 1fr;">
+                        <div class="user-card">
+                            <div class="user-avatar-large">Z</div>
+                            <div class="user-name">张三</div>
+                            <div class="user-meta">
+                                <div style="font-size: 12px;">账号：170****2837</div>
+                                <div style="font-size: 12px;">LenovoID：10227200481</div>
+                                <div style="font-size: 12px; margin-top: 8px;">联想商城</div>
+                            </div>
+                            <div class="user-meta" style="margin-top: 12px;">
+                                <span class="badge badge-success" style="display: inline-block; font-size: 12px;">✓ 已实名</span>
+                                <span class="badge badge-info" style="display: inline-block; font-size: 12px; margin-left: 8px;">普通职员</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">个人基本信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">真实姓名</div>
+                                        <div style="font-weight: 500;">张三</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">昵称</div>
+                                        <div style="font-weight: 500;">小张</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">性别</div>
+                                        <div style="font-weight: 500;">男</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">生日</div>
+                                        <div style="font-weight: 500;">1990-05-15</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">关联手机号</div>
+                                        <div style="font-weight: 500;">17012345678</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">居住地</div>
+                                        <div style="font-weight: 500;">北京市朝阳区</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">注册时间</div>
+                                        <div style="font-weight: 500;">2022-07-19 17:28:40</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">用户类型</div>
+                                        <div style="font-weight: 500;">企业用户</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">会员信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">成为企业会员时间</div>
+                                        <div style="font-weight: 500;">2023-03-23 20:34:18</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">会员等级</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-info">白银会员</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业等级</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-warning">黄金会员</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">激活状态</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-success">已激活</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">黑金VIP</div>
+                                        <div style="font-weight: 500;">否</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">注册通路</div>
+                                        <div style="font-weight: 500;">LENOVO_SHOP_PC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">企业信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">所属企业</div>
+                                        <div style="font-weight: 500;">联想（北京）有限公司</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业税号</div>
+                                        <div style="font-weight: 500;">91110105MA00000000</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业邮箱</div>
+                                        <div style="font-weight: 500;">zhangsan@lenovo.com</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">职员认证信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">职员认证状态</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-info">普通职员</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">职员认证方式</div>
+                                        <div style="font-weight: 500;">企业邮箱</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">认证职员信息时间</div>
+                                        <div style="font-weight: 500;">2024-01-15 14:30:00</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">认证失效时间</div>
+                                        <div style="font-weight: 500;">2025-01-15 14:30:00</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">认证材料</h3>
+                                <div style="color: #666; margin-bottom: 12px; font-weight: 500;">企业邮箱验证记录</div>
+                                <div style="padding: 16px; background: #f5f5f5; border-radius: 4px; font-size: 14px; margin-bottom: 20px;">
+                                    <div style="margin-bottom: 8px;">✓ 邮箱：zhangsan@lenovo.com</div>
+                                    <div style="margin-bottom: 8px;">✓ 验证状态：已验证</div>
+                                    <div>✓ 验证时间：2024-01-15 14:30:00</div>
+                                </div>
+
+                                <div style="color: #666; margin-bottom: 12px; font-weight: 500;">上传的认证材料</div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px;">
+                                    <div style="position: relative; cursor: pointer;" onclick="viewImage(this)">
+                                        <div style="width: 100%; aspect-ratio: 1; background: #e0e0e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dy='.3em' fill='%23999' font-size='12'%3E劳动合同%3C/text%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div style="font-size: 12px; margin-top: 4px; text-align: center; color: #666;">劳动合同</div>
+                                    </div>
+                                    <div style="position: relative; cursor: pointer;" onclick="viewImage(this)">
+                                        <div style="width: 100%; aspect-ratio: 1; background: #e0e0e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dy='.3em' fill='%23999' font-size='12'%3E在职证明%3C/text%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div style="font-size: 12px; margin-top: 4px; text-align: center; color: #666;">在职证明</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 16px; font-size: 12px; color: #999;">点击缩略图可查看大图</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ 员工详情页 - 李四 ============ -->
+                <div id="page-employee-detail-2" class="page">
+                    <div class="page-header">
+                        <div class="page-title">👥 员工详情</div>
+                        <div class="page-desc">用户：李四 (195****3399) | LenovoID：10234679660</div>
+                    </div>
+
+                    <div class="detail-container" style="grid-template-columns: 320px 1fr;">
+                        <div class="user-card">
+                            <div class="user-avatar-large">L</div>
+                            <div class="user-name">李四</div>
+                            <div class="user-meta">
+                                <div style="font-size: 12px;">账号：195****3399</div>
+                                <div style="font-size: 12px;">LenovoID：10234679660</div>
+                                <div style="font-size: 12px; margin-top: 8px;">联想商城</div>
+                            </div>
+                            <div class="user-meta" style="margin-top: 12px;">
+                                <span class="badge badge-success" style="display: inline-block; font-size: 12px;">✓ 已实名</span>
+                                <span class="badge badge-info" style="display: inline-block; font-size: 12px; margin-left: 8px;">专业：编程开发</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">个人基本信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">真实姓名</div>
+                                        <div style="font-weight: 500;">李四</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">昵称</div>
+                                        <div style="font-weight: 500;">小李</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">性别</div>
+                                        <div style="font-weight: 500;">男</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">生日</div>
+                                        <div style="font-weight: 500;">1992-08-22</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">关联手机号</div>
+                                        <div style="font-weight: 500;">19587654321</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">居住地</div>
+                                        <div style="font-weight: 500;">上海市浦东新区</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">注册时间</div>
+                                        <div style="font-weight: 500;">2021-09-06 22:34:23</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">用户类型</div>
+                                        <div style="font-weight: 500;">企业用户</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">会员信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">成为企业会员时间</div>
+                                        <div style="font-weight: 500;">2022-12-02 15:22:15</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">会员等级</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-success">黄金会员</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业等级</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-success">黄金会员</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">激活状态</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-success">已激活</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">黑金VIP</div>
+                                        <div style="font-weight: 500;">是</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">注册通路</div>
+                                        <div style="font-weight: 500;">ERP资管WAD端</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">企业信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">所属企业</div>
+                                        <div style="font-weight: 500;">联想控股股份有限公司</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业税号</div>
+                                        <div style="font-weight: 500;">91110105000000000X</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业邮箱</div>
+                                        <div style="font-weight: 500;">lisi@lenovo.com</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">职员认证信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">职员认证状态</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-info">专业：编程开发</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">职员认证方式</div>
+                                        <div style="font-weight: 500;">个人所得税</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">认证职员信息时间</div>
+                                        <div style="font-weight: 500;">2024-02-20 10:15:30</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">认证失效时间</div>
+                                        <div style="font-weight: 500;">2025-02-20 10:15:30</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">认证材料</h3>
+                                <div style="color: #666; margin-bottom: 12px; font-weight: 500;">个人所得税验证记录</div>
+                                <div style="padding: 16px; background: #f5f5f5; border-radius: 4px; font-size: 14px; margin-bottom: 20px;">
+                                    <div style="margin-bottom: 8px;">✓ 税号：李四(个税用户)</div>
+                                    <div style="margin-bottom: 8px;">✓ 验证状态：已验证</div>
+                                    <div>✓ 验证时间：2024-02-20 10:15:30</div>
+                                </div>
+
+                                <div style="color: #666; margin-bottom: 12px; font-weight: 500;">上传的认证材料</div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px;">
+                                    <div style="position: relative; cursor: pointer;" onclick="viewImage(this)">
+                                        <div style="width: 100%; aspect-ratio: 1; background: #e0e0e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dy='.3em' fill='%23999' font-size='12'%3E个税截图%3C/text%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div style="font-size: 12px; margin-top: 4px; text-align: center; color: #666;">个税截图</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 16px; font-size: 12px; color: #999;">点击缩略图可查看大图</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ 员工详情页 - 王五 ============ -->
+                <div id="page-employee-detail-3" class="page">
+                    <div class="page-header">
+                        <div class="page-title">👥 员工详情</div>
+                        <div class="page-desc">用户：王五 (188****5566) | LenovoID：10256789012</div>
+                    </div>
+
+                    <div class="detail-container" style="grid-template-columns: 320px 1fr;">
+                        <div class="user-card">
+                            <div class="user-avatar-large">W</div>
+                            <div class="user-name">王五</div>
+                            <div class="user-meta">
+                                <div style="font-size: 12px;">账号：188****5566</div>
+                                <div style="font-size: 12px;">LenovoID：10256789012</div>
+                                <div style="font-size: 12px; margin-top: 8px;">联想商城</div>
+                            </div>
+                            <div class="user-meta" style="margin-top: 12px;">
+                                <span class="badge badge-success" style="display: inline-block; font-size: 12px;">✓ 已实名</span>
+                                <span class="badge badge-info" style="display: inline-block; font-size: 12px; margin-left: 8px;">专业：法律</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">个人基本信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">真实姓名</div>
+                                        <div style="font-weight: 500;">王五</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">昵称</div>
+                                        <div style="font-weight: 500;">小王</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">性别</div>
+                                        <div style="font-weight: 500;">女</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">生日</div>
+                                        <div style="font-weight: 500;">1994-03-18</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">关联手机号</div>
+                                        <div style="font-weight: 500;">18812345678</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">居住地</div>
+                                        <div style="font-weight: 500;">深圳市南山区</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">注册时间</div>
+                                        <div style="font-weight: 500;">2023-05-11 08:45:12</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">用户类型</div>
+                                        <div style="font-weight: 500;">企业用户</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">会员信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">成为企业会员时间</div>
+                                        <div style="font-weight: 500;">2024-01-08 12:40:08</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">会员等级</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-info">白银会员</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业等级</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-warning">黄金会员</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">激活状态</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-success">已激活</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">黑金VIP</div>
+                                        <div style="font-weight: 500;">否</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">注册通路</div>
+                                        <div style="font-weight: 500;">LENOVO_SHOP_PC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">企业信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">所属企业</div>
+                                        <div style="font-weight: 500;">联想（北京）有限公司</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业税号</div>
+                                        <div style="font-weight: 500;">91110105MA00000000</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">企业邮箱</div>
+                                        <div style="font-weight: 500;">wangwu@lenovo.com</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">职员认证信息</h3>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 14px;">
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">职员认证状态</div>
+                                        <div style="font-weight: 500;">
+                                            <span class="badge badge-info">专业：法律</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">职员认证方式</div>
+                                        <div style="font-weight: 500;">劳动合同/在职证明</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">认证职员信息时间</div>
+                                        <div style="font-weight: 500;">2024-03-10 09:45:22</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: #666; margin-bottom: 4px;">认证失效时间</div>
+                                        <div style="font-weight: 500;">2025-03-10 09:45:22</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 20px; font-size: 16px;">认证材料</h3>
+                                <div style="color: #666; margin-bottom: 12px; font-weight: 500;">劳动合同及在职证明</div>
+                                <div style="padding: 16px; background: #f5f5f5; border-radius: 4px; font-size: 14px; margin-bottom: 20px;">
+                                    <div style="margin-bottom: 8px;">✓ 文件类型：劳动合同/在职证明</div>
+                                    <div style="margin-bottom: 8px;">✓ 审核状态：已验证</div>
+                                    <div>✓ 审核时间：2024-03-10 09:45:22</div>
+                                </div>
+
+                                <div style="color: #666; margin-bottom: 12px; font-weight: 500;">上传的认证材料</div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px;">
+                                    <div style="position: relative; cursor: pointer;" onclick="viewImage(this)">
+                                        <div style="width: 100%; aspect-ratio: 1; background: #e0e0e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dy='.3em' fill='%23999' font-size='12'%3E劳动合同%3C/text%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div style="font-size: 12px; margin-top: 4px; text-align: center; color: #666;">劳动合同</div>
+                                    </div>
+                                    <div style="position: relative; cursor: pointer;" onclick="viewImage(this)">
+                                        <div style="width: 100%; aspect-ratio: 1; background: #e0e0e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dy='.3em' fill='%23999' font-size='12'%3E在职证明%3C/text%3E%3C/svg%3E" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                        <div style="font-size: 12px; margin-top: 4px; text-align: center; color: #666;">在职证明</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 16px; font-size: 12px; color: #999;">点击缩略图可查看大图</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 认证材料大图预览 -->
+                <div id="modal-image-preview" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 24px; border-radius: 8px; max-width: 90%; max-height: 90%;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div style="font-size: 16px; font-weight: 600;">认证材料</div>
+                            <button onclick="closeImagePreview()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                        </div>
+                        <img id="preview-image" src="" style="max-width: 100%; max-height: 70vh; object-fit: contain;">
+                    </div>
+                </div>
+
+                <!-- ============ 认证审核管理 ============ -->
+                <div id="page-review-list" class="page">
+                    <div class="page-header">
+                        <div class="page-title">✓ 认证审核管理</div>
+                        <div class="page-desc">审核待审批的在职人员认证申请</div>
+                    </div>
+
+                    <div class="card" style="padding: 0;">
+                        <div class="tabs" style="margin: 0; background: white; padding: 0 24px;">
+                            <div class="tab active" onclick="switchTab(this, 'pending')">待审核/邮箱待激活 <span style="color: #ff4d4f; margin-left: 4px;">(51)</span></div>
+                            <div class="tab" onclick="switchTab(this, 'approved')">已通过 <span style="color: #52c41a; margin-left: 4px;">(2,341)</span></div>
+                            <div class="tab" onclick="switchTab(this, 'rejected')">已拒绝 <span style="color: #f5222d; margin-left: 4px;">(156)</span></div>
+                        </div>
+
+                        <div style="padding: 24px;">
+                            <div class="filter-row" style="margin-bottom: 20px;">
+                                <div class="filter-group">
+                                    <span class="filter-label">申请编号/账号</span>
+                                    <input type="text" class="filter-input" placeholder="搜索申请编号或账号">
+                                </div>
+                                <div class="filter-group">
+                                    <span class="filter-label">认证方式</span>
+                                    <select class="filter-select">
+                                        <option>全部</option>
+                                        <option>企业邮箱</option>
+                                        <option>劳动合同/在职证明</option>
+                                        <option>个人所得税</option>
+                                        <option>其他材料</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <span class="filter-label">审核方式</span>
+                                    <select class="filter-select">
+                                        <option>全部</option>
+                                        <option>自动审核通过</option>
+                                        <option>待人工审核</option>
+                                        <option>已驳回</option>
+                                    </select>
+                                </div>
+                                <div class="filter-button">
+                                    <button class="btn btn-primary">🔍 搜索</button>
+                                </div>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table id="review-table">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th>申请编号</th>
+                                            <th>申请人</th>
+                                            <th>认证方式</th>
+                                            <th>认证身份</th>
+                                            <th>审核方式</th>
+                                            <th>申请时间</th>
+                                            <th>审核人</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- 待审核/邮箱待激活 -->
+                                        <tr style="display: none;" class="status-pending">
+                                            <td><input type="checkbox"></td>
+                                            <td>APP20240415001</td>
+                                            <td>王五 (user005)</td>
+                                            <td>劳动合同</td>
+                                            <td><span class="badge badge-info">普通职员</span></td>
+                                            <td><span class="badge badge-warning">待人工审核</span></td>
+                                            <td>2024-04-15 14:30</td>
+                                            <td>-</td>
+                                            <td>
+                                                <a class="action-link" onclick="loadReviewDetail(this)">审核</a>
+                                            </td>
+                                        </tr>
+                                        <tr style="display: none;" class="status-pending">
+                                            <td><input type="checkbox"></td>
+                                            <td>APP20240414008</td>
+                                            <td>赵六 (user006)</td>
+                                            <td>个人所得税</td>
+                                            <td><span class="badge badge-info">专业：工业设计</span></td>
+                                            <td><span class="badge badge-warning">待人工审核</span></td>
+                                            <td>2024-04-14 09:15</td>
+                                            <td>-</td>
+                                            <td>
+                                                <a class="action-link" onclick="loadReviewDetail(this)">审核</a>
+                                            </td>
+                                        </tr>
+                                        <!-- 已通过 -->
+                                        <tr style="display: none;" class="status-approved">
+                                            <td><input type="checkbox"></td>
+                                            <td>APP20240410001</td>
+                                            <td>张三 (user001)</td>
+                                            <td>企业邮箱</td>
+                                            <td><span class="badge badge-info">普通职员</span></td>
+                                            <td><span class="badge badge-success">✓ 自动审核通过</span></td>
+                                            <td>2024-04-10 10:30</td>
+                                            <td>系统</td>
+                                            <td>
+                                                <a class="action-link" onclick="loadReviewDetail(this)">查看详情</a>
+                                            </td>
+                                        </tr>
+                                        <tr style="display: none;" class="status-approved">
+                                            <td><input type="checkbox"></td>
+                                            <td>APP20240409005</td>
+                                            <td>李四 (user002)</td>
+                                            <td>个人所得税</td>
+                                            <td><span class="badge badge-info">专业：编程开发</span></td>
+                                            <td><span class="badge badge-success">✓ 自动审核通过</span></td>
+                                            <td>2024-04-09 15:20</td>
+                                            <td>系统</td>
+                                            <td>
+                                                <a class="action-link" onclick="loadReviewDetail(this)">查看详情</a>
+                                            </td>
+                                        </tr>
+                                        <!-- 已拒绝 -->
+                                        <tr style="display: none;" class="status-rejected">
+                                            <td><input type="checkbox"></td>
+                                            <td>APP20240408001</td>
+                                            <td>孙七 (user007)</td>
+                                            <td>劳动合同</td>
+                                            <td><span class="badge badge-info">普通职员</span></td>
+                                            <td><span class="badge badge-danger">✗ 已驳回</span></td>
+                                            <td>2024-04-08 09:00</td>
+                                            <td>李明</td>
+                                            <td>
+                                                <a class="action-link" onclick="loadReviewDetail(this)">查看详情</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 翻页控件 -->
+                            <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f9f9f9; border-radius: 4px;">
+                                <div style="color: #999; font-size: 13px;">
+                                    共 <span id="review-total-records">5</span> 条记录 | 第 <span id="review-current-page">1</span> 页 / 共 <span id="review-total-pages">1</span> 页
+                                </div>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <button class="btn btn-secondary" onclick="reviewGoToPage(-1)" style="padding: 6px 12px; font-size: 12px;">上一页</button>
+                                    <div style="display: flex; gap: 4px; align-items: center;">
+                                        <input type="number" id="review-page-input" value="1" min="1" style="width: 50px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; text-align: center;">
+                                        <span style="color: #999; font-size: 12px;">页</span>
+                                    </div>
+                                    <button class="btn btn-secondary" onclick="reviewGoToPageInput()" style="padding: 6px 12px; font-size: 12px;">跳转</button>
+                                    <button class="btn btn-secondary" onclick="reviewGoToPage(1)" style="padding: 6px 12px; font-size: 12px;">下一页</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ 认证审核详情 ============ -->
+                <div id="page-review-detail" class="page">
+                    <div class="page-header">
+                        <div class="page-title">✓ 认证审核详情</div>
+                        <div class="page-desc">申请编号：APP20240415001</div>
+                    </div>
+
+                    <!-- 审核流程说明 -->
+                    <div style="background: #f0f5ff; border-left: 3px solid #1890ff; padding: 12px 16px; margin: 0 0 24px 0; border-radius: 4px; font-size: 12px; color: #555;">
+                        <div style="margin-bottom: 6px; font-weight: 500;">🔍 审核流程说明：</div>
+                        <div style="margin-bottom: 4px;">• <strong>自动审核</strong>：邮箱验证通过、OCR扫描成功的数据直接判定为<span style="color: #52c41a; font-weight: 500;">已通过</span></div>
+                        <div>• <strong>人工审核</strong>：自动审核有疑问的数据进入此队列，由人工审核人员最终确认</div>
+                    </div>
+
+                    <div class="detail-container">
+                        <div class="user-card">
+                            <div class="user-avatar-large">W</div>
+                            <div class="user-name">王五</div>
+                            <div class="user-meta">
+                                <div>账号：user005</div>
+                                <div>LenovoID：L555666777</div>
+                            </div>
+                            <div class="user-meta" style="margin-top: 12px;">
+                                <span class="badge badge-warning" style="display: inline-block;">◐ 待审核</span>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: #666;">
+                                <div>申请时间：2024-04-15 14:30</div>
+                                <div>申请类型：首次申请</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="card">
+                                <h3 style="margin-bottom: 16px;">申请基本信息</h3>
+                                <table style="width: 100%; font-size: 14px;">
+                                    <tr>
+                                        <td style="width: 30%; color: #666; padding: 8px 0;">申请编号</td>
+                                        <td style="padding: 8px 0;">APP20240415001</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%; color: #666; padding: 8px 0;">申请类型</td>
+                                        <td style="padding: 8px 0;">首次申请</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%; color: #666; padding: 8px 0;">认证方式</td>
+                                        <td style="padding: 8px 0;"><span class="badge badge-info">劳动合同</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%; color: #666; padding: 8px 0;">认证身份</td>
+                                        <td style="padding: 8px 0;"><span class="badge badge-info">普通职员</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 16px;">用户信息审核</h3>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                        <input type="checkbox" class="review-checkbox" checked>
+                                        <span style="color: #333;">真实姓名：王五</span>
+                                        <span style="color: #52c41a; margin-left: auto;">✓ 与实名认证信息一致</span>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                        <input type="checkbox" class="review-checkbox" checked>
+                                        <span style="color: #333;">企业信息：联想（北京）有限公司</span>
+                                        <span style="color: #52c41a; margin-left: auto;">✓ 已核实</span>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                        <input type="checkbox" class="review-checkbox" checked>
+                                        <span style="color: #333;">职位信息：产品经理</span>
+                                        <span style="color: #52c41a; margin-left: auto;">✓ 符合要求</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 16px;">认证材料审核</h3>
+                                <div style="color: #666; margin-bottom: 12px;">已上传材料：</div>
+                                <div class="material-preview">
+                                    <div class="material-item" onclick="previewImage()">
+                                        <div class="material-thumb">📄</div>
+                                        <div class="material-name">劳动合同.pdf</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 16px;">
+                                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                        <input type="checkbox" checked>
+                                        <span style="margin-left: 8px;">姓名是否匹配</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                        <input type="checkbox" checked>
+                                        <span style="margin-left: 8px;">企业名称是否匹配</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                        <input type="checkbox" checked>
+                                        <span style="margin-left: 8px;">有效期是否符合（六个月内）</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="checkbox" checked>
+                                        <span style="margin-left: 8px;">印章是否清晰</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="margin-bottom: 16px;">审核操作</h3>
+                                <form>
+                                    <div class="form-group">
+                                        <label class="form-label">审核结论</label>
+                                        <div style="display: flex; gap: 20px;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="radio" name="conclusion" value="approved" checked>
+                                                <span>✓ 通过</span>
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="radio" name="conclusion" value="rejected">
+                                                <span>✗ 拒绝</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">审核意见</label>
+                                        <textarea class="form-textarea" placeholder="请输入审核意见（可选）"></textarea>
+                                    </div>
+
+                                    <div style="display: flex; gap: 12px;">
+                                        <button type="button" class="btn btn-success" onclick="showApproveModal()">✓ 提交审核</button>
+                                        <button type="button" class="btn btn-secondary" onclick="showPage('review-list')">取消</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ 数据分析 ============ -->
+                <!-- ============ 在职员工数据概览 ============ -->
+                <div id="page-overview" class="page">
+                    <div class="page-header">
+                        <div class="page-title">📊 在职员工数据概览</div>
+                        <div class="page-desc">在职员工的整体数据统计和趋势分析</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">总在职员工数</div>
+                            <div class="stat-value">2,847</div>
+                            <div class="stat-change">↑ 8% 较上月</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">已认证员工</div>
+                            <div class="stat-value">2,341</div>
+                            <div class="stat-change">82.3% 认证率</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">已失效员工</div>
+                            <div class="stat-value">45</div>
+                            <div class="stat-change">需重新认证</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">本月新增</div>
+                            <div class="stat-value">187</div>
+                            <div class="stat-change">↑ 12% 环比</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">职员认证状态分布</h3>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; font-size: 14px;">
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">1,850</div>
+                                <div style="color: #666; margin-top: 4px;">普通职员</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">186</div>
+                                <div style="color: #666; margin-top: 4px;">法律</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">198</div>
+                                <div style="color: #666; margin-top: 4px;">工业设计</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">89</div>
+                                <div style="color: #666; margin-top: 4px;">媒体设计</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">38</div>
+                                <div style="color: #666; margin-top: 4px;">编程开发</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">认证方式分布</h3>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 14px;">
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">1,051</div>
+                                <div style="color: #666; margin-top: 4px;">企业邮箱</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">45%</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">703</div>
+                                <div style="color: #666; margin-top: 4px;">劳动合同</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">30%</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">422</div>
+                                <div style="color: #666; margin-top: 4px;">个人所得税</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">18%</div>
+                            </div>
+                            <div style="padding: 20px; background: #f0fdf9; border-radius: 4px; border-left: 3px solid #1ABC9C; text-align: center;">
+                                <div style="font-size: 18px; font-weight: 600; color: #1ABC9C;">165</div>
+                                <div style="color: #666; margin-top: 4px;">其他材料</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 4px;">7%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ 系统设置 ============ -->
+                <div id="page-settings" class="page">
+                    <div class="page-header">
+                        <div class="page-title">⚙️ 系统设置</div>
+                        <div class="page-desc">后台系统配置和管理</div>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">基础设置</h3>
+                        <div class="form-group">
+                            <label class="form-label">审核期限（天）</label>
+                            <input type="number" class="form-input" value="3">
+                            <div class="form-help">待审核的申请在此天数内必须完成审核</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">补充期限（天）</label>
+                            <input type="number" class="form-input" value="7">
+                            <div class="form-help">用户需要补充材料时的期限</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">最大文件大小（MB）</label>
+                            <input type="number" class="form-input" value="5">
+                            <div class="form-help">上传认证材料的最大文件大小</div>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-top: 24px;">
+                            <button class="btn btn-primary">💾 保存设置</button>
+                            <button class="btn btn-secondary">↻ 重置</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- AI助手面板 -->
+            <div class="main-assistant">
+                <div class="assistant-header">
+                    <span>🤖</span>
+                    <span>AI 助手</span>
+                </div>
+                <div class="assistant-placeholder">
+                    <div style="margin-bottom: 16px; font-size: 32px;">💬</div>
+                    <div style="font-size: 12px; color: #999;">
+                        <div style="margin-bottom: 8px;">有任何问题？</div>
+                        <div>点击下方按钮</div>
+                        <div>开启 AI 对话</div>
+                    </div>
+                </div>
+                <button class="assistant-btn">开启 AI 对话</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通过弹窗 -->
+    <div id="modal-approve" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                ✓ 通过审核
+                <button class="modal-close" onclick="closeModal('modal-approve')">×</button>
+            </div>
+            <div>
+                <p style="margin-bottom: 16px; color: #666;">确认通过此申请？申请人将获得相应的职员身份和权益。</p>
+                <div class="form-group">
+                    <label class="form-label">授予的职员身份</label>
+                    <select class="form-select">
+                        <option selected>普通职员</option>
+                        <option>专业：法律</option>
+                        <option>专业：工业设计</option>
+                        <option>专业：媒体设计</option>
+                        <option>专业：编程开发</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-approve')">取消</button>
+                <button class="btn btn-success" onclick="submitApprove()">✓ 确认通过</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 审核状态管理 ==========
+        let currentReviewTab = 'pending';  // 当前选中的审核标签：pending/approved/rejected
+
+        // 自动审核规则：根据认证方式判断是否需要人工审核
+        function getAutoReviewResult(certMethod, hasEmailVerified, hasOCRPassed) {
+            return {
+                'email': hasEmailVerified ? 'approved' : 'pending',  // 邮箱验证通过 → 自动通过
+                'contract': hasOCRPassed ? 'approved' : 'pending',   // OCR校验通过 → 自动通过
+                'tax': hasOCRPassed ? 'approved' : 'pending',        // OCR校验通过 → 自动通过
+                'other': 'pending'  // 其他材料 → 需要人工审核
+            }[certMethod] || 'pending';
+        }
+
+        // 分页配置
+        const pageConfig = {
+            currentPage: 1,
+            pageSize: 50,  // 每页显示50条
+            totalRecords: 50,
+            totalPages: 1
+        };
+
+        // 生成示例员工数据
+        const employeeNames = ['张三', '李四', '王五', '赵六', '孙七', '周八', '吴九', '郑十', '何一', '曾二', '朱三', '高四', '林五', '罗六', '陆七', '黄八', '金九', '龙十', '邓一', '陈二'];
+        const companies = ['联想（北京）有限公司', '联想控股股份有限公司', '联想商用产业集团', '联想研究院', '联想集团北京研发中心'];
+        const certTypes = ['普通职员', '专业：法律', '专业：工业设计', '专业：媒体设计', '专业：编程开发'];
+        const certMethods = ['企业邮箱', '劳动合同', '个人所得税', '其他材料'];
+        const statuses = ['已认证', '已失效'];
+
+        function generateEmployeeTable() {
+            // 生成数据，按照统计数据分布
+            let rows = '';
+            const certifiedCount = 2341;  // 已认证
+            const expiredCount = 45;      // 已失效
+            const totalRecords = certifiedCount + expiredCount;  // 总数 = 2386
+
+            // 认证类型分布（调整以匹配总数2,386）
+            const certTypeDistribution = {
+                '普通职员': 1875,      // 1850 + 25（调整差额）
+                '专业：法律': 186,
+                '专业：工业设计': 198,
+                '专业：媒体设计': 89,
+                '专业：编程开发': 38
+            };
+
+            // 认证方式分布
+            const certMethodDistribution = {
+                '企业邮箱': 1051,
+                '劳动合同': 703,
+                '个人所得税': 422,
+                '其他材料': 165
+            };
+
+            let certTypeIndex = 0;
+            let certMethodIndex = 0;
+            const certTypes = Object.keys(certTypeDistribution);
+            const certMethods = Object.keys(certMethodDistribution);
+
+            // 本月新增数：前187条
+            const newThisMonthCount = 187;
+
+            for (let i = 0; i < totalRecords; i++) {
+                const account = '170' + String(10000 + Math.floor(i / 100)).slice(-5) + String(i % 100).padStart(2, '0');
+                const nameIndex = i % employeeNames.length;
+                const name = employeeNames[nameIndex] + String(Math.floor(i / employeeNames.length) + 1);
+                const lenovoId = '102' + String(27200481 + i).slice(-8);
+                const phone = '1' + String(70 + (i % 8)) + String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
+                const company = companies[i % companies.length];
+
+                // 数据分布：2341个已认证，45个已失效
+                const status = i < certifiedCount ? '已认证' : '已失效';
+
+                // 本月新增标记：前187条
+                const isNew = i < newThisMonthCount ? 'yes' : 'no';
+
+                // 职员认证类型分布
+                let certType = '普通职员';
+                let typeCounter = 0;
+                for (let t = 0; t < certTypes.length; t++) {
+                    typeCounter += certTypeDistribution[certTypes[t]];
+                    if (i < typeCounter) {
+                        certType = certTypes[t];
+                        break;
+                    }
+                }
+
+                // 认证方式分布
+                let certMethod = '企业邮箱';
+                let methodCounter = 0;
+                for (let m = 0; m < certMethods.length; m++) {
+                    methodCounter += certMethodDistribution[certMethods[m]];
+                    if (i < methodCounter) {
+                        certMethod = certMethods[m];
+                        break;
+                    }
+                }
+
+                const month = String(Math.floor(i / 473) + 1).padStart(2, '0');  // 分散到12个月
+                const day = String((i % 28) + 1).padStart(2, '0');
+                const certDate = '2024-' + month + '-' + day + ' ' +
+                                String(8 + (i % 12)).padStart(2, '0') + ':' + String(30 + (i % 30)).padStart(2, '0');
+
+                const badgeClass = status === '已认证' ? 'badge-success' : 'badge-warning';
+                const certTypeBadge = certType.includes('专业') ? 'badge-info' : 'badge-info';
+
+                rows += `<tr data-status="${status}" data-cert-type="${certType}" data-cert-method="${certMethod}" data-is-new="${isNew}">
+                    <td><input type="checkbox"></td>
+                    <td>${account}</td>
+                    <td>${name}</td>
+                    <td>${lenovoId}</td>
+                    <td>${phone}</td>
+                    <td><span class="badge badge-success">✓ 已认证</span></td>
+                    <td>${company}</td>
+                    <td><span class="badge ${certTypeBadge}">${certType}</span></td>
+                    <td>${certMethod}</td>
+                    <td>${certDate}</td>
+                    <td><span class="badge ${badgeClass}">${status}</span></td>
+                    <td>
+                        <a class="action-link" onclick="showPage('employee-detail-1')">查看详情</a>
+                    </td>
+                </tr>`;
+            }
+
+            // 更新统计信息
+            pageConfig.totalRecords = totalRecords;
+
+            return rows;
+        }
+
+        function toggleMenuGroup(element) {
+            // 获取这个菜单组的submenu和toggle按钮
+            const menuGroup = element.closest('.menu-group');
+            const submenu = menuGroup.querySelector('.submenu');
+            const toggle = element.querySelector('.menu-group-toggle');
+
+            // 切换展开/收起状态
+            submenu.classList.toggle('expanded');
+            toggle.classList.toggle('expanded');
+        }
+
+        function showPage(pageName) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // 显示指定页面
+            const page = document.getElementById('page-' + pageName);
+            if (page) {
+                page.classList.add('active');
+            }
+
+            // 更新菜单选中状态
+            document.querySelectorAll('.menu-item, .submenu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const clickTarget = event.target.closest('.menu-item, .submenu-item');
+            if (clickTarget) {
+                clickTarget.classList.add('active');
+            }
+
+            // 更新面包屑
+            const breadcrumbMap = {
+                'overview': '在职员工数据概览',
+                'employee-list': '在职员工管理',
+                'employee-detail': '员工详情',
+                'employee-detail-1': '员工详情',
+                'employee-detail-2': '员工详情',
+                'employee-detail-3': '员工详情',
+                'review-list': '认证审核管理',
+                'review-detail': '认证审核详情'
+            };
+            document.getElementById('breadcrumb').textContent = breadcrumbMap[pageName] || '首页';
+
+            // ========== 审核详情页面特殊处理 ==========
+            if (pageName === 'review-detail') {
+                updateReviewDetailStatus();
+            }
+        }
+
+        // 更新审核详情页面的状态显示
+        function updateReviewDetailStatus() {
+            const userMeta = document.querySelector('#page-review-detail .user-meta');
+            if (!userMeta) return;
+
+            // 查找并移除旧的状态badge
+            const oldBadge = userMeta.querySelector('.badge');
+            if (oldBadge) {
+                oldBadge.remove();
+            }
+
+            // 根据currentReviewTab创建新的状态badge
+            const statusConfig = {
+                'pending': { text: '◐ 待审核', class: 'badge-warning' },
+                'approved': { text: '✓ 已通过审核', class: 'badge-success' },
+                'rejected': { text: '✗ 已驳回', class: 'badge-danger' }
+            };
+
+            const config = statusConfig[currentReviewTab] || statusConfig['pending'];
+
+            // 创建新的badge元素
+            const newBadge = document.createElement('span');
+            newBadge.className = `badge ${config.class}`;
+            newBadge.style.display = 'inline-block';
+            newBadge.textContent = config.text;
+
+            userMeta.appendChild(newBadge);
+
+            // 根据状态隐藏或显示审核操作卡片
+            const reviewDetailPage = document.getElementById('page-review-detail');
+            if (reviewDetailPage) {
+                const cards = reviewDetailPage.querySelectorAll('.card');
+                let reviewOperationSection = null;
+
+                // 查找包含"审核操作"h3的卡片
+                cards.forEach(card => {
+                    const h3 = card.querySelector('h3');
+                    if (h3 && h3.textContent.includes('审核操作')) {
+                        reviewOperationSection = card;
+                    }
+                });
+
+                if (reviewOperationSection) {
+                    if (currentReviewTab === 'approved') {
+                        // 自动审核通过，不需要人工审核，隐藏审核操作
+                        reviewOperationSection.style.display = 'none';
+                    } else {
+                        // 待审核，显示审核操作
+                        reviewOperationSection.style.display = 'block';
+                    }
+                }
+            }
+
+            console.log('✓ 更新审核状态:', config.text);
+        }
+
+        function updatePagination() {
+            // 计算总页数和总记录数
+            const visibleRows = document.querySelectorAll('#page-employee-list tbody tr:not([style*="display: none"])');
+            pageConfig.totalRecords = visibleRows.length;
+            pageConfig.totalPages = Math.ceil(pageConfig.totalRecords / pageConfig.pageSize) || 1;
+            pageConfig.currentPage = Math.min(pageConfig.currentPage, pageConfig.totalPages);
+
+            // 更新分页信息
+            document.getElementById('total-records').textContent = pageConfig.totalRecords;
+            document.getElementById('current-page').textContent = pageConfig.currentPage;
+            document.getElementById('total-pages').textContent = pageConfig.totalPages;
+            document.getElementById('page-input').value = pageConfig.currentPage;
+            document.getElementById('page-input').max = pageConfig.totalPages;
+
+            // 隐藏或显示所有行
+            visibleRows.forEach((row, index) => {
+                const pageStart = (pageConfig.currentPage - 1) * pageConfig.pageSize;
+                const pageEnd = pageStart + pageConfig.pageSize;
+                row.style.display = (index >= pageStart && index < pageEnd) ? '' : 'none';
+            });
+        }
+
+        function goToPage(direction) {
+            const newPage = pageConfig.currentPage + direction;
+            if (newPage >= 1 && newPage <= pageConfig.totalPages) {
+                pageConfig.currentPage = newPage;
+                updatePagination();
+            }
+        }
+
+        function goToPageInput() {
+            const pageInput = document.getElementById('page-input');
+            const page = parseInt(pageInput.value) || 1;
+            if (page >= 1 && page <= pageConfig.totalPages) {
+                pageConfig.currentPage = page;
+                updatePagination();
+            } else {
+                alert(`请输入 1 到 ${pageConfig.totalPages} 之间的页码`);
+                pageInput.value = pageConfig.currentPage;
+            }
+        }
+
+        // 审核管理翻页配置
+        let reviewPageConfig = {
+            currentPage: 1,
+            pageSize: 5,
+            totalRecords: 5,
+            totalPages: 1
+        };
+
+        function updateReviewPagination() {
+            const reviewTable = document.getElementById('review-table');
+            const allRows = reviewTable.querySelectorAll('tbody tr');
+
+            // 计算当前标签下的可见行数
+            const visibleRows = Array.from(allRows).filter(row => {
+                const display = window.getComputedStyle(row).display;
+                return display !== 'none';
+            });
+
+            reviewPageConfig.totalRecords = visibleRows.length;
+            reviewPageConfig.totalPages = Math.ceil(reviewPageConfig.totalRecords / reviewPageConfig.pageSize) || 1;
+            reviewPageConfig.currentPage = Math.min(reviewPageConfig.currentPage, reviewPageConfig.totalPages);
+
+            // 更新翻页信息
+            document.getElementById('review-total-records').textContent = reviewPageConfig.totalRecords;
+            document.getElementById('review-current-page').textContent = reviewPageConfig.currentPage;
+            document.getElementById('review-total-pages').textContent = reviewPageConfig.totalPages;
+            document.getElementById('review-page-input').value = reviewPageConfig.currentPage;
+            document.getElementById('review-page-input').max = reviewPageConfig.totalPages;
+
+            // 隐藏或显示对应页的行
+            visibleRows.forEach((row, index) => {
+                const pageStart = (reviewPageConfig.currentPage - 1) * reviewPageConfig.pageSize;
+                const pageEnd = pageStart + reviewPageConfig.pageSize;
+                row.style.display = (index >= pageStart && index < pageEnd) ? '' : 'none';
+            });
+        }
+
+        function reviewGoToPage(direction) {
+            const newPage = reviewPageConfig.currentPage + direction;
+            if (newPage >= 1 && newPage <= reviewPageConfig.totalPages) {
+                reviewPageConfig.currentPage = newPage;
+                updateReviewPagination();
+            }
+        }
+
+        function reviewGoToPageInput() {
+            const pageInput = document.getElementById('review-page-input');
+            const page = parseInt(pageInput.value) || 1;
+            if (page >= 1 && page <= reviewPageConfig.totalPages) {
+                reviewPageConfig.currentPage = page;
+                updateReviewPagination();
+            } else {
+                alert(`请输入 1 到 ${reviewPageConfig.totalPages} 之间的页码`);
+                pageInput.value = reviewPageConfig.currentPage;
+            }
+        }
+
+        // 加载审核详情并同步数据
+        function loadReviewDetail(element) {
+            const row = element.closest('tr');
+            const cells = row.querySelectorAll('td');
+
+            // 提取行数据
+            const appNumber = cells[1].textContent;
+            const applicant = cells[2].textContent;
+            const certMethod = cells[3].textContent;
+            const certIdentity = cells[4].textContent;
+            const reviewMethod = cells[5].textContent;
+            const appTime = cells[6].textContent;
+            const reviewer = cells[7].textContent;
+
+            // 更新详情页面的标题和数据
+            const detailPage = document.getElementById('page-review-detail');
+            const pageDesc = detailPage.querySelector('.page-desc');
+            pageDesc.textContent = `申请编号：${appNumber}`;
+
+            // 更新用户信息卡片（简化版，实际应该从row获取更多数据）
+            const userName = applicant.split(' ')[0];
+            const userAccount = applicant.split('(')[1].replace(')', '');
+
+            detailPage.querySelector('.user-avatar-large').textContent = userName.charAt(0);
+            detailPage.querySelector('.user-name').textContent = userName;
+            detailPage.querySelector('.user-meta').innerHTML = `
+                <div>账号：${userAccount}</div>
+                <div>LenovoID：L${Math.random().toString().slice(2, 12)}</div>
+            `;
+
+            // 更新申请基本信息
+            const basicInfoTable = detailPage.querySelector('.card:nth-child(1) table');
+            basicInfoTable.rows[0].cells[1].textContent = appNumber;
+            basicInfoTable.rows[2].cells[1].innerHTML = `<span class="badge badge-info">${certMethod}</span>`;
+            basicInfoTable.rows[3].cells[1].innerHTML = certIdentity;
+
+            // 同步审核方式和状态
+            updateReviewDetailStatus();
+
+            // 跳转到详情页
+            showPage('review-detail');
+        }
+
+        function filterByCard(filterType, filterValue) {
+            // 确保页面显示
+            const employeeListPage = document.getElementById('page-employee-list');
+            if (employeeListPage) {
+                employeeListPage.classList.add('active');
+            }
+
+            // 获取所有表格行
+            const rows = document.querySelectorAll('#page-employee-list tbody tr');
+            let visibleCount = 0;
+
+            // 隐藏所有行，然后根据条件显示
+            rows.forEach(row => {
+                let shouldShow = false;
+
+                if (filterType === 'total') {
+                    // 显示所有行
+                    shouldShow = true;
+                } else if (filterType === 'certified') {
+                    // 显示已认证的行
+                    shouldShow = row.getAttribute('data-status') === '已认证';
+                } else if (filterType === 'expired') {
+                    // 显示已失效的行
+                    shouldShow = row.getAttribute('data-status') === '已失效';
+                } else if (filterType === 'new') {
+                    // 显示本月新增（前187条）
+                    shouldShow = row.getAttribute('data-is-new') === 'yes';
+                } else if (filterType === 'certType') {
+                    // 按职员认证类型筛选
+                    const certType = row.getAttribute('data-cert-type') || '';
+                    // 精确匹配或包含匹配
+                    shouldShow = (certType === filterValue || certType.includes(filterValue));
+                } else if (filterType === 'certMethod') {
+                    // 按认证方式筛选
+                    const certMethod = row.getAttribute('data-cert-method') || '';
+                    shouldShow = (certMethod === filterValue || certMethod.includes(filterValue));
+                }
+
+                row.style.display = shouldShow ? '' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+
+            // 显示提示信息
+            let message = '';
+            if (filterType === 'total') {
+                message = `显示全部 ${visibleCount} 条记录`;
+            } else if (filterType === 'certified') {
+                message = `已认证员工 ${visibleCount} 条`;
+            } else if (filterType === 'expired') {
+                message = `已失效员工 ${visibleCount} 条`;
+            } else if (filterType === 'new') {
+                message = `本月新增员工 ${visibleCount} 条`;
+            } else {
+                message = `筛选 "${filterValue}"，显示 ${visibleCount} 条记录`;
+            }
+            console.log(message);
+
+            // 重置分页到第1页
+            pageConfig.currentPage = 1;
+            updatePagination();
+
+            // 滚动到表格区域
+            setTimeout(() => {
+                const table = document.querySelector('#page-employee-list .card:has(table)');
+                if (table) {
+                    table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+
+        function switchTab(element, tab) {
+            // 记录当前选中的审核标签
+            currentReviewTab = tab;
+            console.log('✓ 切换审核标签:', tab);
+
+            // 更新标签页样式
+            element.parentElement.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            // 隐藏所有表格行，只显示对应状态的行
+            const rows = element.closest('.card').querySelector('tbody').querySelectorAll('tr');
+            rows.forEach(row => {
+                row.style.display = 'none';
+            });
+
+            // 显示选中标签页对应的行
+            const statusClass = 'status-' + tab;
+            const visibleRows = element.closest('.card').querySelector('tbody').querySelectorAll('.' + statusClass);
+            visibleRows.forEach(row => {
+                row.style.display = '';
+            });
+
+            // 重置翻页并更新翻页信息
+            reviewPageConfig.currentPage = 1;
+            updateReviewPagination();
+        }
+
+        function showReview() {
+            showPage('review-detail');
+        }
+
+        function showApproveModal() {
+            document.getElementById('modal-approve').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function handleSearch() {
+            const filterBar = document.querySelector('#page-employee-list .filter-bar');
+            const searchInput = filterBar.querySelector('.filter-input');
+            const selects = filterBar.querySelectorAll('.filter-select');
+
+            const searchValue = searchInput.value.toLowerCase();
+            const filters = {
+                realName: selects[0].value,
+                certType: selects[1].value,
+                certMethod: selects[2].value,
+                status: selects[3].value
+            };
+
+            const rows = document.querySelectorAll('#page-employee-list tbody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                let show = true;
+
+                // 搜索账号或姓名
+                if (searchValue) {
+                    const accountName = (row.cells[1]?.textContent + row.cells[2]?.textContent).toLowerCase();
+                    if (!accountName.includes(searchValue)) {
+                        show = false;
+                    }
+                }
+
+                // 筛选认证类型
+                if (show && filters.certType !== '全部') {
+                    const certType = row.getAttribute('data-cert-type') || '';
+                    if (!certType.includes(filters.certType)) {
+                        show = false;
+                    }
+                }
+
+                // 筛选认证方式
+                if (show && filters.certMethod !== '全部') {
+                    const certMethod = row.getAttribute('data-cert-method') || '';
+                    if (certMethod !== filters.certMethod) {
+                        show = false;
+                    }
+                }
+
+                // 筛选当前状态
+                if (show && filters.status !== '全部') {
+                    const status = row.getAttribute('data-status') || '';
+                    if (status !== filters.status) {
+                        show = false;
+                    }
+                }
+
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            // 重置分页到第1页
+            pageConfig.currentPage = 1;
+            updatePagination();
+
+            alert(`已筛选，显示 ${visibleCount} 条记录`);
+        }
+
+        function handleReset() {
+            // 重置搜索框
+            const filterBar = document.querySelector('#page-employee-list .filter-bar');
+            const searchInput = filterBar.querySelector('.filter-input');
+            searchInput.value = '';
+
+            // 重置所有下拉框
+            const selects = filterBar.querySelectorAll('.filter-select');
+            selects.forEach(select => {
+                select.value = '全部';
+            });
+
+            // 显示所有行
+            const rows = document.querySelectorAll('#page-employee-list tbody tr');
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+
+            // 重置分页到第1页
+            pageConfig.currentPage = 1;
+            updatePagination();
+
+            alert('已重置筛选条件，显示全部记录');
+        }
+
+        function handleExport() {
+            const rows = document.querySelectorAll('#page-employee-list tbody tr:not([style*="display: none"])');
+            let csvContent = '账号,姓名,性别,职员认证状态,认证方式,当前状态,认证时间,有效期\n';
+
+            rows.forEach(row => {
+                const cells = Array.from(row.cells).map(cell => {
+                    const text = cell.textContent.trim();
+                    return `"${text}"`;
+                });
+                csvContent += cells.join(',') + '\n';
+            });
+
+            // 创建并下载文件
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', '员工数据_' + new Date().getTime() + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert(`已导出 ${rows.length} 条记录`);
+        }
+
+        function submitApprove() {
+            alert('审核通过！');
+            closeModal('modal-approve');
+            showPage('review-list');
+        }
+
+        function previewImage() {
+            alert('图片预览功能\n实际应用中会弹出大图查看器');
+        }
+
+        function viewImage(element) {
+            const modal = document.getElementById('modal-image-preview');
+            const previewImage = document.getElementById('preview-image');
+            const img = element.querySelector('img');
+            previewImage.src = img.src;
+            modal.style.display = 'flex';
+        }
+
+        function closeImagePreview() {
+            const modal = document.getElementById('modal-image-preview');
+            modal.style.display = 'none';
+        }
+
+        // 点击模态框外部关闭图片预览
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('modal-image-preview');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // 页面加载初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            // 显示员工管理页面
+            const employeeListPage = document.getElementById('page-employee-list');
+            if (employeeListPage) {
+                employeeListPage.classList.add('active');
+            }
+
+            document.getElementById('breadcrumb').textContent = '在职员工管理';
+
+            // 初始化员工列表表格，生成50条示例数据
+            const tbody = document.querySelector('#page-employee-list tbody');
+            if (tbody) {
+                tbody.innerHTML = generateEmployeeTable();
+                // 默认显示全部数据
+                const allRows = tbody.querySelectorAll('tr');
+                allRows.forEach(row => {
+                    row.style.display = '';
+                });
+                // 初始化分页
+                pageConfig.currentPage = 1;
+                updatePagination();
+            }
+
+            // 初始化审核管理表格，显示待审核标签页的内容
+            const pendingRows = document.querySelectorAll('.status-pending');
+            pendingRows.forEach(row => {
+                row.style.display = '';
+            });
+
+            // 初始化审核管理翻页
+            reviewPageConfig.currentPage = 1;
+            updateReviewPagination();
+        });
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal-approve');
+            if (event.target === modal) {
+                modal.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

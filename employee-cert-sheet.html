@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Version: 2.0.0 (Updated: 2026-04-15) - Upgrade/Update Flow Implementation -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>联想职工认证</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: rgba(0, 0, 0, 0.5);
+            color: #333;
+            overflow: hidden;
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            height: 90vh;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.3s ease;
+            z-index: 99;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(100%);
+            }
+        }
+
+        .status-bar {
+            height: 0;
+            padding-top: 0;
+            display: none;
+        }
+
+        .header {
+            padding: 16px 16px 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 4px;
+            background: #e8e8e8;
+            border-radius: 2px;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .logo-box {
+            background: #e31937;
+            color: white;
+            padding: 2px 6px;
+            font-size: 11px;
+            border-radius: 2px;
+        }
+
+        .header-close {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 16px 100px 16px;
+        }
+
+        .page {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-header {
+            margin-bottom: 24px;
+            margin-top: 20px;
+        }
+
+        .step-progress {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 16px;
+            justify-content: space-between;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #999;
+            margin-bottom: 6px;
+        }
+
+        .step-circle.active {
+            background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%);
+            color: white;
+            border: none;
+        }
+
+        .step-circle.done {
+            background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%);
+            color: white;
+            border: none;
+        }
+
+        .step-label {
+            font-size: 10px;
+            color: #999;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .step-content {
+            margin-bottom: 24px;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: #999;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-required {
+            color: #ff4444;
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            background: #fafafa;
+            color: #333;
+            transition: all 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-input::placeholder {
+            color: #ccc;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #0066ff;
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.08);
+        }
+
+        .form-input.error,
+        .form-select.error {
+            border-color: #ff4444;
+            background: #fff5f5;
+        }
+
+        .form-input.success {
+            border-color: #4caf50;
+            background: #f5fff5;
+        }
+
+        .error-msg {
+            display: none;
+            font-size: 11px;
+            color: #ff4444;
+            margin-top: 4px;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-item.selected {
+            background: #f5e8eb;
+            border-color: #6B1B3F;
+        }
+
+        .option-check,
+        .option-radio {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            margin-right: 10px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #0066ff;
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .option-desc {
+            font-size: 11px;
+            color: #999;
+            line-height: 1.4;
+        }
+
+        .tip-box {
+            display: flex;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #f0f5ff;
+            border: 1px solid #d4e8ff;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #0066ff;
+            line-height: 1.5;
+        }
+
+        .tip-icon {
+            font-size: 14px;
+            min-width: 14px;
+        }
+
+        .legal-box {
+            padding: 12px;
+            background: #fff5f5;
+            border: 1px solid #ffc6c6;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 11px;
+            color: #ff6666;
+            line-height: 1.6;
+        }
+
+        .legal-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .success-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+
+        .success-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .success-desc {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .privilege-item {
+            background: #f0f5ff;
+            border: 1px solid #d4e8ff;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #0066ff;
+        }
+
+        .privilege-item strong {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .button-group {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: #fff;
+            border-top: 1px solid #e8e8e8;
+            padding: 12px 16px;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            -webkit-user-select: none;
+            user-select: none;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #6B1B3F 0%, #C83F5F 100%);
+            color: white;
+            flex: 2;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(90deg, #5a1535 0%, #b63450 100%);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #6B1B3F;
+            border: 2px solid #6B1B3F;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+
+        /* Modal */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            z-index: 1000;
+            max-width: 320px;
+            width: 90%;
+            padding: 24px 16px;
+            text-align: center;
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .modal-desc {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 10px;
+            background: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .modal-btn-secondary {
+            width: 100%;
+            padding: 10px;
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #e8e8e8;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar"></div>
+
+        <div class="header">
+            <div class="header-logo">
+                <div class="logo-box">Lenovo</div>
+                <span>联想</span>
+            </div>
+            <button class="header-close" onclick="closeSheet()">×</button>
+        </div>
+
+        <div class="content">
+            <!-- 第1步：企业职工认证 -->
+            <div id="step1" class="page active">
+                <div class="step-header">
+                    <div class="step-progress">
+                        <div class="step-item">
+                            <div class="step-circle active">1</div>
+                            <div class="step-label">认证类型</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">实名认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">在职认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">材料提交</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-content">
+                    <div id="step1-first-time">
+                        <!-- 权益展示 -->
+                        <div style="padding: 12px; background: #f5f5f5; border-radius: 8px; margin-bottom: 20px;">
+                            <div style="font-size: 12px; color: #999; margin-bottom: 8px;">可解锁权益</div>
+                            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #333;">采购权益专享</div>
+                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #333;">身份标识</div>
+                            </div>
+                        </div>
+
+                        <!-- 企业职工认证选项 -->
+                        <div class="step-title">企业职工认证</div>
+                        <div class="step-desc">验证你的企业员工身份</div>
+
+                        <div class="option-group">
+                            <label class="option-item selected">
+                                <input type="radio" name="cert-type" value="enterprise" class="option-radio" checked>
+                                <div class="option-content">
+                                    <div class="option-title">企业职工认证</div>
+                                    <div class="option-desc">适用于企业在职员工<br>权益：采购权益专享、身份标识</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 已认证用户的升级/更新入口 -->
+                    <div id="step1-upgrade" class="hidden">
+                        <div class="step-title">继续认证</div>
+                        <div class="step-desc">选择升级认证或更新在职信息</div>
+
+                        <!-- 升级认证入口 -->
+                        <div id="upgrade-option"
+                             class="option-item"
+                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: all 0.3s;"
+                             onclick="startUpgradeFlow()"
+                             onmouseover="this.style.borderColor='#1ABC9C'; this.style.backgroundColor='#f0fffe';"
+                             onmouseout="this.style.borderColor='#e0e0e0'; this.style.backgroundColor='white';">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #1ABC9C; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">🎯</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: #333; margin-bottom: 4px;">升级：专业职称认证</div>
+                                <div style="font-size: 12px; color: #999;">从基础认证升级为专业职称认证，获得专业身份和特权</div>
+                            </div>
+                            <div style="color: #999; font-size: 18px;">›</div>
+                        </div>
+
+                        <!-- 更新认证入口 -->
+                        <div id="update-option"
+                             class="option-item"
+                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;"
+                             onclick="startUpdateFlow()"
+                             onmouseover="this.style.borderColor='#1ABC9C'; this.style.backgroundColor='#f0fffe';"
+                             onmouseout="this.style.borderColor='#e0e0e0'; this.style.backgroundColor='white';">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #1ABC9C; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">🔄</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: #333; margin-bottom: 4px;">更新在职认证信息</div>
+                                <div style="font-size: 12px; color: #999;">更新您的企业、职位、行业等基本信息</div>
+                            </div>
+                            <div style="color: #999; font-size: 18px;">›</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第2步：实名认证 -->
+            <div id="step2" class="page hidden">
+                <div class="step-header">
+                    <div class="step-progress">
+                        <div class="step-item">
+                            <div class="step-circle done">✓</div>
+                            <div class="step-label">认证类型</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle active">2</div>
+                            <div class="step-label">实名认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">在职认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">材料提交</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-content">
+                    <!-- 未完成状态 -->
+                    <div id="realname-pending">
+                        <div class="step-title">第2步：实名认证</div>
+
+                        <div style="padding: 12px; background: #fff3e0; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #d46b08; line-height: 1.6; border-left: 3px solid #ff9800;">
+                            🔐 实名认证对会员的身份证、银行卡、资格证等个人信息进行验证，请认真填写。
+                        </div>
+
+                        <!-- 身份证认证表单 -->
+                        <div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span>姓名 <span class="form-required">*</span></span>
+                                </label>
+                                <input type="text" class="form-input" placeholder="请填写您的真实姓名" id="realname" oninput="validate()">
+                                <div class="error-msg" id="realname-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span>身份证号 <span class="form-required">*</span></span>
+                                </label>
+                                <input type="text" class="form-input" placeholder="请填写您的身份证号" id="idcard" oninput="validate()" maxlength="18">
+                                <div class="error-msg" id="idcard-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span>手机/关联手机 <span class="form-required">*</span></span>
+                                </label>
+                                <input type="text" class="form-input" placeholder="默认为注册手机号" id="phone" oninput="validate()">
+                                <div class="error-msg" id="phone-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span>验证码 <span class="form-required">*</span></span>
+                                </label>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" class="form-input" placeholder="请输入验证码" id="code" oninput="validate()" maxlength="6" style="flex: 1;">
+                                    <button class="btn btn-secondary" style="white-space: nowrap;" onclick="sendCode()">发送验证码</button>
+                                </div>
+                                <div class="error-msg" id="code-error"></div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" id="agreement" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span style="font-size: 13px; color: #666;">我同意 <a href="#" style="color: #1ABC9C; text-decoration: none;">《实名认证协议》</a></span>
+                                </label>
+                                <div class="error-msg" id="agreement-error"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 已完成状态 -->
+                    <div id="realname-completed" class="hidden">
+                        <div class="success-box" style="padding: 40px 20px 0;">
+                            <div class="success-icon">✅</div>
+                            <div class="success-title">实名认证已完成</div>
+                            <div class="success-desc">你已完成个人实名认证，可以继续进行职工认证</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第3步：在职认证 -->
+            <div id="step3" class="page hidden">
+                <div class="step-header">
+                    <div class="step-progress">
+                        <div class="step-item">
+                            <div class="step-circle done">✓</div>
+                            <div class="step-label">认证类型</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle done">✓</div>
+                            <div class="step-label">实名认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle active">3</div>
+                            <div class="step-label">在职认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">材料提交</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-content">
+                    <!-- 升级认证的提示信息 -->
+                    <div id="specialty-upgrade-tips" class="hidden" style="padding: 12px; background: #fff3e0; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #d46b08; line-height: 1.6; border-left: 3px solid #ff9800;">
+                        <div style="font-weight: 500; margin-bottom: 6px;">📋 专业职称认证资料要求</div>
+                        <div>请上传包含您的职称信息的相关文件，例如：</div>
+                        <div style="margin-top: 6px;">
+                            ✓ 设计师 → 设计相关的项目文件、作品集、资格证书等截图<br>
+                            ✓ 律师 → 律师证、执业证、法律相关文件截图<br>
+                            ✓ 编程开发 → 技术认证证书、代码贡献证明、项目经验等截图<br>
+                            ✓ 工业设计 → 设计专利、获奖证书、设计作品等截图
+                        </div>
+                    </div>
+
+                    <div class="step-title">第3步：企业在职认证</div>
+                    <div class="step-desc">填写你的企业信息和职位，帮助我们验证你的在职身份</div>
+
+                    <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                        填写下列信息以完成认证。如有疑问，可参考个人认证常见问题说明。
+                    </div>
+
+                    <!-- 企业信息部分 -->
+                    <div id="company-section">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span>企业名称 <span class="form-required">*</span></span>
+                        </label>
+                        <div style="position: relative;">
+                            <input type="text" class="form-input" placeholder="请输入企业名称（如：联想、测试）" id="company" oninput="searchCompanies(this.value)" onblur="hideCompanyDropdown()" autocomplete="off">
+                            <div id="company-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e8e8e8; border-top: none; border-radius: 0 0 6px 6px; max-height: 250px; overflow-y: auto; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <!-- 搜索结果列表会动态插入 -->
+                            </div>
+                        </div>
+                        <div id="company-verify-status" style="display: none; margin-top: 6px;"></div>
+                        <div class="error-msg" id="company-error"></div>
+                    </div>
+                    </div>
+
+                    <!-- 职位信息部分 -->
+                    <div id="position-section">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span>职位信息 <span class="form-required">*</span></span>
+                        </label>
+                        <div style="position: relative;">
+                            <input type="text" class="form-input" placeholder="输入职位，如：产品经理" id="position" oninput="filterPositions(this.value); validate()" onblur="hidePositionSuggestions()" maxlength="50" autocomplete="off">
+                            <div id="position-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e8e8e8; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 10;">
+                                <!-- 建议列表会动态插入 -->
+                            </div>
+                        </div>
+                        <div class="error-msg" id="position-error"></div>
+                    </div>
+
+                    <!-- 行业部分 -->
+                    <div id="industry-section">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span>所属行业 <span class="form-required">*</span></span>
+                        </label>
+                        <select class="form-select" id="industry" onchange="validate()">
+                            <option value="">请选择行业</option>
+                            <option value="tech">互联网/信息技术</option>
+                            <option value="finance">金融</option>
+                            <option value="design">设计</option>
+                            <option value="legal">法律</option>
+                            <option value="transport">运输/仓储</option>
+                            <option value="real-estate">房地产</option>
+                            <option value="other">其他</option>
+                        </select>
+                        <div class="error-msg" id="industry-error"></div>
+                    </div>
+                    </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <div class="tip-icon">ℹ️</div>
+                        <div class="tip-content">
+                            <strong>职位匹配</strong>
+                            系统会自动匹配你的职位与选择的专业领域
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第4步：认证材料提交 -->
+            <div id="step4" class="page hidden">
+                <div class="step-header">
+                    <div class="step-progress">
+                        <div class="step-item">
+                            <div class="step-circle done">✓</div>
+                            <div class="step-label">认证类型</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle done">✓</div>
+                            <div class="step-label">实名认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle done">✓</div>
+                            <div class="step-label">在职认证</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-circle active">4</div>
+                            <div class="step-label">材料提交</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-content">
+                    <div class="step-title">第4步：选择在职证明方式</div>
+                    <div class="step-desc">请选择任意一种方式验证你的在职身份</div>
+
+                    <div class="option-group">
+                        <label class="option-item selected" id="email-option" onclick="selectMethod(this, 'email')">
+                            <input type="radio" name="method" value="email" class="option-radio" checked>
+                            <div class="option-content">
+                                <div class="option-title">企业邮箱认证 <span style="color: #4caf50;">（推荐）</span></div>
+                                <div class="option-desc">请用企业邮箱接收系统发送的验证邮件</div>
+                            </div>
+                        </label>
+
+                        <label class="option-item" onclick="selectMethod(this, 'contract')">
+                            <input type="radio" name="method" value="contract" class="option-radio">
+                            <div class="option-content">
+                                <div class="option-title">劳动合同或在职证明</div>
+                                <div class="option-desc">上传劳动合同或企业在职证明文件</div>
+                            </div>
+                        </label>
+
+                        <label class="option-item" onclick="selectMethod(this, 'tax')">
+                            <input type="radio" name="method" value="tax" class="option-radio">
+                            <div class="option-content">
+                                <div class="option-title">个人所得税APP认证</div>
+                                <div class="option-desc">上传个人所得税APP的在职受雇信息页面</div>
+                            </div>
+                        </label>
+
+                        <label class="option-item" onclick="selectMethod(this, 'other')">
+                            <input type="radio" name="method" value="other" class="option-radio">
+                            <div class="option-content">
+                                <div class="option-title">其他材料认证</div>
+                                <div class="option-desc">上传其他可证明在职身份的材料</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- 企业邮箱方式 -->
+                    <div id="email-method">
+                        <div style="padding: 12px; background: #f0f7ff; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #0066cc; line-height: 1.6; border-left: 3px solid #0066cc;">
+                            <strong>📋 认证说明：</strong><br>
+                            使用企业邮箱认证，仅可认证为xX企业员工(L1认证)。如需认证具体职务请上传其他证明材料或选择其他认证方式。可上传可以证明在职公司、目前职位和在职时效的材料，如社保缴费证明、职称材料等(可多项组合)，通过OCR识别可升级为L2指定的四个行业认证(法律、工业设计、媒体设计、编程开发)。
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span>企业邮箱 <span class="form-required">*</span></span>
+                            </label>
+                            <div style="display: flex; gap: 8px;">
+                                <div style="flex: 1;">
+                                    <input type="text" class="form-input" placeholder="请输入邮箱用户名" id="email-user" oninput="validate()">
+                                </div>
+                                <div style="flex: 1; display: flex; align-items: center;">
+                                    <span style="color: #666;">@</span>
+                                    <input type="text" class="form-input" placeholder="邮箱后缀(从企业信息自动获取)" id="email-domain" disabled style="background: #f5f5f5; margin-left: 4px;">
+                                </div>
+                            </div>
+                            <div class="error-msg" id="email-error"></div>
+                            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px; flex: none;" onclick="sendCode()">发送验证码</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span>验证码 <span class="form-required">*</span></span>
+                                <span class="form-hint">6位数字</span>
+                            </label>
+                            <input type="text" class="form-input" placeholder="请输入验证码" id="code" oninput="validate()" maxlength="6">
+                            <div class="error-msg" id="code-error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span>辅助职位认证 <span style="color: #999;">(非必填)</span></span>
+                                <span class="form-hint">上传带有资质、行业特性的资料可升级为L2认证</span>
+                            </label>
+                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;" onclick="document.getElementById('position-file').click()">
+                                <div style="font-size: 32px; margin-bottom: 8px;">+</div>
+                                <div style="font-size: 12px; color: #999;">点击或拖拽上传资格证书、职称证明等资料</div>
+                                <div style="font-size: 11px; color: #ccc; margin-top: 8px;">支持JPG/PNG/PDF，单张最大5MB</div>
+                            </div>
+                            <input type="file" id="position-file" style="display: none;" accept=".jpg,.png,.pdf" onchange="validate()">
+                            <div class="error-msg" id="position-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- 劳动合同/在职证明方式 -->
+                    <div id="contract-method" class="hidden">
+                        <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                            请上传劳动合同或企业在职证明。在职证明需为六个月内开具，需包含真实、清晰、完整的关键信息，无遮挡。
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span>上传文件 <span class="form-required">*</span></span>
+                                <span class="form-hint">支持JPG/PNG/PDF，单张最大5MB</span>
+                            </label>
+                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
+                                <div style="font-size: 32px; margin-bottom: 8px;">+</div>
+                                <div style="font-size: 12px; color: #999;">点击或拖拽上传劳动合同或在职证明文件</div>
+                            </div>
+                            <div class="error-msg" id="contract-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- 个人所得税APP方式 -->
+                    <div id="tax-method" class="hidden">
+                        <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                            请上传个人所得税APP由「个人中心」进入「在职受雇信息」页面的录屏视频。使用个人所得税材料认证，仅可认证为所属企业员工。如需认证具体职务请上传其他证明材料或选择其他认证方式。
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span>上传认证材料 <span class="form-required">*</span></span>
+                                <span class="form-hint">支持上传视频</span>
+                            </label>
+                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
+                                <div style="font-size: 32px; margin-bottom: 8px;">+</div>
+                                <div style="font-size: 12px; color: #999;">点击或拖拽上传个人所得税APP的在职受雇信息页面</div>
+                            </div>
+                            <div class="error-msg" id="tax-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- 其他材料方式 -->
+                    <div id="other-method" class="hidden">
+                        <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                            请上传可以证明在职公司、目前职位和在职时效的材料。如社保缴费证明、职称材料等。支持上传多项认证材料（可多项组合）。
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span>上传认证材料 <span class="form-required">*</span></span>
+                                <span class="form-hint">支持图片或文件</span>
+                            </label>
+                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
+                                <div style="font-size: 32px; margin-bottom: 8px;">+</div>
+                                <div style="font-size: 12px; color: #999;">点击或拖拽上传其他在职证明材料</div>
+                            </div>
+                            <div class="error-msg" id="other-error"></div>
+                        </div>
+                    </div>
+
+                    <div class="legal-box">
+                        <div class="legal-title">⚖️ 法律声明</div>
+                        • 提交信息仅用于身份验证<br>
+                        • 材料在审核后将被删除<br>
+                        • 虚假信息将承担法律责任
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成功页面 -->
+            <div id="success" class="page hidden">
+                <div class="success-box">
+                    <div class="success-icon">✅</div>
+                    <div class="success-title">认证成功！</div>
+                    <div class="success-desc">恭喜！你已获得职工认证，可以享受相应权益</div>
+
+                    <div class="privilege-item">
+                        <strong>🎁 基础职员认证</strong>
+                        全系列产品95折优惠
+                    </div>
+
+                    <div class="privilege-item" id="specialist-privilege" class="hidden">
+                        <strong>🏆 专业职称认证</strong>
+                        专项机型定制优惠和推荐
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-secondary" id="btn-back" onclick="goBack()" style="display: none;">返回</button>
+            <button class="btn btn-primary" id="btn-next" onclick="goNext()">下一步</button>
+        </div>
+    </div>
+
+    <!-- 实名认证检查弹窗 -->
+    <div class="overlay" id="realname-check-overlay"></div>
+    <div class="modal" id="realname-check-modal">
+        <div class="modal-title">完成实名认证</div>
+        <div class="modal-desc">你还未完成个人实名认证，需要先完成实名认证才能进行职工认证。</div>
+        <button class="modal-btn" onclick="confirmRealnameCheck()">继续进行实名认证</button>
+        <button class="modal-btn-secondary" onclick="cancelRealnameCheck()">返回</button>
+    </div>
+
+    <script>
+        // 初始化：禁用body overflow
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.overflow = 'hidden';
+        });
+
+        let currentStep = 1;
+        let selectedType = 'enterprise';  // 企业职工认证
+        let selectedSpecialty = '';
+        let hasRealname = false;  // demo初始状态为未完成实名认证
+
+        // ========== 用户认证状态管理 ==========
+        let userStatus = 'not-certified';  // not-certified | basic-certified | specialist-certified
+        let userCertCount = 0;
+        let lastCertData = null;
+        let flowType = 'first';  // first | upgrade | update
+
+        // 企业搜索结果数据库（模拟天眼查数据）
+        // TODO: 替换为真实天眼查接口调用：
+        // fetch(`/api/tianyancha/search?keyword=${keyword}`)
+        //   .then(res => res.json())
+        //   .then(data => displayCompanySearchResults(data))
+        const companySearchResults = {
+            '联想': [
+                { fullName: '联想（北京）有限公司', shortName: '联想', emailDomain: 'lenovo.com', foundedYear: 2001 },
+                { fullName: '联想控股股份有限公司', shortName: '联想控股', emailDomain: 'lenovo.com', foundedYear: 2001 },
+                { fullName: '联想集团有限公司', shortName: '联想集团', emailDomain: 'lenovo.com', foundedYear: 1984 }
+            ],
+            '测试': [
+                { fullName: '测试科技有限公司', shortName: '测试科技', emailDomain: null, foundedYear: 2023 },
+                { fullName: '测试有限公司', shortName: '测试公司', emailDomain: null, foundedYear: 2022 }
+            ],
+            '阿里': [
+                { fullName: '阿里巴巴集团控股有限公司', shortName: '阿里', emailDomain: 'alibaba.com', foundedYear: 1999 }
+            ],
+            '腾讯': [
+                { fullName: '腾讯科技有限公司', shortName: '腾讯', emailDomain: 'tencent.com', foundedYear: 1998 }
+            ]
+        };
+
+        let verifiedCompanyInfo = null;  // 已选择的企业信息
+
+        // 标准岗位列表（用于职位建议）
+        const standardPositions = [
+            '产品经理', '产品总监', '产品助理', '产品运营',
+            '技术总监', '工程师', '开发工程师', '前端工程师', '后端工程师', '全栈工程师', '架构师', '技术主管',
+            '设计师', '平面设计师', 'UI设计师', '交互设计师', '视觉设计师', '用户体验设计师',
+            '销售经理', '销售总监', '业务经理', '客户经理', '渠道经理',
+            '市场经理', '市场总监', '品牌经理', '内容运营', '社区运营',
+            '人力资源', '行政', '财务', '财务经理', '成本会计', '税务经理',
+            '法律顾问', '法务', '律师', '合规经理',
+            '项目经理', '项目总监', '运营经理', '供应链经理',
+            '质量经理', '制造工程师', '工业工程师', '制造经理',
+            '采购经理', '采购总监', '物流经理', '仓储经理',
+            '部门经理', '总经理', '董事长', '总裁', '首席执行官',
+            '工程师', '程序员', '开发者', '实习生'
+        ];
+
+        // 职业对应的行业和职位映射
+        const specialtyMap = {
+            'lawyer': {
+                name: '法律',
+                industries: ['法律'],
+                positions: ['律师', '法务', '顾问', '法律顾问']
+            },
+            'industrial-design': {
+                name: '工业设计',
+                industries: ['工业设计', '制造业', '消费电子'],
+                positions: ['工业设计师', '产品设计师', '设计师', '设计主管']
+            },
+            'media-design': {
+                name: '媒体设计',
+                industries: ['设计', '媒体', '广告', '创意产业'],
+                positions: ['平面设计师', 'UI设计师', '设计师', '视觉设计师', '交互设计师']
+            },
+            'developer': {
+                name: '编程开发',
+                industries: ['互联网/信息技术', '软件开发', '云计算'],
+                positions: ['开发工程师', '软件工程师', '全栈工程师', '前端工程师', '后端工程师', '开发者']
+            }
+        };
+
+        // ========== 初始化：检测用户认证状态 ==========
+        function initUserStatus() {
+            return new Promise(async (resolve) => {
+                try {
+                    // 从后端API获取用户认证状态
+                    const response = await fetch('/api/user/cert-status');
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            userStatus = data.status;
+                            userCertCount = data.certCount || 0;
+                            lastCertData = data.lastCertData || null;
+                            console.log('✓ 从后端获取用户状态:', userStatus);
+                        }
+                    }
+                } catch (error) {
+                    // 后端不可用时，userStatus 保持默认值 'not-certified'
+                    console.log('⚠ 后端不可用，使用初始状态: not-certified');
+                }
+
+                // 根据用户状态渲染 Step 1
+                renderStep1();
+                resolve();
+            });
+        }
+
+        // ========== 已认证用户：选择升级或更新 ==========
+        function startUpgradeFlow() {
+            // 升级为专业职称认证
+            flowType = 'upgrade';
+            selectedType = 'specialist';
+            hasRealname = true;
+            currentStep = 3;
+            showStep(3);
+        }
+
+        function startUpdateFlow() {
+            // 更新在职认证信息
+            flowType = 'update';
+            selectedType = 'enterprise';
+            hasRealname = true;
+            currentStep = 3;
+
+            // 预填上一次的企业信息
+            if (lastCertData) {
+                document.getElementById('company').value = lastCertData.company || '';
+                document.getElementById('position').value = lastCertData.position || '';
+                document.getElementById('industry').value = lastCertData.industry || '';
+                console.log('✓ 预填上次认证信息');
+            }
+
+            showStep(3);
+        }
+
+        // ========== 专业职称升级提示 ==========
+        function showSpecialistUpgradeTips(specialty) {
+            const tips = {
+                'lawyer': {
+                    title: '律师',
+                    examples: '律师证、执业证、法律相关文件截图'
+                },
+                'industrial-design': {
+                    title: '工业设计师',
+                    examples: '设计专利、获奖证书、设计作品等截图'
+                },
+                'media-design': {
+                    title: '设计师',
+                    examples: '设计相关的项目文件、作品集、资格证书等截图'
+                },
+                'developer': {
+                    title: '编程开发',
+                    examples: '技术认证证书、代码贡献证明、项目经验等截图'
+                }
+            };
+
+            const tipInfo = tips[specialty];
+            if (tipInfo) {
+                // 如果在 Step 3，更新那里的提示
+                const step3Tips = document.getElementById('specialty-upgrade-tips');
+                if (step3Tips && currentStep === 3) {
+                    step3Tips.innerHTML = `
+                        <div style="font-weight: 500; margin-bottom: 6px;">📋 ${tipInfo.title} 职称认证资料要求</div>
+                        <div>请上传包含您的职称信息的相关文件：</div>
+                        <div style="margin-top: 6px;">✓ ${tipInfo.examples}</div>
+                    `;
+                }
+            }
+        }
+
+        // ========== 返回首页 ==========
+        function returnToHome() {
+            // 重置状态（但保留 userStatus 在内存中）
+            currentStep = 1;
+            selectedType = 'enterprise';
+            selectedSpecialty = '';
+            hasRealname = false;
+            flowType = 'first';
+            verifiedCompanyInfo = null;
+
+            // 直接显示 Step 1（根据内存中的 userStatus 渲染正确内容）
+            renderStep1();
+            showStep(1);
+            window.scrollTo(0, 0);
+            console.log('→ 返回首页，显示升级/更新卡片');
+        }
+
+        // ========== 动态渲染 Step 1 ==========
+        function renderStep1() {
+            const step1Content = document.getElementById('step1');
+
+            if (!step1Content) return;
+
+            // 获取所有的 Step 1 相关元素
+            const firstTimeSection = document.getElementById('step1-first-time');
+            const upgradeSection = document.getElementById('step1-upgrade');
+
+            if (userStatus === 'not-certified') {
+                // 首次认证用户：显示企业职工认证和专业职称认证选项卡
+                if (firstTimeSection) firstTimeSection.classList.remove('hidden');
+                if (upgradeSection) upgradeSection.classList.add('hidden');
+                console.log('✓ 显示首次认证选项卡');
+            } else if (userStatus === 'basic-certified' || userStatus === 'specialist-certified') {
+                // 已认证用户：显示升级和更新入口
+                if (firstTimeSection) firstTimeSection.classList.add('hidden');
+                if (upgradeSection) upgradeSection.classList.remove('hidden');
+
+                // 如果已完成专业认证，隐藏升级入口，仅显示更新入口
+                const upgradeOption = document.getElementById('upgrade-option');
+                if (upgradeOption) {
+                    if (userStatus === 'specialist-certified') {
+                        upgradeOption.classList.add('hidden');
+                        console.log('✓ 已完成专业认证，隐藏升级入口');
+                    } else {
+                        upgradeOption.classList.remove('hidden');
+                        console.log('✓ 显示升级/更新入口卡片');
+                    }
+                }
+            }
+        }
+
+        // ========== 准备更新用户状态 ==========
+        function prepareStatusUpdate() {
+            // 构建新的用户状态
+            let newStatus = userStatus;
+            let newCertType = selectedType;
+
+            if (flowType === 'first' || flowType === 'upgrade') {
+                if (selectedType === 'specialist') {
+                    newStatus = 'specialist-certified';
+                    newCertType = `specialist_${selectedSpecialty}`;
+                } else {
+                    newStatus = 'basic-certified';
+                }
+            }
+
+            // 更新内存中的用户状态
+            userStatus = newStatus;
+
+            // 保存当前认证信息用于预填
+            const certInfo = {
+                company: document.getElementById('company')?.value || '',
+                position: document.getElementById('position')?.value || '',
+                industry: document.getElementById('industry')?.value || '',
+                specialty: selectedSpecialty || ''
+            };
+            localStorage.setItem('lastCertData', JSON.stringify(certInfo));
+
+            console.log('✓ 状态已更新:', {
+                userStatus: newStatus,
+                certType: newCertType,
+                certInfo: certInfo
+            });
+
+            // 向后端提交认证数据（异步，不阻塞页面流程）
+            submitCertificationToBackend(newStatus, newCertType, certInfo);
+        }
+
+        // ========== 向后端提交认证数据 ==========
+        async function submitCertificationToBackend(newStatus, newCertType, certInfo) {
+            try {
+                const certData = {
+                    flowType: flowType,
+                    certNumber: flowType === 'first' ? 1 : userCertCount + 1,
+                    isUpgrade: flowType === 'upgrade',
+                    certType: newCertType,
+                    company: certInfo.company,
+                    position: certInfo.position,
+                    industry: certInfo.industry,
+                    specialty: certInfo.specialty,
+                    authMethod: document.querySelector('input[name="method"]:checked')?.value || 'other',
+                    timestamp: new Date().toISOString()
+                };
+
+                const response = await fetch('/api/auth/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(certData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✓ 认证数据已提交到后端:', result);
+                } else {
+                    console.warn('⚠ 后端提交失败:', response.status);
+                }
+            } catch (error) {
+                console.warn('⚠ 后端提交异常（可以继续）:', error);
+            }
+        }
+
+        function selectType(element, type) {
+            document.querySelectorAll('input[name="cert-type"]').forEach(input => {
+                input.parentElement.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+            selectedType = type;
+
+            // 显示或隐藏专业职称选择
+            if (type === 'specialist') {
+                document.getElementById('specialist-options').classList.remove('hidden');
+            } else {
+                document.getElementById('specialist-options').classList.add('hidden');
+                selectedSpecialty = '';
+            }
+            document.getElementById('btn-next').disabled = false;
+        }
+
+        function selectSpecialty(element, specialty) {
+            document.querySelectorAll('input[name="specialty"]').forEach(input => {
+                input.parentElement.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+            selectedSpecialty = specialty;
+            document.getElementById('btn-next').disabled = false;
+        }
+
+        function selectRealnameMethod(element, method) {
+            document.querySelectorAll('input[name="realname-method"]').forEach(input => {
+                input.parentElement.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+
+            if (method === 'idcard') {
+                document.getElementById('idcard-method').classList.remove('hidden');
+                document.getElementById('face-method').classList.add('hidden');
+            } else {
+                document.getElementById('idcard-method').classList.add('hidden');
+                document.getElementById('face-method').classList.remove('hidden');
+            }
+            document.getElementById('btn-next').disabled = false;
+        }
+
+        function selectMethod(element, method) {
+            document.querySelectorAll('input[name="method"]').forEach(input => {
+                input.parentElement.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+
+            // 隐藏所有方式
+            document.getElementById('email-method').classList.add('hidden');
+            document.getElementById('contract-method').classList.add('hidden');
+            document.getElementById('tax-method').classList.add('hidden');
+            document.getElementById('other-method').classList.add('hidden');
+
+            // 显示选中的方式
+            if (method === 'email') {
+                document.getElementById('email-method').classList.remove('hidden');
+            } else if (method === 'contract') {
+                document.getElementById('contract-method').classList.remove('hidden');
+            } else if (method === 'tax') {
+                document.getElementById('tax-method').classList.remove('hidden');
+            } else if (method === 'other') {
+                document.getElementById('other-method').classList.remove('hidden');
+            }
+
+            document.getElementById('btn-next').disabled = false;
+        }
+
+        function startFaceRecognition() {
+            alert('人脸识别成功！');
+            document.getElementById('face-realname').value = '张三';
+            document.getElementById('face-error').classList.remove('show');
+            validate();
+        }
+
+        // 企业搜索函数
+        function searchCompanies(keyword) {
+            const dropdown = document.getElementById('company-dropdown');
+            const errorMsg = document.getElementById('company-error');
+
+            if (!keyword.trim()) {
+                dropdown.style.display = 'none';
+                errorMsg.classList.remove('show');
+                return;
+            }
+
+            // 模拟异步查询天眼查接口
+            // TODO: 替换为真实天眼查接口：
+            // fetch(`/api/tianyancha/search?keyword=${keyword}`)
+            //   .then(res => res.json())
+            //   .then(data => displayCompanySearchResults(data))
+            //   .catch(err => console.error('企业搜索失败:', err))
+
+            setTimeout(() => {
+                displayCompanySearchResults(keyword);
+            }, 300);
+        }
+
+        function displayCompanySearchResults(keyword) {
+            const dropdown = document.getElementById('company-dropdown');
+            const errorMsg = document.getElementById('company-error');
+
+            // 按关键词搜索企业
+            const results = [];
+            for (const [key, companies] of Object.entries(companySearchResults)) {
+                if (key.toLowerCase().includes(keyword.toLowerCase())) {
+                    results.push(...companies);
+                }
+            }
+
+            if (results.length === 0) {
+                dropdown.style.display = 'none';
+                errorMsg.textContent = '未找到相关企业，请确认企业名称';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            // 显示搜索结果列表
+            dropdown.innerHTML = results.slice(0, 10).map(company =>
+                `<div style="padding: 12px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333; transition: background 0.2s;"
+                      onmouseover="this.style.background='#f5f5f5'"
+                      onmouseout="this.style.background='transparent'"
+                      onclick="selectCompany('${company.fullName}', '${company.emailDomain || ''}')">
+                    <div style="font-weight: 500; margin-bottom: 4px;">${company.fullName}</div>
+                    <div style="font-size: 12px; color: #999;">邮箱: ${company.emailDomain ? company.emailDomain : '暂无'} | 成立: ${company.foundedYear}</div>
+                </div>`
+            ).join('');
+            dropdown.style.display = 'block';
+            errorMsg.classList.remove('show');
+        }
+
+        function selectCompany(fullName, emailDomain) {
+            document.getElementById('company').value = fullName;
+            document.getElementById('company-dropdown').style.display = 'none';
+
+            // 设置已选择的企业信息
+            verifiedCompanyInfo = {
+                fullName: fullName,
+                emailDomain: emailDomain || null
+            };
+
+            document.getElementById('company-verify-status').style.display = 'block';
+            if (emailDomain) {
+                document.getElementById('company-verify-status').innerHTML = '<div style="color: #1ABC9C; font-size: 12px;">✓ 企业信息已确认（支持邮箱认证）</div>';
+            } else {
+                document.getElementById('company-verify-status').innerHTML = '<div style="color: #ff9800; font-size: 12px;">⚠ 企业信息已确认（不支持邮箱认证）</div>';
+            }
+
+            validate();
+        }
+
+        function hideCompanyDropdown() {
+            setTimeout(() => {
+                document.getElementById('company-dropdown').style.display = 'none';
+            }, 200);
+        }
+
+        // 职位建议相关函数
+        function filterPositions(keyword) {
+            const suggestionsBox = document.getElementById('position-suggestions');
+
+            if (!keyword.trim()) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+
+            // 按输入的关键词过滤职位列表
+            const filtered = standardPositions.filter(position =>
+                position.toLowerCase().includes(keyword.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+
+            // 显示建议列表（最多显示10条）
+            suggestionsBox.innerHTML = filtered.slice(0, 10).map(position =>
+                `<div style="padding: 10px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333;" onclick="selectPosition('${position}')">${position}</div>`
+            ).join('');
+            suggestionsBox.style.display = 'block';
+        }
+
+        function selectPosition(position) {
+            document.getElementById('position').value = position;
+            document.getElementById('position-suggestions').style.display = 'none';
+            validate();
+        }
+
+        function hidePositionSuggestions() {
+            setTimeout(() => {
+                document.getElementById('position-suggestions').style.display = 'none';
+            }, 200);
+        }
+
+        function validate() {
+            let isValid = false;
+
+            if (currentStep === 1) {
+                // 企业职工认证，直接通过
+                isValid = true;
+            } else if (currentStep === 2) {
+                const name = document.getElementById('realname').value.trim();
+                const idcard = document.getElementById('idcard').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const code = document.getElementById('code').value.trim();
+                const agreement = document.getElementById('agreement').checked;
+
+                document.getElementById('realname-error').classList.remove('show');
+                document.getElementById('idcard-error').classList.remove('show');
+                document.getElementById('phone-error').classList.remove('show');
+                document.getElementById('code-error').classList.remove('show');
+                document.getElementById('agreement-error').classList.remove('show');
+
+                if (!name) {
+                    document.getElementById('realname-error').textContent = '请输入姓名';
+                    document.getElementById('realname-error').classList.add('show');
+                } else if (!/^[\u4e00-\u9fa5]{2,20}$/.test(name)) {
+                    document.getElementById('realname-error').textContent = '姓名必须为2-20个汉字';
+                    document.getElementById('realname-error').classList.add('show');
+                }
+
+                if (!idcard) {
+                    document.getElementById('idcard-error').textContent = '请输入身份证号';
+                    document.getElementById('idcard-error').classList.add('show');
+                } else if (!/^\d{18}$/.test(idcard)) {
+                    document.getElementById('idcard-error').textContent = '身份证号必须为18位数字';
+                    document.getElementById('idcard-error').classList.add('show');
+                }
+
+                if (!phone) {
+                    document.getElementById('phone-error').textContent = '请输入手机号';
+                    document.getElementById('phone-error').classList.add('show');
+                } else if (!/^1[3-9]\d{9}$/.test(phone)) {
+                    document.getElementById('phone-error').textContent = '请输入有效的手机号';
+                    document.getElementById('phone-error').classList.add('show');
+                }
+
+                if (!code) {
+                    document.getElementById('code-error').textContent = '请输入验证码';
+                    document.getElementById('code-error').classList.add('show');
+                } else if (!/^\d{6}$/.test(code)) {
+                    document.getElementById('code-error').textContent = '验证码为6位数字';
+                    document.getElementById('code-error').classList.add('show');
+                }
+
+                if (!agreement) {
+                    document.getElementById('agreement-error').textContent = '请同意实名认证协议';
+                    document.getElementById('agreement-error').classList.add('show');
+                }
+
+                isValid = /^[\u4e00-\u9fa5]{2,20}$/.test(name) &&
+                          /^\d{18}$/.test(idcard) &&
+                          /^1[3-9]\d{9}$/.test(phone) &&
+                          /^\d{6}$/.test(code) &&
+                          agreement;
+            } else if (currentStep === 3) {
+                const company = document.getElementById('company').value.trim();
+                const position = document.getElementById('position').value.trim();
+                const industry = document.getElementById('industry').value;
+
+                document.getElementById('company-error').classList.remove('show');
+                document.getElementById('position-error').classList.remove('show');
+                document.getElementById('industry-error').classList.remove('show');
+
+                if (!company) {
+                    document.getElementById('company-error').textContent = '请选择企业名称';
+                    document.getElementById('company-error').classList.add('show');
+                } else if (!verifiedCompanyInfo || verifiedCompanyInfo.fullName !== company) {
+                    // 企业未被选择或输入值不匹配
+                    document.getElementById('company-error').textContent = '请从下拉列表中选择企业';
+                    document.getElementById('company-error').classList.add('show');
+                }
+
+                if (!position) {
+                    document.getElementById('position-error').textContent = '请输入职位';
+                    document.getElementById('position-error').classList.add('show');
+                } else if (position.length < 2 || position.length > 12) {
+                    document.getElementById('position-error').textContent = '职位长度2-12字符';
+                    document.getElementById('position-error').classList.add('show');
+                }
+
+                if (!industry) {
+                    document.getElementById('industry-error').textContent = '请选择行业';
+                    document.getElementById('industry-error').classList.add('show');
+                }
+
+                isValid = verifiedCompanyInfo && position.length >= 2 && position.length <= 12 && industry;
+            } else if (currentStep === 4) {
+                const method = document.querySelector('input[name="method"]:checked').value;
+
+                if (method === 'email') {
+                    const emailUser = document.getElementById('email-user').value.trim();
+                    const emailDomain = document.getElementById('email-domain').value.trim();
+                    const code = document.getElementById('code').value.trim();
+
+                    document.getElementById('email-error').classList.remove('show');
+                    document.getElementById('code-error').classList.remove('show');
+
+                    if (!emailUser) {
+                        document.getElementById('email-error').textContent = '请输入邮箱用户名';
+                        document.getElementById('email-error').classList.add('show');
+                    }
+
+                    if (!emailDomain) {
+                        document.getElementById('email-error').textContent = '邮箱后缀未获取，请检查企业信息';
+                        document.getElementById('email-error').classList.add('show');
+                    }
+
+                    if (!code) {
+                        document.getElementById('code-error').textContent = '请输入验证码';
+                        document.getElementById('code-error').classList.add('show');
+                    } else if (!/^\d{6}$/.test(code)) {
+                        document.getElementById('code-error').textContent = '验证码为6位数字';
+                        document.getElementById('code-error').classList.add('show');
+                    }
+
+                    isValid = emailUser && emailDomain && /^\d{6}$/.test(code);
+                } else {
+                    // 其他方式只需上传文件，demo中直接通过
+                    isValid = true;
+                }
+            }
+
+            updateButtonState(isValid);
+        }
+
+        function updateButtonState(isValid) {
+            document.getElementById('btn-next').disabled = !isValid;
+        }
+
+        function generateEmailDomain(company) {
+            // 邮箱后缀映射表
+            const emailDomainMap = {
+                '联想（北京）有限公司': 'lenovo.com',
+                '联想控股股份有限公司': 'lenovo.com',
+                '联想有限公司': 'lenovo.com'
+            };
+
+            // 如果有精确匹配，直接返回
+            if (emailDomainMap[company]) {
+                return emailDomainMap[company];
+            }
+
+            // 否则，根据企业名称中的关键词生成
+            if (company.includes('联想')) {
+                return 'lenovo.com';
+            }
+
+            // 通过企业名称首字母缩写生成
+            const initials = company.split(/[\s\-()（）]/).filter(s => s).map(s => s[0]).join('').toLowerCase();
+            return initials + '.com' || 'company.com';
+        }
+
+        function goNext() {
+            // 当离开第2步时，标记实名认证已完成
+            if (currentStep === 2 && !hasRealname) {
+                hasRealname = true;
+            }
+
+            // 流程跳转
+            if (currentStep === 4) {
+                currentStep = 5;
+                // Step 4 → Step 5：准备更新用户状态
+                prepareStatusUpdate();
+            } else {
+                currentStep++;
+            }
+
+            showStep(currentStep);
+        }
+
+        function goBack() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+                p.classList.add('hidden');
+            });
+
+            if (step <= 4) {
+                const page = document.getElementById(`step${step}`);
+                page.classList.remove('hidden');
+                page.classList.add('active');
+
+                // 第2步：根据hasRealname显示不同内容
+                if (step === 2) {
+                    if (hasRealname) {
+                        document.getElementById('realname-pending').classList.add('hidden');
+                        document.getElementById('realname-completed').classList.remove('hidden');
+                    } else {
+                        document.getElementById('realname-pending').classList.remove('hidden');
+                        document.getElementById('realname-completed').classList.add('hidden');
+                        // 初始化手机号：设置默认的注册手机号
+                        const defaultPhone = '13812345678';  // 模拟从注册账号获取的默认手机号
+                        const phoneInput = document.getElementById('phone');
+                        if (!phoneInput.value) {
+                            phoneInput.value = defaultPhone;
+                        }
+                    }
+                }
+
+                // 第3步：根据职业类型更新行业和职位选项，以及处理升级/更新流程
+                if (step === 3) {
+                    // 处理升级流程：隐藏企业、职位、行业字段
+                    if (flowType === 'upgrade') {
+                        const companySection = document.getElementById('company-section');
+                        const positionSection = document.getElementById('position-section');
+                        const industrySection = document.getElementById('industry-section');
+                        const upgradeTips = document.getElementById('specialty-upgrade-tips');
+
+                        if (companySection) companySection.style.display = 'none';
+                        if (positionSection) positionSection.style.display = 'none';
+                        if (industrySection) industrySection.style.display = 'none';
+                        if (upgradeTips) upgradeTips.style.display = 'block';
+                        console.log('✓ 升级认证流程：隐藏企业字段，显示职称认证提示');
+                    } else {
+                        // 显示企业、职位、行业字段
+                        const companySection = document.getElementById('company-section');
+                        const positionSection = document.getElementById('position-section');
+                        const industrySection = document.getElementById('industry-section');
+                        const upgradeTips = document.getElementById('specialty-upgrade-tips');
+
+                        if (companySection) companySection.style.display = 'block';
+                        if (positionSection) positionSection.style.display = 'block';
+                        if (industrySection) industrySection.style.display = 'block';
+                        if (upgradeTips) upgradeTips.style.display = 'none';
+                    }
+
+                    if (selectedType === 'specialist') {
+                        const specialty = specialtyMap[selectedSpecialty];
+                        if (specialty) {
+                            // 更新行业select的options
+                            const industrySelect = document.getElementById('industry');
+                            industrySelect.innerHTML = '<option value="">请选择行业</option>';
+                            specialty.industries.forEach(ind => {
+                                const option = document.createElement('option');
+                                option.value = ind;
+                                option.textContent = ind;
+                                industrySelect.appendChild(option);
+                            });
+
+                            // 更新职位input的placeholder
+                            const positionInput = document.getElementById('position');
+                            positionInput.placeholder = '例如：' + specialty.positions.slice(0, 2).join('、');
+                        }
+                    }
+                }
+
+                // 第4步：根据企业是否有邮箱后缀来显示/隐藏邮箱认证方式
+                if (step === 4) {
+                    const emailOption = document.getElementById('email-option');
+                    const contractOption = document.querySelector('input[name="method"][value="contract"]').closest('.option-item');
+                    const taxOption = document.querySelector('input[name="method"][value="tax"]').closest('.option-item');
+                    const otherOption = document.querySelector('input[name="method"][value="other"]').closest('.option-item');
+
+                    if (flowType === 'upgrade') {
+                        // 升级流程：仅显示"其他材料补充"
+                        if (emailOption) emailOption.classList.add('hidden');
+                        if (contractOption) contractOption.classList.add('hidden');
+                        if (taxOption) taxOption.classList.add('hidden');
+                        if (otherOption) {
+                            otherOption.classList.remove('hidden');
+                            selectMethod(otherOption, 'other');
+                            console.log('✓ 升级认证流程：仅显示其他材料补充');
+                        }
+                    } else {
+                        // 首次或更新流程：显示所有选项
+                        if (emailOption) emailOption.classList.remove('hidden');
+                        if (contractOption) contractOption.classList.remove('hidden');
+                        if (taxOption) taxOption.classList.remove('hidden');
+                        if (otherOption) otherOption.classList.remove('hidden');
+
+                        if (verifiedCompanyInfo && verifiedCompanyInfo.emailDomain) {
+                            // 有邮箱后缀：显示邮箱选项，设为默认选中
+                            document.getElementById('email-domain').value = verifiedCompanyInfo.emailDomain;
+                            document.getElementById('email-user').focus();
+                            selectMethod(emailOption, 'email');
+                        } else {
+                            // 无邮箱后缀：隐藏邮箱选项，默认选择劳动合同
+                            emailOption.classList.add('hidden');
+                            const contractLabel = document.querySelector('input[name="method"][value="contract"]').closest('.option-item');
+                            selectMethod(contractLabel, 'contract');
+                        }
+                    }
+                }
+            } else {
+                const success = document.getElementById('success');
+                success.classList.remove('hidden');
+                success.classList.add('active');
+                if (selectedType === 'specialist') {
+                    document.getElementById('specialist-privilege').classList.remove('hidden');
+                }
+            }
+
+            document.getElementById('btn-back').style.display = step > 1 ? 'block' : 'none';
+
+            if (step === 5) {
+                document.getElementById('btn-next').textContent = '返回首页';
+                document.getElementById('btn-next').onclick = returnToHome;
+                document.getElementById('btn-next').disabled = false;
+            } else {
+                document.getElementById('btn-next').textContent = '下一步';
+                document.getElementById('btn-next').onclick = goNext;
+                document.getElementById('btn-next').disabled = false;
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function confirmRealnameCheck() {
+            document.getElementById('realname-check-overlay').classList.remove('show');
+            document.getElementById('realname-check-modal').classList.remove('show');
+            // 进入第2步进行实名认证
+            currentStep = 2;
+            showStep(currentStep);
+        }
+
+        function cancelRealnameCheck() {
+            document.getElementById('realname-check-overlay').classList.remove('show');
+            document.getElementById('realname-check-modal').classList.remove('show');
+        }
+
+        function sendCode() {
+            if (currentStep === 2) {
+                // 第2步：发送短信验证码到手机号
+                const phone = document.getElementById('phone').value.trim();
+
+                document.getElementById('phone-error').classList.remove('show');
+
+                if (!phone) {
+                    document.getElementById('phone-error').textContent = '请输入手机号';
+                    document.getElementById('phone-error').classList.add('show');
+                    return;
+                } else if (!/^1[3-9]\d{9}$/.test(phone)) {
+                    document.getElementById('phone-error').textContent = '请输入有效的手机号';
+                    document.getElementById('phone-error').classList.add('show');
+                    return;
+                }
+
+                alert(`验证码已发送至 ${phone}`);
+                document.getElementById('phone-error').classList.remove('show');
+            } else if (currentStep === 4) {
+                // 第4步：发送邮件验证码
+                const emailUser = document.getElementById('email-user').value.trim();
+                const emailDomain = document.getElementById('email-domain').value.trim();
+
+                if (!emailUser || !emailDomain) {
+                    document.getElementById('email-error').textContent = '请输入完整的邮箱地址';
+                    document.getElementById('email-error').classList.add('show');
+                    return;
+                }
+
+                const fullEmail = emailUser + '@' + emailDomain;
+                alert(`验证码已发送至 ${fullEmail}`);
+                document.getElementById('email-error').classList.remove('show');
+            }
+        }
+
+        // ========== 页面加载初始化 ==========
+        initUserStatus();
+
+        function closeSheet() {
+            // 关闭半弹层
+            document.body.style.overflow = 'auto';
+            document.querySelector('.container').style.animation = 'slideDown 0.3s ease forwards';
+            setTimeout(() => {
+                window.history.back();
+            }, 300);
+        }
+    </script>
+</body>
+</html>
