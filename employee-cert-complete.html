@@ -9,6 +9,26 @@
     <meta http-equiv="Expires" content="0">
     <title>联想职工认证</title>
     <style>
+        :root {
+            /* 主色系 - Lenovo Brand Colors */
+            --color-primary: #FF2F2F;
+            --color-primary-light: #FFF9F9;
+
+            /* 次要色系 */
+            --color-secondary-1: #252525;   /* 主文本 */
+            --color-secondary-2: #454545;   /* 次级文本 */
+            --color-secondary-3: #606060;   /* 三级文本 */
+            --color-secondary-4: #979797;   /* 提示文本 */
+            --color-secondary-5: #BDBDBD;   /* 装饰文本 */
+            --color-secondary-6: #F6F6F6;   /* 页面背景 */
+
+            /* 中性色系 */
+            --color-white: #FFFFFF;
+            --color-near-white: #FCFCFC;
+            --color-border-light: #DBDBDB;
+            --color-border-dark: #454545;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,15 +38,15 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            background: var(--color-secondary-6);
+            color: var(--color-secondary-1);
         }
 
         .container {
             width: 100%;
             max-width: 393px;
             margin: 0 auto;
-            background: #fff;
+            background: var(--color-white);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -40,7 +60,7 @@
 
         .header {
             padding: 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--color-border-light);
             text-align: center;
         }
 
@@ -51,11 +71,12 @@
             gap: 6px;
             font-weight: 600;
             font-size: 16px;
+            color: var(--color-secondary-1);
         }
 
         .logo-box {
-            background: #e31937;
-            color: white;
+            background: var(--color-primary);
+            color: var(--color-white);
             padding: 2px 6px;
             font-size: 11px;
             border-radius: 2px;
@@ -112,29 +133,29 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: #e8e8e8;
+            background: var(--color-secondary-6);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 11px;
             font-weight: 600;
-            color: #999;
+            color: var(--color-secondary-4);
             margin-bottom: 6px;
         }
 
         .step-circle.active {
-            background: #0066ff;
-            color: white;
+            background: var(--color-primary);
+            color: var(--color-white);
         }
 
         .step-circle.done {
-            background: #0066ff;
-            color: white;
+            background: var(--color-primary);
+            color: var(--color-white);
         }
 
         .step-label {
             font-size: 10px;
-            color: #999;
+            color: var(--color-secondary-4);
             text-align: center;
             line-height: 1.2;
         }
@@ -146,13 +167,13 @@
         .step-title {
             font-size: 16px;
             font-weight: 600;
-            color: #333;
+            color: var(--color-secondary-1);
             margin-bottom: 8px;
         }
 
         .step-desc {
             font-size: 12px;
-            color: #999;
+            color: var(--color-secondary-4);
             line-height: 1.5;
             margin-bottom: 16px;
         }
@@ -166,61 +187,61 @@
             justify-content: space-between;
             align-items: center;
             font-size: 12px;
-            color: #666;
+            color: var(--color-secondary-2);
             margin-bottom: 6px;
             font-weight: 500;
         }
 
         .form-required {
-            color: #ff4444;
+            color: var(--color-primary);
         }
 
         .form-hint {
             font-size: 11px;
-            color: #999;
+            color: var(--color-secondary-4);
         }
 
         .form-input,
         .form-select {
             width: 100%;
             padding: 10px 12px;
-            border: 1px solid #d9d9d9;
+            border: 1px solid var(--color-border-light);
             border-radius: 4px;
             font-size: 14px;
-            background: #fafafa;
-            color: #333;
+            background: var(--color-near-white);
+            color: var(--color-secondary-1);
             transition: all 0.2s;
             -webkit-appearance: none;
             appearance: none;
         }
 
         .form-input::placeholder {
-            color: #ccc;
+            color: var(--color-secondary-4);
         }
 
         .form-input:focus,
         .form-select:focus {
             outline: none;
-            border-color: #0066ff;
-            background: #fff;
-            box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.08);
+            border-color: var(--color-secondary-2);
+            background: var(--color-white);
+            box-shadow: 0 0 0 2px rgba(255, 47, 47, 0.08);
         }
 
         .form-input.error,
         .form-select.error {
-            border-color: #ff4444;
-            background: #fff5f5;
+            border-color: var(--color-primary);
+            background: var(--color-primary-light);
         }
 
         .form-input.success {
-            border-color: #4caf50;
+            border-color: #FF2F2F;
             background: #f5fff5;
         }
 
         .error-msg {
             display: none;
             font-size: 11px;
-            color: #ff4444;
+            color: var(--color-primary);
             margin-top: 4px;
         }
 
@@ -239,16 +260,16 @@
             display: flex;
             align-items: flex-start;
             padding: 12px;
-            background: #fafafa;
-            border: 1px solid #e8e8e8;
+            background: var(--color-near-white);
+            border: 1px solid var(--color-border-light);
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .option-item.selected {
-            background: #f0f5ff;
-            border-color: #0066ff;
+            background: var(--color-primary-light);
+            border-color: var(--color-primary);
         }
 
         .option-check,
@@ -259,7 +280,7 @@
             margin-right: 10px;
             margin-top: 2px;
             cursor: pointer;
-            accent-color: #0066ff;
+            accent-color: var(--color-primary);
         }
 
         .option-content {
@@ -269,13 +290,13 @@
         .option-title {
             font-size: 13px;
             font-weight: 500;
-            color: #333;
+            color: var(--color-secondary-1);
             margin-bottom: 3px;
         }
 
         .option-desc {
             font-size: 11px;
-            color: #999;
+            color: var(--color-secondary-4);
             line-height: 1.4;
         }
 
@@ -283,12 +304,12 @@
             display: flex;
             gap: 8px;
             padding: 10px 12px;
-            background: #f0f5ff;
-            border: 1px solid #d4e8ff;
+            background: var(--color-primary-light);
+            border: 1px solid var(--color-border-light);
             border-radius: 4px;
             margin-bottom: 16px;
             font-size: 12px;
-            color: #0066ff;
+            color: var(--color-primary);
             line-height: 1.5;
         }
 
@@ -299,12 +320,12 @@
 
         .legal-box {
             padding: 12px;
-            background: #fff5f5;
-            border: 1px solid #ffc6c6;
+            background: var(--color-primary-light);
+            border: 1px solid var(--color-border-light);
             border-radius: 4px;
             margin-bottom: 16px;
             font-size: 11px;
-            color: #ff6666;
+            color: var(--color-primary);
             line-height: 1.6;
         }
 
@@ -326,25 +347,25 @@
         .success-title {
             font-size: 16px;
             font-weight: 600;
-            color: #333;
+            color: var(--color-secondary-1);
             margin-bottom: 8px;
         }
 
         .success-desc {
             font-size: 12px;
-            color: #999;
+            color: var(--color-secondary-4);
             margin-bottom: 24px;
             line-height: 1.6;
         }
 
         .privilege-item {
-            background: #f0f5ff;
-            border: 1px solid #d4e8ff;
+            background: var(--color-primary-light);
+            border: 1px solid var(--color-border-light);
             border-radius: 6px;
             padding: 12px;
             margin-bottom: 8px;
             font-size: 12px;
-            color: #0066ff;
+            color: var(--color-primary);
         }
 
         .privilege-item strong {
@@ -360,8 +381,8 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 393px;
-            background: #fff;
-            border-top: 1px solid #e8e8e8;
+            background: var(--color-white);
+            border-top: 1px solid var(--color-border-light);
             padding: 12px 16px;
             padding-bottom: max(12px, env(safe-area-inset-bottom));
             display: flex;
@@ -383,20 +404,20 @@
         }
 
         .btn-primary {
-            background: #0066ff;
-            color: white;
+            background: var(--color-primary);
+            color: var(--color-white);
             flex: 2;
         }
 
         .btn-primary:disabled {
-            background: #ccc;
+            background: var(--color-secondary-5);
             cursor: not-allowed;
         }
 
         .btn-secondary {
-            background: #f5f5f5;
-            color: #333;
-            border: 1px solid #e8e8e8;
+            background: var(--color-white);
+            color: var(--color-secondary-1);
+            border: 1px solid var(--color-border-light);
         }
 
         /* Modal */
@@ -421,7 +442,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: var(--color-white);
             border-radius: 12px;
             z-index: 1000;
             max-width: 320px;
@@ -437,13 +458,13 @@
         .modal-title {
             font-size: 16px;
             font-weight: 600;
-            color: #333;
+            color: var(--color-secondary-1);
             margin-bottom: 12px;
         }
 
         .modal-desc {
             font-size: 13px;
-            color: #999;
+            color: var(--color-secondary-4);
             margin-bottom: 20px;
             line-height: 1.6;
         }
@@ -451,7 +472,7 @@
         .modal-btn {
             width: 100%;
             padding: 10px;
-            background: #0066ff;
+            background: #FF2F2F;
             color: white;
             border: none;
             border-radius: 16px;
@@ -463,9 +484,9 @@
         .modal-btn-secondary {
             width: 100%;
             padding: 10px;
-            background: #f5f5f5;
-            color: #333;
-            border: 1px solid #e8e8e8;
+            background: #F6F6F6;
+            color: #252525;
+            border: 1px solid #DBDBDB;
             border-radius: 16px;
             font-size: 14px;
             font-weight: 500;
@@ -517,11 +538,11 @@
                     <!-- 首次认证用户界面 -->
                     <div id="step1-first-time">
                         <!-- 权益展示 -->
-                        <div style="padding: 12px; background: #f5f5f5; border-radius: 8px; margin-bottom: 20px;">
-                            <div style="font-size: 12px; color: #999; margin-bottom: 8px;">可解锁权益</div>
+                        <div style="padding: 12px; background: #F6F6F6; border-radius: 8px; margin-bottom: 20px;">
+                            <div style="font-size: 12px; color: #606060; margin-bottom: 8px;">可解锁权益</div>
                             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #333;">采购权益专享</div>
-                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #333;">身份标识</div>
+                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #252525;">采购权益专享</div>
+                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #252525;">身份标识</div>
                             </div>
                         </div>
 
@@ -548,31 +569,31 @@
                         <!-- 升级认证入口 -->
                         <div id="upgrade-option"
                              class="option-item"
-                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: all 0.3s;"
+                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #DBDBDB; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: all 0.3s;"
                              onclick="startUpgradeFlow()"
-                             onmouseover="this.style.borderColor='#1ABC9C'; this.style.backgroundColor='#f0fffe';"
-                             onmouseout="this.style.borderColor='#e0e0e0'; this.style.backgroundColor='white';">
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #1ABC9C; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">🎯</div>
+                             onmouseover="this.style.borderColor='#FF2F2F'; this.style.backgroundColor='#FFF9F9';"
+                             onmouseout="this.style.borderColor='#DBDBDB'; this.style.backgroundColor='white';">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #FF2F2F; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">🎯</div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 500; color: #333; margin-bottom: 4px;">升级：专业职称认证</div>
-                                <div style="font-size: 12px; color: #999;">从基础认证升级为专业职称认证，获得专业身份和特权</div>
+                                <div style="font-weight: 500; color: #252525; margin-bottom: 4px;">升级：专业职称认证</div>
+                                <div style="font-size: 12px; color: #606060;">从基础认证升级为专业职称认证，获得专业身份和特权</div>
                             </div>
-                            <div style="color: #999; font-size: 18px;">›</div>
+                            <div style="color: #606060; font-size: 18px;">›</div>
                         </div>
 
                         <!-- 更新认证入口 -->
                         <div id="update-option"
                              class="option-item"
-                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;"
+                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #DBDBDB; border-radius: 8px; cursor: pointer; transition: all 0.3s;"
                              onclick="startUpdateFlow()"
-                             onmouseover="this.style.borderColor='#1ABC9C'; this.style.backgroundColor='#f0fffe';"
-                             onmouseout="this.style.borderColor='#e0e0e0'; this.style.backgroundColor='white';">
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #1ABC9C; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">🔄</div>
+                             onmouseover="this.style.borderColor='#FF2F2F'; this.style.backgroundColor='#FFF9F9';"
+                             onmouseout="this.style.borderColor='#DBDBDB'; this.style.backgroundColor='white';">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #FF2F2F; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; flex-shrink: 0;">🔄</div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 500; color: #333; margin-bottom: 4px;">更新在职认证信息</div>
-                                <div style="font-size: 12px; color: #999;">更新您的企业、职位、行业等基本信息</div>
+                                <div style="font-weight: 500; color: #252525; margin-bottom: 4px;">更新在职认证信息</div>
+                                <div style="font-size: 12px; color: #606060;">更新您的企业、职位、行业等基本信息</div>
                             </div>
-                            <div style="color: #999; font-size: 18px;">›</div>
+                            <div style="color: #606060; font-size: 18px;">›</div>
                         </div>
                     </div>
                 </div>
@@ -606,7 +627,7 @@
                     <div id="realname-pending">
                         <div class="step-title">第2步：实名认证</div>
 
-                        <div style="padding: 12px; background: #fff3e0; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #d46b08; line-height: 1.6; border-left: 3px solid #ff9800;">
+                        <div style="padding: 12px; background: #FFF9F9; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #FF2F2F; line-height: 1.6; border-left: 3px solid #FF2F2F;">
                             🔐 实名认证对会员的身份证、银行卡、资格证等个人信息进行验证，请认真填写。
                         </div>
 
@@ -650,7 +671,7 @@
                             <div class="form-group" style="margin-bottom: 16px;">
                                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                                     <input type="checkbox" id="agreement" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span style="font-size: 13px; color: #666;">我同意 <a href="#" style="color: #1ABC9C; text-decoration: none;">《实名认证协议》</a></span>
+                                    <span style="font-size: 13px; color: #454545;">我同意 <a href="#" style="color: #FF2F2F; text-decoration: none;">《实名认证协议》</a></span>
                                 </label>
                                 <div class="error-msg" id="agreement-error"></div>
                             </div>
@@ -693,7 +714,7 @@
 
                 <div class="step-content">
                     <!-- 升级认证的提示信息 -->
-                    <div id="specialty-upgrade-tips" class="hidden" style="padding: 12px; background: #fff3e0; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #d46b08; line-height: 1.6; border-left: 3px solid #ff9800;">
+                    <div id="specialty-upgrade-tips" class="hidden" style="padding: 12px; background: #FFF9F9; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #FF2F2F; line-height: 1.6; border-left: 3px solid #FF2F2F;">
                         <div style="font-weight: 500; margin-bottom: 6px;">📋 专业职称认证资料要求</div>
                         <div>请上传包含您的职称信息的相关文件，例如：</div>
                         <div style="margin-top: 6px;">
@@ -707,7 +728,7 @@
                     <div class="step-title">第3步：企业在职认证</div>
                     <div class="step-desc">填写你的企业信息和职位，帮助我们验证你的在职身份</div>
 
-                    <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                    <div style="padding: 12px; background: #F6F6F6; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #606060; line-height: 1.6;">
                         填写下列信息以完成认证。如有疑问，可参考个人认证常见问题说明。
                     </div>
 
@@ -719,7 +740,7 @@
                             </label>
                         <div style="position: relative;">
                             <input type="text" class="form-input" placeholder="请输入企业名称（如：联想、测试）" id="company" oninput="searchCompanies(this.value)" onblur="hideCompanyDropdown()" autocomplete="off">
-                            <div id="company-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e8e8e8; border-top: none; border-radius: 0 0 6px 6px; max-height: 250px; overflow-y: auto; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <div id="company-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #DBDBDB; border-top: none; border-radius: 0 0 6px 6px; max-height: 250px; overflow-y: auto; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                                 <!-- 搜索结果列表会动态插入 -->
                             </div>
                         </div>
@@ -733,7 +754,7 @@
                         </label>
                         <div style="position: relative;">
                             <input type="text" class="form-input" placeholder="输入职位，如：产品经理" id="position" oninput="filterPositions(this.value); validate()" onblur="hidePositionSuggestions()" maxlength="50" autocomplete="off">
-                            <div id="position-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e8e8e8; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 10;">
+                            <div id="position-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #DBDBDB; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 10;">
                                 <!-- 建议列表会动态插入 -->
                             </div>
                         </div>
@@ -799,7 +820,7 @@
                         <label class="option-item selected" id="email-option" onclick="selectMethod(this, 'email')">
                             <input type="radio" name="method" value="email" class="option-radio" checked>
                             <div class="option-content">
-                                <div class="option-title">企业邮箱认证 <span style="color: #4caf50;">（推荐）</span></div>
+                                <div class="option-title">企业邮箱认证 <span style="color: #FF2F2F;">（推荐）</span></div>
                                 <div class="option-desc">请用企业邮箱接收系统发送的验证邮件</div>
                             </div>
                         </label>
@@ -831,7 +852,7 @@
 
                     <!-- 企业邮箱方式 -->
                     <div id="email-method">
-                        <div style="padding: 12px; background: #f0f7ff; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #0066cc; line-height: 1.6; border-left: 3px solid #0066cc;">
+                        <div style="padding: 12px; background: #FFF9F9; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #FF2F2F; line-height: 1.6; border-left: 3px solid #FF2F2F;">
                             <strong>📋 认证说明：</strong><br>
                             使用企业邮箱认证，仅可认证为xX企业员工(L1认证)。如需认证具体职务请上传其他证明材料或选择其他认证方式。可上传可以证明在职公司、目前职位和在职时效的材料，如社保缴费证明、职称材料等(可多项组合)，通过OCR识别可升级为L2指定的四个行业认证(法律、工业设计、媒体设计、编程开发)。
                         </div>
@@ -844,8 +865,8 @@
                                     <input type="text" class="form-input" placeholder="请输入邮箱用户名" id="email-user" oninput="validate()">
                                 </div>
                                 <div style="flex: 1; display: flex; align-items: center;">
-                                    <span style="color: #666;">@</span>
-                                    <input type="text" class="form-input" placeholder="邮箱后缀(从企业信息自动获取)" id="email-domain" disabled style="background: #f5f5f5; margin-left: 4px;">
+                                    <span style="color: #454545;">@</span>
+                                    <input type="text" class="form-input" placeholder="邮箱后缀(从企业信息自动获取)" id="email-domain" disabled style="background: #F6F6F6; margin-left: 4px;">
                                 </div>
                             </div>
                             <div class="error-msg" id="email-error"></div>
@@ -863,13 +884,13 @@
 
                         <div class="form-group">
                             <label class="form-label">
-                                <span>辅助职位认证 <span style="color: #999;">(非必填)</span></span>
+                                <span>辅助职位认证 <span style="color: #606060;">(非必填)</span></span>
                                 <span class="form-hint">上传带有资质、行业特性的资料可升级为L2认证</span>
                             </label>
-                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;" onclick="document.getElementById('position-file').click()">
+                            <div style="border: 2px dashed #DBDBDB; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #FCFCFC;" onclick="document.getElementById('position-file').click()">
                                 <div style="font-size: 32px; margin-bottom: 8px;">+</div>
-                                <div style="font-size: 12px; color: #999;">点击或拖拽上传资格证书、职称证明等资料</div>
-                                <div style="font-size: 11px; color: #ccc; margin-top: 8px;">支持JPG/PNG/PDF，单张最大5MB</div>
+                                <div style="font-size: 12px; color: #606060;">点击或拖拽上传资格证书、职称证明等资料</div>
+                                <div style="font-size: 11px; color: #979797; margin-top: 8px;">支持JPG/PNG/PDF，单张最大5MB</div>
                             </div>
                             <input type="file" id="position-file" style="display: none;" accept=".jpg,.png,.pdf" onchange="validate()">
                             <div class="error-msg" id="position-error"></div>
@@ -878,7 +899,7 @@
 
                     <!-- 劳动合同/在职证明方式 -->
                     <div id="contract-method" class="hidden">
-                        <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                        <div style="padding: 12px; background: #F6F6F6; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #606060; line-height: 1.6;">
                             请上传劳动合同或企业在职证明。在职证明需为六个月内开具，需包含真实、清晰、完整的关键信息，无遮挡。
                         </div>
                         <div class="form-group">
@@ -886,9 +907,9 @@
                                 <span>上传文件 <span class="form-required">*</span></span>
                                 <span class="form-hint">支持JPG/PNG/PDF，单张最大5MB</span>
                             </label>
-                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
+                            <div style="border: 2px dashed #DBDBDB; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #FCFCFC;">
                                 <div style="font-size: 32px; margin-bottom: 8px;">+</div>
-                                <div style="font-size: 12px; color: #999;">点击或拖拽上传劳动合同或在职证明文件</div>
+                                <div style="font-size: 12px; color: #606060;">点击或拖拽上传劳动合同或在职证明文件</div>
                             </div>
                             <div class="error-msg" id="contract-error"></div>
                         </div>
@@ -896,7 +917,7 @@
 
                     <!-- 个人所得税APP方式 -->
                     <div id="tax-method" class="hidden">
-                        <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                        <div style="padding: 12px; background: #F6F6F6; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #606060; line-height: 1.6;">
                             请上传个人所得税APP由「个人中心」进入「在职受雇信息」页面的录屏视频。使用个人所得税材料认证，仅可认证为所属企业员工。如需认证具体职务请上传其他证明材料或选择其他认证方式。
                         </div>
                         <div class="form-group">
@@ -904,9 +925,9 @@
                                 <span>上传认证材料 <span class="form-required">*</span></span>
                                 <span class="form-hint">支持上传视频</span>
                             </label>
-                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
+                            <div style="border: 2px dashed #DBDBDB; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #FCFCFC;">
                                 <div style="font-size: 32px; margin-bottom: 8px;">+</div>
-                                <div style="font-size: 12px; color: #999;">点击或拖拽上传个人所得税APP的在职受雇信息页面</div>
+                                <div style="font-size: 12px; color: #606060;">点击或拖拽上传个人所得税APP的在职受雇信息页面</div>
                             </div>
                             <div class="error-msg" id="tax-error"></div>
                         </div>
@@ -914,7 +935,7 @@
 
                     <!-- 其他材料方式 -->
                     <div id="other-method" class="hidden">
-                        <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
+                        <div style="padding: 12px; background: #F6F6F6; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #606060; line-height: 1.6;">
                             请上传可以证明在职公司、目前职位和在职时效的材料。如社保缴费证明、职称材料等。支持上传多项认证材料（可多项组合）。
                         </div>
                         <div class="form-group">
@@ -922,9 +943,9 @@
                                 <span>上传认证材料 <span class="form-required">*</span></span>
                                 <span class="form-hint">支持图片或文件</span>
                             </label>
-                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
+                            <div style="border: 2px dashed #DBDBDB; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #FCFCFC;">
                                 <div style="font-size: 32px; margin-bottom: 8px;">+</div>
-                                <div style="font-size: 12px; color: #999;">点击或拖拽上传其他在职证明材料</div>
+                                <div style="font-size: 12px; color: #606060;">点击或拖拽上传其他在职证明材料</div>
                             </div>
                             <div class="error-msg" id="other-error"></div>
                         </div>
@@ -1452,12 +1473,12 @@
 
             // 显示搜索结果列表
             dropdown.innerHTML = results.slice(0, 10).map(company =>
-                `<div style="padding: 12px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333; transition: background 0.2s;"
-                      onmouseover="this.style.background='#f5f5f5'"
+                `<div style="padding: 12px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #252525; transition: background 0.2s;"
+                      onmouseover="this.style.background='#F6F6F6'"
                       onmouseout="this.style.background='transparent'"
                       onclick="selectCompany('${company.fullName}', '${company.emailDomain || ''}')">
                     <div style="font-weight: 500; margin-bottom: 4px;">${company.fullName}</div>
-                    <div style="font-size: 12px; color: #999;">邮箱: ${company.emailDomain ? company.emailDomain : '暂无'} | 成立: ${company.foundedYear}</div>
+                    <div style="font-size: 12px; color: #606060;">邮箱: ${company.emailDomain ? company.emailDomain : '暂无'} | 成立: ${company.foundedYear}</div>
                 </div>`
             ).join('');
             dropdown.style.display = 'block';
@@ -1476,9 +1497,9 @@
 
             document.getElementById('company-verify-status').style.display = 'block';
             if (emailDomain) {
-                document.getElementById('company-verify-status').innerHTML = '<div style="color: #1ABC9C; font-size: 12px;">✓ 企业信息已确认（支持邮箱认证）</div>';
+                document.getElementById('company-verify-status').innerHTML = '<div style="color: #FF2F2F; font-size: 12px;">✓ 企业信息已确认（支持邮箱认证）</div>';
             } else {
-                document.getElementById('company-verify-status').innerHTML = '<div style="color: #ff9800; font-size: 12px;">⚠ 企业信息已确认（不支持邮箱认证）</div>';
+                document.getElementById('company-verify-status').innerHTML = '<div style="color: #FF2F2F; font-size: 12px;">⚠ 企业信息已确认（不支持邮箱认证）</div>';
             }
 
             validate();
@@ -1514,7 +1535,7 @@
             // 如果没有匹配结果，显示"使用自定义职位"
             if (filtered.length === 0) {
                 suggestionsBox.innerHTML = `
-                    <div style="padding: 10px 12px; cursor: pointer; font-size: 13px; color: #1ABC9C; background: #f0fdf9;" onclick="selectPosition('${trimmedKeyword}'); document.getElementById('position-suggestions').style.display='none';">
+                    <div style="padding: 10px 12px; cursor: pointer; font-size: 13px; color: #FF2F2F; background: #f0fdf9;" onclick="selectPosition('${trimmedKeyword}'); document.getElementById('position-suggestions').style.display='none';">
                         ✓ 使用自定义职位：<strong>${trimmedKeyword}</strong>
                     </div>
                 `;
@@ -1524,12 +1545,12 @@
 
             // 显示匹配的职位建议（最多5个）+ 自定义选项
             let html = filtered.map(item =>
-                `<div style="padding: 10px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333; transition: background 0.2s;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='transparent'" onclick="selectPosition('${item.name}')">${item.name}</div>`
+                `<div style="padding: 10px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #252525; transition: background 0.2s;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='transparent'" onclick="selectPosition('${item.name}')">${item.name}</div>`
             ).join('');
 
             // 添加自定义选项
             html += `
-                <div style="padding: 10px 12px; cursor: pointer; font-size: 13px; color: #1ABC9C; background: #f0fdf9; transition: background 0.2s;" onmouseover="this.style.background='#e8f5f0'" onmouseout="this.style.background='#f0fdf9'" onclick="selectPosition('${trimmedKeyword}'); document.getElementById('position-suggestions').style.display='none';">
+                <div style="padding: 10px 12px; cursor: pointer; font-size: 13px; color: #FF2F2F; background: #f0fdf9; transition: background 0.2s;" onmouseover="this.style.background='#e8f5f0'" onmouseout="this.style.background='#f0fdf9'" onclick="selectPosition('${trimmedKeyword}'); document.getElementById('position-suggestions').style.display='none';">
                     ✓ 使用自定义职位：<strong>${trimmedKeyword}</strong>
                 </div>
             `;
