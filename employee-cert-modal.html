@@ -193,7 +193,7 @@
         }
 
         .form-required {
-            color: #ff4444;
+            color: #FF2F2F;
         }
 
         .form-hint {
@@ -230,7 +230,7 @@
 
         .form-input.error,
         .form-select.error {
-            border-color: #ff4444;
+            border-color: #FF2F2F;
             background: #fff5f5;
         }
 
@@ -242,7 +242,7 @@
         .error-msg {
             display: none;
             font-size: 11px;
-            color: #ff4444;
+            color: #FF2F2F;
             margin-top: 4px;
         }
 
@@ -1605,6 +1605,49 @@
             validate();
         }
 
+        // ========== 天眼查 API 集成 ==========
+        async function searchCompaniesFromTianyancha(keyword) {
+            try {
+                const response = await fetch(
+                    `http://open.api.tianyancha.com/services/open/ic/baseinfoV2/2.0?keyword=${encodeURIComponent(keyword)}`
+                );
+                const data = await response.json();
+
+                if (data.error_code === 0 && data.result) {
+                    // API 返回单个企业结果
+                    return [{
+                        name: data.result.name,
+                        creditCode: data.result.creditCode,
+                        email: data.result.email || null,
+                        emailList: data.result.emailList || [],
+                        phoneNumber: data.result.phoneNumber || ''
+                    }];
+                }
+                return [];
+            } catch (error) {
+                console.error('天眼查 API 调用失败:', error);
+                // 回退到本地数据
+                return fallbackToLocalCompanyData(keyword);
+            }
+        }
+
+        function fallbackToLocalCompanyData(keyword) {
+            const results = [];
+            for (const [key, companies] of Object.entries(companySearchResults)) {
+                if (key.toLowerCase().includes(keyword.toLowerCase())) {
+                    results.push(...companies.map(c => ({
+                        name: c.fullName,
+                        creditCode: '本地数据-无信用代码',
+                        email: null,
+                        emailList: c.emailDomain ? [c.emailDomain] : [],
+                        phoneNumber: '',
+                        isLocal: true
+                    })));
+                }
+            }
+            return results;
+        }
+
         // 企业搜索函数
         function searchCompanies(keyword) {
             const dropdown = document.getElementById('company-dropdown');
@@ -1616,31 +1659,21 @@
                 return;
             }
 
-            // 模拟异步查询天眼查接口
-            // TODO: 替换为真实天眼查接口：
-            // fetch(`/api/tianyancha/search?keyword=${keyword}`)
-            //   .then(res => res.json())
-            //   .then(data => displayCompanySearchResults(data))
-            //   .catch(err => console.error('企业搜索失败:', err))
+            // 显示加载状态
+            dropdown.innerHTML = '<div style="padding: 12px; text-align: center; color: #999;">搜索中...</div>';
+            dropdown.style.display = 'block';
 
-            setTimeout(() => {
-                displayCompanySearchResults(keyword);
-            }, 300);
+            // 调用天眼查 API
+            searchCompaniesFromTianyancha(keyword).then(results => {
+                displayCompanySearchResults(results, keyword);
+            });
         }
 
-        function displayCompanySearchResults(keyword) {
+        function displayCompanySearchResults(results, keyword) {
             const dropdown = document.getElementById('company-dropdown');
             const errorMsg = document.getElementById('company-error');
 
-            // 按关键词搜索企业
-            const results = [];
-            for (const [key, companies] of Object.entries(companySearchResults)) {
-                if (key.toLowerCase().includes(keyword.toLowerCase())) {
-                    results.push(...companies);
-                }
-            }
-
-            if (results.length === 0) {
+            if (!results || results.length === 0) {
                 dropdown.style.display = 'none';
                 errorMsg.textContent = '未找到相关企业，请确认企业名称';
                 errorMsg.classList.add('show');
@@ -1652,28 +1685,37 @@
                 `<div style="padding: 12px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333; transition: background 0.2s;"
                       onmouseover="this.style.background='#f5f5f5'"
                       onmouseout="this.style.background='transparent'"
-                      onclick="selectCompany('${company.fullName}', '${company.emailDomain || ''}')">
-                    <div style="font-weight: 500; margin-bottom: 4px;">${company.fullName}</div>
-                    <div style="font-size: 12px; color: #999;">邮箱: ${company.emailDomain ? company.emailDomain : '暂无'} | 成立: ${company.foundedYear}</div>
+                      onclick="selectCompany('${company.name.replace(/'/g, "\\'")}', '${(company.email || '').replace(/'/g, "\\'")}', '${(company.creditCode || '').replace(/'/g, "\\'")}')">
+                    <div style="font-weight: 500; margin-bottom: 4px;">${company.name}</div>
+                    <div style="font-size: 12px; color: #999;">信用代码: ${company.creditCode || '暂无'} | 邮箱: ${company.email ? company.email : '暂无'}</div>
                 </div>`
             ).join('');
             dropdown.style.display = 'block';
             errorMsg.classList.remove('show');
         }
 
-        function selectCompany(fullName, emailDomain) {
+        function selectCompany(fullName, email, creditCode) {
             document.getElementById('company').value = fullName;
             document.getElementById('company-dropdown').style.display = 'none';
+
+            // 提取邮箱后缀
+            let emailDomain = null;
+            if (email) {
+                const parts = email.split('@');
+                emailDomain = parts.length > 1 ? parts[1] : null;
+            }
 
             // 设置已选择的企业信息
             verifiedCompanyInfo = {
                 fullName: fullName,
+                creditCode: creditCode || null,
+                email: email || null,
                 emailDomain: emailDomain || null
             };
 
             document.getElementById('company-verify-status').style.display = 'block';
-            if (emailDomain) {
-                document.getElementById('company-verify-status').innerHTML = '<div style="color: #1ABC9C; font-size: 12px;">✓ 企业信息已确认（支持邮箱认证）</div>';
+            if (email) {
+                document.getElementById('company-verify-status').innerHTML = '<div style="color: #6B1B3F; font-size: 12px;">✓ 企业信息已确认（支持邮箱认证）</div>';
             } else {
                 document.getElementById('company-verify-status').innerHTML = '<div style="color: #ff9800; font-size: 12px;">⚠ 企业信息已确认（不支持邮箱认证）</div>';
             }
