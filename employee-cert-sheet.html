@@ -288,6 +288,43 @@
             box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.08);
         }
 
+        /* 自定义下拉菜单样式 */
+        .custom-select-value {
+            transition: all 0.2s;
+        }
+
+        .custom-select-value:hover {
+            border-color: #999;
+        }
+
+        .custom-select-value.active {
+            border-color: #0066ff;
+            background: #fff;
+        }
+
+        .custom-option {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .custom-option:last-child {
+            border-bottom: none;
+        }
+
+        .custom-option:hover {
+            background: #f5f5f5;
+        }
+
+        .custom-option.selected {
+            background: #f0f5ff;
+            color: #0066ff;
+            font-weight: 500;
+        }
+
         .form-input.error,
         .form-select.error {
             border-color: #ff4444;
@@ -849,11 +886,12 @@
 
                     <!-- 行业部分 -->
                     <div id="industry-section">
-                    <div class="form-group" style="position: relative;">
+                    <div class="form-group">
                         <label class="form-label">
                             <span>所属行业 <span class="form-required">*</span></span>
                         </label>
-                        <select class="form-select" id="industry" onchange="validate()" style="appearance: auto; position: static; width: 100%; height: 40px; padding: 10px 12px; border: 1px solid #d9d9d9; background: #fafafa; font-size: 14px; border-radius: 4px; box-sizing: border-box;">
+                        <!-- 隐藏的原生select用于数据存储 -->
+                        <select id="industry" style="display: none;" onchange="validate()">
                             <option value="">请选择行业</option>
                             <option value="tech">互联网/信息技术</option>
                             <option value="finance">金融</option>
@@ -863,6 +901,23 @@
                             <option value="real-estate">房地产</option>
                             <option value="other">其他</option>
                         </select>
+                        <!-- 自定义下拉菜单 -->
+                        <div class="custom-select" id="industry-dropdown" style="position: relative; width: 100%; cursor: pointer;">
+                            <div class="custom-select-value" style="width: 100%; padding: 10px 12px; border: 1px solid #d9d9d9; background: #fafafa; border-radius: 4px; font-size: 14px; color: #333; height: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;">
+                                <span id="industry-label">请选择行业</span>
+                                <span style="font-size: 12px; color: #999;">▼</span>
+                            </div>
+                            <div class="custom-select-dropdown" id="industry-menu" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d9d9d9; border-top: none; border-radius: 0 0 4px 4px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: -1px;">
+                                <div class="custom-option" data-value="">请选择行业</div>
+                                <div class="custom-option" data-value="tech">互联网/信息技术</div>
+                                <div class="custom-option" data-value="finance">金融</div>
+                                <div class="custom-option" data-value="design">设计</div>
+                                <div class="custom-option" data-value="legal">法律</div>
+                                <div class="custom-option" data-value="transport">运输/仓储</div>
+                                <div class="custom-option" data-value="real-estate">房地产</div>
+                                <div class="custom-option" data-value="other">其他</div>
+                            </div>
+                        </div>
                         <div class="error-msg" id="industry-error"></div>
                     </div>
                     </div>
@@ -1081,7 +1136,59 @@
         // 初始化：禁用body overflow
         document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'hidden';
+            initIndustrySelect();
         });
+
+        // ========== 自定义下拉菜单初始化 ==========
+        function initIndustrySelect() {
+            const dropdown = document.getElementById('industry-dropdown');
+            const menu = document.getElementById('industry-menu');
+            const label = document.getElementById('industry-label');
+            const selectValue = dropdown.querySelector('.custom-select-value');
+            const options = menu.querySelectorAll('.custom-option');
+            const hiddenSelect = document.getElementById('industry');
+
+            selectValue.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+                selectValue.classList.toggle('active', menu.style.display === 'block');
+            });
+
+            options.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const value = option.getAttribute('data-value');
+                    const text = option.textContent;
+
+                    // 更新标签
+                    label.textContent = text;
+
+                    // 更新隐藏的select
+                    hiddenSelect.value = value;
+
+                    // 更新选项样式
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    if (value) {
+                        option.classList.add('selected');
+                    }
+
+                    // 关闭菜单
+                    menu.style.display = 'none';
+                    selectValue.classList.remove('active');
+
+                    // 触发validate
+                    validate();
+                });
+            });
+
+            // 点击其他地方关闭菜单
+            document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target)) {
+                    menu.style.display = 'none';
+                    selectValue.classList.remove('active');
+                }
+            });
+        }
 
         let currentStep = 1;
         let selectedType = 'enterprise';  // 企业职工认证
@@ -1428,6 +1535,21 @@
                 document.getElementById('company').value = lastCertData.company || '';
                 document.getElementById('position').value = lastCertData.position || '';
                 document.getElementById('industry').value = lastCertData.industry || '';
+
+                // 同时更新自定义下拉菜单的显示
+                if (lastCertData.industry) {
+                    const menu = document.getElementById('industry-menu');
+                    if (menu) {
+                        const options = menu.querySelectorAll('.custom-option');
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        const selectedOption = Array.from(options).find(opt => opt.getAttribute('data-value') === lastCertData.industry);
+                        if (selectedOption) {
+                            selectedOption.classList.add('selected');
+                            document.getElementById('industry-label').textContent = selectedOption.textContent;
+                        }
+                    }
+                }
+
                 console.log('✓ 预填上次认证信息');
             }
 
@@ -2097,6 +2219,27 @@
                                 option.textContent = ind;
                                 industrySelect.appendChild(option);
                             });
+
+                            // 同时更新自定义下拉菜单
+                            const industryMenu = document.getElementById('industry-menu');
+                            if (industryMenu) {
+                                industryMenu.innerHTML = '<div class="custom-option" data-value="">请选择行业</div>';
+                                specialty.industries.forEach(ind => {
+                                    const optionDiv = document.createElement('div');
+                                    optionDiv.className = 'custom-option';
+                                    optionDiv.setAttribute('data-value', ind);
+                                    optionDiv.textContent = ind;
+                                    industryMenu.appendChild(optionDiv);
+                                });
+                                // 重新绑定事件
+                                initIndustrySelect();
+                            }
+
+                            // 重置标签
+                            const label = document.getElementById('industry-label');
+                            if (label) {
+                                label.textContent = '请选择行业';
+                            }
 
                             // 更新职位input的placeholder
                             const positionInput = document.getElementById('position');
