@@ -322,7 +322,17 @@
             margin-right: 10px;
             margin-top: 2px;
             cursor: pointer;
-            accent-color: #0066ff;
+            accent-color: #C83F5F;
+            appearance: none;
+            border: 2px solid #C83F5F;
+            border-radius: 50%;
+            background: white;
+            position: relative;
+        }
+
+        .option-radio:checked {
+            background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%);
+            border-color: transparent;
         }
 
         .option-content {
@@ -362,12 +372,12 @@
 
         .legal-box {
             padding: 12px;
-            background: #fff5f5;
-            border: 1px solid #ffc6c6;
+            background: linear-gradient(135deg, rgba(107, 27, 63, 0.4) 0%, rgba(200, 63, 95, 0.4) 100%);
+            border: 1px solid rgba(200, 63, 95, 0.3);
             border-radius: 4px;
             margin-bottom: 16px;
             font-size: 11px;
-            color: #ff6666;
+            color: #999;
             line-height: 1.6;
         }
 
