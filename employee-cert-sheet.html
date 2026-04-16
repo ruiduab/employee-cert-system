@@ -1208,19 +1208,19 @@
         //   .then(data => displayCompanySearchResults(data))
         const companySearchResults = {
             '联想': [
-                { fullName: '联想（北京）有限公司', shortName: '联想', emailDomain: 'lenovo.com', foundedYear: 2001 },
-                { fullName: '联想控股股份有限公司', shortName: '联想控股', emailDomain: 'lenovo.com', foundedYear: 2001 },
-                { fullName: '联想集团有限公司', shortName: '联想集团', emailDomain: 'lenovo.com', foundedYear: 1984 }
+                { fullName: '联想（北京）有限公司', shortName: '联想', emailDomain: 'lenovo.com' },
+                { fullName: '联想控股股份有限公司', shortName: '联想控股', emailDomain: 'lenovo.com' },
+                { fullName: '联想集团有限公司', shortName: '联想集团', emailDomain: 'lenovo.com' }
             ],
             '测试': [
-                { fullName: '测试科技有限公司', shortName: '测试科技', emailDomain: null, foundedYear: 2023 },
-                { fullName: '测试有限公司', shortName: '测试公司', emailDomain: null, foundedYear: 2022 }
+                { fullName: '测试科技有限公司', shortName: '测试科技', emailDomain: null },
+                { fullName: '测试有限公司', shortName: '测试公司', emailDomain: null }
             ],
             '阿里': [
-                { fullName: '阿里巴巴集团控股有限公司', shortName: '阿里', emailDomain: 'alibaba.com', foundedYear: 1999 }
+                { fullName: '阿里巴巴集团控股有限公司', shortName: '阿里', emailDomain: 'alibaba.com' }
             ],
             '腾讯': [
-                { fullName: '腾讯科技有限公司', shortName: '腾讯', emailDomain: 'tencent.com', foundedYear: 1998 }
+                { fullName: '腾讯科技有限公司', shortName: '腾讯', emailDomain: 'tencent.com' }
             ]
         };
 
@@ -1899,12 +1899,21 @@
                 emailDomain: emailDomain || null
             };
 
-            document.getElementById('company-verify-status').style.display = 'block';
+            // 构建企业信息展示
+            let statusHTML = '<div style="color: #6B1B3F; font-size: 12px;">';
+            statusHTML += '<div style="margin-bottom: 6px;">✓ 企业信息已确认';
             if (email) {
-                document.getElementById('company-verify-status').innerHTML = '<div style="color: #6B1B3F; font-size: 12px;">✓ 企业信息已确认（支持邮箱认证）</div>';
+                statusHTML += '（支持邮箱认证）';
             } else {
-                document.getElementById('company-verify-status').innerHTML = '<div style="color: #ff9800; font-size: 12px;">⚠ 企业信息已确认（不支持邮箱认证）</div>';
+                statusHTML += '（不支持邮箱认证）';
             }
+            statusHTML += '</div>';
+            statusHTML += '<div style="color: #454545; font-size: 12px; margin-bottom: 4px;">企业名称：' + fullName + '</div>';
+            statusHTML += '<div style="color: #454545; font-size: 12px;">税号/信用代码：' + (creditCode || '暂无') + '</div>';
+            statusHTML += '</div>';
+
+            document.getElementById('company-verify-status').style.display = 'block';
+            document.getElementById('company-verify-status').innerHTML = statusHTML;
 
             validate();
         }
@@ -2080,6 +2089,7 @@
                 document.getElementById('position-error').classList.remove('show');
                 document.getElementById('industry-error').classList.remove('show');
 
+                let companyValid = false;
                 if (!company) {
                     document.getElementById('company-error').textContent = '请选择企业名称';
                     document.getElementById('company-error').classList.add('show');
@@ -2087,6 +2097,8 @@
                     // 企业未被选择或输入值不匹配
                     document.getElementById('company-error').textContent = '请从下拉列表中选择企业';
                     document.getElementById('company-error').classList.add('show');
+                } else {
+                    companyValid = true;
                 }
 
                 if (!position) {
@@ -2102,7 +2114,7 @@
                     document.getElementById('industry-error').classList.add('show');
                 }
 
-                isValid = verifiedCompanyInfo && position.length >= 2 && position.length <= 12 && industry;
+                isValid = companyValid && position.length >= 2 && position.length <= 12 && industry;
             } else if (currentStep === 4) {
                 const method = document.querySelector('input[name="method"]:checked').value;
 
