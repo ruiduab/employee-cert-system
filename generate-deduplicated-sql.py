@@ -40,11 +40,11 @@ INSERT INTO standard_positions (name, en_name, category_id, keywords, is_active)
     sql_lines.append(header)
 
     # 按分类组织
-    categories_map = {{
+    categories_map = {
         'Technology': 1, 'Data': 2, 'Product': 3, 'Design': 4,
         'Sales': 5, 'Marketing': 6, 'HR': 7, 'Finance': 8,
         'Legal': 9, 'Operations': 10, 'Manufacturing': 11, 'Executive': 12, 'Other': 13
-    }}
+    }
 
     sql_values = []
     for pos in positions:
