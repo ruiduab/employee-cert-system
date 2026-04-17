@@ -1797,13 +1797,17 @@
 
         async function searchCompaniesFromTianyancha(keyword) {
             try {
-                const response = await fetch(
-                    `http://open.api.tianyancha.com/services/open/ic/baseinfoV2/2.0?keyword=${encodeURIComponent(keyword)}&accessToken=${TIANYANCHA_TOKEN}`
-                );
+                const url = `http://open.api.tianyancha.com/services/open/ic/baseinfoV2/2.0?keyword=${encodeURIComponent(keyword)}&accessToken=${TIANYANCHA_TOKEN}`;
+                console.log('天眼查 API 请求:', url);
+
+                const response = await fetch(url);
                 const data = await response.json();
+
+                console.log('天眼查 API 响应:', data);
 
                 if (data.error_code === 0 && data.result) {
                     // API 返回单个企业结果
+                    console.log('API 返回成功，企业数据:', data.result);
                     return [{
                         name: data.result.name,
                         creditCode: data.result.creditCode,
@@ -1811,6 +1815,8 @@
                         emailList: data.result.emailList || [],
                         phoneNumber: data.result.phoneNumber || ''
                     }];
+                } else if (data.error_code !== 0) {
+                    console.warn('天眼查 API 错误:', data.error_code, data.error_message);
                 }
                 return [];
             } catch (error) {
