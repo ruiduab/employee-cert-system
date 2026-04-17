@@ -1426,10 +1426,12 @@
 
         // 企业搜索函数
         // ========== 天眼查 API 集成 ==========
+        const TIANYANCHA_TOKEN = '7d8d9dc8-6ddc-464c-b31f-416a2e1b2d97';
+
         async function searchCompaniesFromTianyancha(keyword) {
             try {
                 const response = await fetch(
-                    `http://open.api.tianyancha.com/services/open/ic/baseinfoV2/2.0?keyword=${encodeURIComponent(keyword)}`
+                    `http://open.api.tianyancha.com/services/open/ic/baseinfoV2/2.0?keyword=${encodeURIComponent(keyword)}&accessToken=${TIANYANCHA_TOKEN}`
                 );
                 const data = await response.json();
 
