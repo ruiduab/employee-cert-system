@@ -1047,19 +1047,19 @@
                         <div class="filter-row">
                             <div class="filter-group">
                                 <span class="filter-label">账号/姓名</span>
-                                <input type="text" class="filter-input" placeholder="搜索账号或姓名">
+                                <input type="text" class="filter-input" id="filter-name" placeholder="搜索账号或姓名">
                             </div>
                             <div class="filter-group">
-                                <span class="filter-label">是否实名</span>
-                                <select class="filter-select">
-                                    <option>全部</option>
-                                    <option>已认证</option>
-                                    <option>未认证</option>
-                                </select>
+                                <span class="filter-label">岗位信息</span>
+                                <input type="text" class="filter-input" id="filter-position" placeholder="搜索岗位信息">
+                            </div>
+                            <div class="filter-group">
+                                <span class="filter-label">所属企业</span>
+                                <input type="text" class="filter-input" id="filter-company" placeholder="搜索所属企业">
                             </div>
                             <div class="filter-group">
                                 <span class="filter-label">职员认证状态</span>
-                                <select class="filter-select">
+                                <select class="filter-select" id="filter-cert-type">
                                     <option>全部</option>
                                     <option>普通职员</option>
                                     <option>专业：法律</option>
@@ -1070,7 +1070,7 @@
                             </div>
                             <div class="filter-group">
                                 <span class="filter-label">认证方式</span>
-                                <select class="filter-select">
+                                <select class="filter-select" id="filter-cert-method">
                                     <option>全部</option>
                                     <option>企业邮箱</option>
                                     <option>劳动合同/在职证明</option>
@@ -1080,11 +1080,21 @@
                             </div>
                             <div class="filter-group">
                                 <span class="filter-label">当前状态</span>
-                                <select class="filter-select">
+                                <select class="filter-select" id="filter-status">
                                     <option>全部</option>
                                     <option>已认证</option>
                                     <option>已失效</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="filter-row" style="margin-top: 12px;">
+                            <div class="filter-group">
+                                <span class="filter-label">认证时间（起）</span>
+                                <input type="date" class="filter-input" id="filter-date-start" style="min-width: 150px;">
+                            </div>
+                            <div class="filter-group">
+                                <span class="filter-label">认证时间（止）</span>
+                                <input type="date" class="filter-input" id="filter-date-end" style="min-width: 150px;">
                             </div>
                             <div class="filter-button">
                                 <button class="btn btn-primary" onclick="handleSearch()">🔍 搜索</button>
@@ -1107,7 +1117,7 @@
                                         <th>真实姓名</th>
                                         <th>LenovoID</th>
                                         <th>关联手机号</th>
-                                        <th>是否实名</th>
+                                        <th>岗位信息</th>
                                         <th>所属企业</th>
                                         <th>职员认证状态</th>
                                         <th>认证方式</th>
@@ -2132,6 +2142,7 @@
         // 生成示例员工数据
         const employeeNames = ['张三', '李四', '王五', '赵六', '孙七', '周八', '吴九', '郑十', '何一', '曾二', '朱三', '高四', '林五', '罗六', '陆七', '黄八', '金九', '龙十', '邓一', '陈二'];
         const companies = ['联想（北京）有限公司', '联想控股股份有限公司', '联想商用产业集团', '联想研究院', '联想集团北京研发中心'];
+        const positions = ['软件工程师', '产品经理', '销售经理', '人力资源', '市场营销', '财务分析师', '项目经理', '运维工程师', '测试工程师', '设计师', 'UI设计师', '数据分析师', '法务专员', '行政助理', '客户经理'];
         const certTypes = ['普通职员', '专业：法律', '专业：工业设计', '专业：媒体设计', '专业：编程开发'];
         const certMethods = ['企业邮箱', '劳动合同', '个人所得税', '其他材料'];
         const statuses = ['已认证', '已失效'];
@@ -2175,6 +2186,7 @@
                 const lenovoId = '102' + String(27200481 + i).slice(-8);
                 const phone = '1' + String(70 + (i % 8)) + String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
                 const company = companies[i % companies.length];
+                const position = positions[i % positions.length];
 
                 // 数据分布：2341个已认证，45个已失效
                 const status = i < certifiedCount ? '已认证' : '已失效';
@@ -2212,13 +2224,13 @@
                 const badgeClass = status === '已认证' ? 'badge-success' : 'badge-warning';
                 const certTypeBadge = certType.includes('专业') ? 'badge-info' : 'badge-info';
 
-                rows += `<tr data-status="${status}" data-cert-type="${certType}" data-cert-method="${certMethod}" data-is-new="${isNew}">
+                rows += `<tr data-status="${status}" data-cert-type="${certType}" data-cert-method="${certMethod}" data-is-new="${isNew}" data-position="${position}" data-company="${company}" data-cert-date="${certDate}">
                     <td><input type="checkbox"></td>
                     <td>${account}</td>
                     <td>${name}</td>
                     <td>${lenovoId}</td>
                     <td>${phone}</td>
-                    <td><span class="badge badge-success">✓ 已认证</span></td>
+                    <td>${position}</td>
                     <td>${company}</td>
                     <td><span class="badge ${certTypeBadge}">${certType}</span></td>
                     <td>${certMethod}</td>
@@ -2598,17 +2610,14 @@
         }
 
         function handleSearch() {
-            const filterBar = document.querySelector('#page-employee-list .filter-bar');
-            const searchInput = filterBar.querySelector('.filter-input');
-            const selects = filterBar.querySelectorAll('.filter-select');
-
-            const searchValue = searchInput.value.toLowerCase();
-            const filters = {
-                realName: selects[0].value,
-                certType: selects[1].value,
-                certMethod: selects[2].value,
-                status: selects[3].value
-            };
+            const searchValue = (document.getElementById('filter-name').value || '').toLowerCase();
+            const positionValue = (document.getElementById('filter-position').value || '').toLowerCase();
+            const companyValue = (document.getElementById('filter-company').value || '').toLowerCase();
+            const certTypeValue = document.getElementById('filter-cert-type').value;
+            const certMethodValue = document.getElementById('filter-cert-method').value;
+            const statusValue = document.getElementById('filter-status').value;
+            const dateStart = document.getElementById('filter-date-start').value;
+            const dateEnd = document.getElementById('filter-date-end').value;
 
             const rows = document.querySelectorAll('#page-employee-list tbody tr');
             let visibleCount = 0;
@@ -2616,43 +2625,46 @@
             rows.forEach(row => {
                 let show = true;
 
-                // 搜索账号或姓名
                 if (searchValue) {
                     const accountName = (row.cells[1]?.textContent + row.cells[2]?.textContent).toLowerCase();
-                    if (!accountName.includes(searchValue)) {
-                        show = false;
-                    }
+                    if (!accountName.includes(searchValue)) show = false;
                 }
 
-                // 筛选认证类型
-                if (show && filters.certType !== '全部') {
+                if (show && positionValue) {
+                    const position = (row.getAttribute('data-position') || '').toLowerCase();
+                    if (!position.includes(positionValue)) show = false;
+                }
+
+                if (show && companyValue) {
+                    const company = (row.getAttribute('data-company') || '').toLowerCase();
+                    if (!company.includes(companyValue)) show = false;
+                }
+
+                if (show && certTypeValue !== '全部') {
                     const certType = row.getAttribute('data-cert-type') || '';
-                    if (!certType.includes(filters.certType)) {
-                        show = false;
-                    }
+                    if (!certType.includes(certTypeValue)) show = false;
                 }
 
-                // 筛选认证方式
-                if (show && filters.certMethod !== '全部') {
+                if (show && certMethodValue !== '全部') {
                     const certMethod = row.getAttribute('data-cert-method') || '';
-                    if (certMethod !== filters.certMethod) {
-                        show = false;
-                    }
+                    if (certMethod !== certMethodValue) show = false;
                 }
 
-                // 筛选当前状态
-                if (show && filters.status !== '全部') {
+                if (show && statusValue !== '全部') {
                     const status = row.getAttribute('data-status') || '';
-                    if (status !== filters.status) {
-                        show = false;
-                    }
+                    if (status !== statusValue) show = false;
+                }
+
+                if (show && (dateStart || dateEnd)) {
+                    const certDate = (row.getAttribute('data-cert-date') || '').substring(0, 10);
+                    if (dateStart && certDate < dateStart) show = false;
+                    if (dateEnd && certDate > dateEnd) show = false;
                 }
 
                 row.style.display = show ? '' : 'none';
                 if (show) visibleCount++;
             });
 
-            // 重置分页到第1页
             pageConfig.currentPage = 1;
             updatePagination();
 
@@ -2660,24 +2672,20 @@
         }
 
         function handleReset() {
-            // 重置搜索框
-            const filterBar = document.querySelector('#page-employee-list .filter-bar');
-            const searchInput = filterBar.querySelector('.filter-input');
-            searchInput.value = '';
+            document.getElementById('filter-name').value = '';
+            document.getElementById('filter-position').value = '';
+            document.getElementById('filter-company').value = '';
+            document.getElementById('filter-cert-type').value = '全部';
+            document.getElementById('filter-cert-method').value = '全部';
+            document.getElementById('filter-status').value = '全部';
+            document.getElementById('filter-date-start').value = '';
+            document.getElementById('filter-date-end').value = '';
 
-            // 重置所有下拉框
-            const selects = filterBar.querySelectorAll('.filter-select');
-            selects.forEach(select => {
-                select.value = '全部';
-            });
-
-            // 显示所有行
             const rows = document.querySelectorAll('#page-employee-list tbody tr');
             rows.forEach(row => {
                 row.style.display = '';
             });
 
-            // 重置分页到第1页
             pageConfig.currentPage = 1;
             updatePagination();
 
