@@ -62,7 +62,6 @@
 
         .header {
             padding: 12px 16px;
-            border-bottom: 1px solid var(--color-border-light);
             text-align: center;
         }
 
@@ -504,13 +503,7 @@
 <body>
     <div class="container">
         <div class="status-bar"></div>
-
-        <div class="header">
-            <div class="header-logo">
-                <div class="logo-box">Lenovo</div>
-                <span>联想</span>
-            </div>
-        </div>
+        <div class="header"></div>
 
         <div class="content">
             <!-- 第1步：企业职工认证 -->
@@ -755,7 +748,7 @@
                             <span>职位信息 <span class="form-required">*</span></span>
                         </label>
                         <div style="position: relative;">
-                            <input type="text" class="form-input" placeholder="输入职位，如：产品经理" id="position" oninput="filterPositions(this.value); validate()" onblur="hidePositionSuggestions()" maxlength="50" autocomplete="off">
+                            <input type="text" class="form-input" placeholder="输入职位，如律师/设计师/POC" id="position" oninput="filterPositions(this.value); validate()" onblur="hidePositionSuggestions()" maxlength="50" autocomplete="off">
                             <div id="position-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #DBDBDB; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 10;">
                                 <!-- 建议列表会动态插入 -->
                             </div>
@@ -840,17 +833,13 @@
                             <input type="radio" name="method" value="other" class="option-radio">
                             <div class="option-content">
                                 <div class="option-title">其他材料认证</div>
-                                <div class="option-desc">上传其他可证明在职身份的材料</div>
+                                <div class="option-desc">上传您的工卡、名片等照片或者截图，证明您的在职状态</div>
                             </div>
                         </label>
                     </div>
 
                     <!-- 企业邮箱方式 -->
                     <div id="email-method">
-                        <div style="padding: 12px; background: #FFF9F9; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #454545; line-height: 1.6; border-left: 3px solid #FF2F2F;">
-                            <strong><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#252525" stroke-width="2" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><path d="M9 11l3 3L22 4"></path><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path></svg>认证说明：</strong><br>
-                            使用企业邮箱认证，仅可认证为xX企业员工(L1认证)。如需认证具体职务请上传其他证明材料或选择其他认证方式。可上传可以证明在职公司、目前职位和在职时效的材料，如社保缴费证明、职称材料等(可多项组合)，通过OCR识别可升级为L2指定的四个行业认证(法律、工业设计、媒体设计、编程开发)。
-                        </div>
                         <div class="form-group">
                             <label class="form-label">
                                 <span>企业邮箱 <span class="form-required">*</span></span>
@@ -877,19 +866,6 @@
                             <div class="error-msg" id="code-error"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span>辅助职位认证 <span style="color: #606060;">(非必填)</span></span>
-                                <span class="form-hint">上传带有资质、行业特性的资料可升级为L2认证</span>
-                            </label>
-                            <div style="border: 2px dashed #DBDBDB; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #FCFCFC;" onclick="document.getElementById('position-file').click()">
-                                <div style="font-size: 32px; margin-bottom: 8px;">+</div>
-                                <div style="font-size: 12px; color: #606060;">点击或拖拽上传资格证书、职称证明等资料</div>
-                                <div style="font-size: 11px; color: #979797; margin-top: 8px;">支持JPG/PNG/PDF，单张最大5MB</div>
-                            </div>
-                            <input type="file" id="position-file" style="display: none;" accept=".jpg,.png,.pdf" onchange="validate()">
-                            <div class="error-msg" id="position-error"></div>
-                        </div>
                     </div>
 
                     <!-- 劳动合同/在职证明方式 -->
@@ -913,12 +889,12 @@
                     <!-- 个人所得税APP方式 -->
                     <div id="tax-method" class="hidden">
                         <div style="padding: 12px; background: #F6F6F6; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #606060; line-height: 1.6;">
-                            请上传个人所得税APP由「个人中心」进入「在职受雇信息」页面的录屏视频。使用个人所得税材料认证，仅可认证为所属企业员工。如需认证具体职务请上传其他证明材料或选择其他认证方式。
+                            请上传个人所得税APP由「个人中心」进入「在职受雇信息」页面进行截图。
                         </div>
                         <div class="form-group">
                             <label class="form-label">
                                 <span>上传认证材料 <span class="form-required">*</span></span>
-                                <span class="form-hint">支持上传视频</span>
+                                <span class="form-hint">支持上传截图</span>
                             </label>
                             <div style="border: 2px dashed #DBDBDB; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #FCFCFC;">
                                 <div style="font-size: 32px; margin-bottom: 8px;">+</div>
@@ -946,12 +922,6 @@
                         </div>
                     </div>
 
-                    <div class="legal-box">
-                        <div class="legal-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="2" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><path d="M6 9L6 5c0-1 .895-2 2-2h8c1.105 0 2 .895 2 2v4"></path><circle cx="9" cy="14" r="5"></circle><circle cx="15" cy="14" r="5"></circle><line x1="12" y1="14" x2="12" y2="20"></line><line x1="9" y1="20" x2="15" y2="20"></line></svg>法律声明</div>
-                        • 提交信息仅用于身份验证<br>
-                        • 材料在审核后将被删除<br>
-                        • 虚假信息将承担法律责任
-                    </div>
                 </div>
             </div>
 
@@ -963,13 +933,8 @@
                     <div class="success-desc">恭喜！你已获得职工认证，可以享受相应权益</div>
 
                     <div class="privilege-item">
-                        <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><polyline points="12 1 12 23"></polyline><path d="M2 8.5h20V19c0 1.105-.895 2-2 2H4c-1.105 0-2-.895-2-2v-10.5z"></path><path d="M12 8.5V4.5L2 7.5"></path><path d="M12 8.5v-4L22 7.5"></path></svg>基础职员认证</strong>
-                        全系列产品95折优惠
-                    </div>
-
-                    <div class="privilege-item" id="specialist-privilege" class="hidden">
-                        <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><path d="M6 9c0-1 1-2 2-2h8c1 0 2 1 2 2"></path><line x1="6" y1="9" x2="6" y2="12"></line><line x1="18" y1="9" x2="18" y2="12"></line><path d="M7 12h10v5c0 1-1 2-2 2h-6c-1 0-2-1-2-2v-5z"></path><line x1="9" y1="3" x2="9" y2="9"></line><line x1="15" y1="3" x2="15" y2="9"></line><line x1="3" y1="21" x2="21" y2="21"></line></svg>专业职称认证</strong>
-                        专项机型定制优惠和推荐
+                        <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><polyline points="12 1 12 23"></polyline><path d="M2 8.5h20V19c0 1.105-.895 2-2 2H4c-1.105 0-2-.895-2-2v-10.5z"></path><path d="M12 8.5V4.5L2 7.5"></path><path d="M12 8.5v-4L22 7.5"></path></svg>一键升级成为企业用户</strong>
+                        额外享受企业会员2000元优惠券礼包
                     </div>
                 </div>
             </div>
@@ -1424,45 +1389,11 @@
             validate();
         }
 
-        // 企业搜索函数
-        // ========== 后端代理 API 集成 ==========
-        const API_PROXY_URL = 'http://101.132.158.166:3000/api/search-company';
-
+        // ========== 使用本地测试数据 ==========
         async function searchCompaniesFromTianyancha(keyword) {
-            try {
-                console.log('调用后端代理 API:', API_PROXY_URL, '搜索关键词:', keyword);
-
-                const response = await fetch(API_PROXY_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ keyword: keyword })
-                });
-
-                const data = await response.json();
-                console.log('后端 API 响应:', data);
-
-                if (data.error_code === 0 && data.result) {
-                    // API 返回单个企业结果
-                    console.log('API 返回成功，企业数据:', data.result);
-                    return [{
-                        name: data.result.name,
-                        creditCode: data.result.creditCode,
-                        email: data.result.email || null,
-                        emailList: data.result.emailList || [],
-                        phoneNumber: data.result.phoneNumber || ''
-                    }];
-                } else if (data.error_code !== 0) {
-                    console.warn('API 错误:', data.error_code, data.error_message);
-                }
-                return [];
-            } catch (error) {
-                console.error('API 调用失败:', error);
-                // 回退到本地数据
-                console.log('使用本地数据...');
-                return fallbackToLocalCompanyData(keyword);
-            }
+            console.log('搜索企业:', keyword);
+            // 直接使用本地数据
+            return fallbackToLocalCompanyData(keyword);
         }
 
         function fallbackToLocalCompanyData(keyword) {
@@ -1472,7 +1403,7 @@
                     results.push(...companies.map(c => ({
                         name: c.fullName,
                         creditCode: '本地数据-无信用代码',
-                        email: null,
+                        email: c.emailDomain || null,
                         emailList: c.emailDomain ? [c.emailDomain] : [],
                         phoneNumber: '',
                         isLocal: true
@@ -1520,7 +1451,7 @@
                       onmouseout="this.style.background='transparent'"
                       onclick="selectCompany('${company.name.replace(/'/g, "\\'")}', '${(company.email || '').replace(/'/g, "\\'")}', '${(company.creditCode || '').replace(/'/g, "\\'")}')">
                     <div style="font-weight: 500; margin-bottom: 4px;">${company.name}</div>
-                    <div style="font-size: 12px; color: #606060;">信用代码: ${company.creditCode || '暂无'} | 邮箱: ${company.email ? company.email : '暂无'}</div>
+                    <div style="font-size: 12px; color: #606060;">信用代码: ${company.creditCode || '暂无'}</div>
                 </div>`
             ).join('');
             dropdown.style.display = 'block';
@@ -1534,8 +1465,11 @@
             // 提取邮箱后缀
             let emailDomain = null;
             if (email) {
-                const parts = email.split('@');
-                emailDomain = parts.length > 1 ? parts[1] : null;
+                if (email.includes('@')) {
+                    emailDomain = email.split('@')[1];
+                } else {
+                    emailDomain = email;
+                }
             }
 
             // 设置已选择的企业信息
@@ -1548,11 +1482,7 @@
 
             // 构建企业信息展示
             let statusHTML = '<div style="color: #FF2F2F; font-size: 12px;">';
-            if (email) {
-                statusHTML += '<div style="margin-bottom: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="#FF2F2F" stroke="#FF2F2F" stroke-width="2.5" style="display: inline-block; margin-right: 4px; vertical-align: middle;"><polyline points="20 6 9 17 4 12"></polyline></svg>企业信息已确认（支持邮箱认证）</div>';
-            } else {
-                statusHTML += '<div style="margin-bottom: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="2" style="display: inline-block; margin-right: 4px; vertical-align: middle;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>企业信息已确认（不支持邮箱认证）</div>';
-            }
+            statusHTML += '<div style="margin-bottom: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="#FF2F2F" stroke="#FF2F2F" stroke-width="2.5" style="display: inline-block; margin-right: 4px; vertical-align: middle;"><polyline points="20 6 9 17 4 12"></polyline></svg>企业信息已确认</div>';
             statusHTML += '<div style="color: #454545; font-size: 12px; margin-bottom: 4px;">企业名称：' + fullName + '</div>';
             statusHTML += '<div style="color: #454545; font-size: 12px;">税号/信用代码：' + (creditCode || '暂无') + '</div>';
             statusHTML += '</div>';

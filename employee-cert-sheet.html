@@ -18,7 +18,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: rgba(0, 0, 0, 0.5);
+            background: #f5f5f5;
             color: #333;
             overflow: hidden;
             width: 100%;
@@ -27,11 +27,282 @@
             padding: 0;
         }
 
+        /* ========== 乐享对话背景 ========== */
+        .lexiang-chat {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #f7f7f8;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+        }
+        .lexiang-header {
+            background: #fff;
+            padding: 44px 16px 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .lexiang-back {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .lexiang-header-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #E31937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .lexiang-header-logo svg { width: 18px; height: 18px; }
+        .lexiang-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        .lexiang-actions {
+            display: flex;
+            gap: 16px;
+            color: #999;
+            font-size: 18px;
+        }
+        .lexiang-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+        }
+        .chat-msg {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .chat-msg.user {
+            justify-content: flex-end;
+        }
+        .chat-msg.ai {
+            justify-content: flex-start;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #E31937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .chat-avatar svg { width: 20px; height: 20px; }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        .chat-bubble.user {
+            background: #E31937;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-bubble.ai {
+            max-width: 85%;
+            background: #fff;
+            color: #333;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 16px;
+        }
+        .mcp-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f0fdf4;
+            color: #16a34a;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            border: 1px solid #bbf7d0;
+        }
+        .mcp-tag svg { width: 14px; height: 14px; }
+        .chat-bubble.ai h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0 0 12px 0;
+        }
+        .chat-bubble.ai .chat-section {
+            margin-bottom: 14px;
+        }
+        .chat-bubble.ai .chat-section:last-of-type {
+            margin-bottom: 0;
+        }
+        .chat-bubble.ai .chat-section-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+        .chat-bubble.ai .chat-section-desc {
+            color: #555;
+            font-size: 14px;
+        }
+        .chat-activity-card {
+            margin-top: 16px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .chat-activity-banner {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #E31937 0%, #ff6b6b 50%, #ffd93d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.4;
+            padding: 16px;
+        }
+        .chat-activity-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #fff;
+        }
+        .chat-activity-info span {
+            font-size: 13px;
+            color: #666;
+        }
+        .chat-activity-info a {
+            font-size: 13px;
+            color: #E31937;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .chat-cert-btn {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 10px 24px;
+            border: 1.5px solid #E31937;
+            color: #E31937;
+            background: #fff;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chat-cert-btn:active {
+            background: #FFF5F5;
+        }
+        .chat-actions {
+            display: flex;
+            gap: 18px;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .chat-actions span {
+            font-size: 16px;
+            color: #bbb;
+            cursor: pointer;
+        }
+        .lexiang-footer-hint {
+            text-align: center;
+            font-size: 11px;
+            color: #bbb;
+            padding: 6px 0;
+            background: #f7f7f8;
+        }
+        .lexiang-input {
+            background: #fff;
+            padding: 10px 16px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            border-top: 1px solid #eee;
+        }
+        .lexiang-input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f5f5;
+            border-radius: 22px;
+            padding: 6px 6px 6px 16px;
+        }
+        .lexiang-input-row input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: #333;
+            background: transparent;
+        }
+        .lexiang-input-row input::placeholder {
+            color: #bbb;
+        }
+        .lexiang-send-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .lexiang-send-btn svg { width: 18px; height: 18px; }
+        .lexiang-input-tabs {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            padding-left: 4px;
+        }
+        .lexiang-input-tabs span {
+            font-size: 12px;
+            color: #999;
+            padding: 3px 10px;
+            border-radius: 12px;
+            border: 1px solid #e5e5e5;
+            background: #fff;
+        }
+        .lexiang-input-tabs span.active {
+            color: #E31937;
+            border-color: #E31937;
+            background: #fff5f5;
+        }
+
+        .sheet-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 98;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .sheet-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         .container {
             width: 100%;
             height: 90vh;
             background: #fff;
-            display: flex;
+            display: none;
             flex-direction: column;
             position: fixed;
             bottom: 0;
@@ -39,8 +310,11 @@
             right: 0;
             border-radius: 20px 20px 0 0;
             box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.15);
-            animation: slideUp 0.3s ease;
             z-index: 99;
+        }
+        .container.active {
+            display: flex;
+            animation: slideUp 0.3s ease;
         }
 
         @keyframes slideUp {
@@ -68,11 +342,10 @@
         }
 
         .header {
-            padding: 16px 16px 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
-            text-align: center;
+            padding: 21px 16px 12px 24px;
+            text-align: left;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             flex-shrink: 0;
             position: relative;
@@ -90,43 +363,54 @@
             transform: translateX(-50%);
         }
 
-        .header-logo {
+        .header-info {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .header-title {
+            font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 18px;
             font-weight: 600;
-            font-size: 16px;
-            flex: 1;
+            color: #252525;
+            line-height: 1.3;
+        }
+
+        .header-subtitle {
+            font-size: 11px;
+            color: rgba(0,0,0,0.4);
+            font-weight: 400;
+        }
+
+        .header-logo {
+            display: none;
         }
 
         .logo-box {
-            background: #e31937;
-            color: white;
-            padding: 2px 6px;
-            font-size: 11px;
-            border-radius: 2px;
+            display: none;
         }
 
         .header-close {
-            width: 28px;
-            height: 28px;
+            width: 12px;
+            height: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: #999;
+            font-size: 18px;
+            color: #606060;
             cursor: pointer;
             background: none;
             border: none;
             padding: 0;
+            margin-top: 2px;
         }
 
         .content {
             flex: 1;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            padding: 0 16px 100px 16px;
+            padding: 0 16px 110px 16px;
         }
 
         .page {
@@ -151,12 +435,12 @@
 
         .step-header {
             margin-bottom: 24px;
-            margin-top: 20px;
+            margin-top: 8px;
         }
 
         .step-progress {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 4px;
             margin-bottom: 16px;
             justify-content: space-between;
@@ -173,10 +457,11 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: #e8e8e8;
+            background: #f6f6f6;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 11px;
             font-weight: 600;
             color: #999;
@@ -184,22 +469,26 @@
         }
 
         .step-circle.active {
-            background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%);
+            background: linear-gradient(to right, #4d144a 11.896%, #b8252e);
             color: white;
             border: none;
         }
 
         .step-circle.done {
-            background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%);
+            background: linear-gradient(to right, #4d144a 11.896%, #b8252e);
             color: white;
             border: none;
         }
 
         .step-label {
             font-size: 10px;
-            color: #999;
+            color: #979797;
             text-align: center;
             line-height: 1.2;
+        }
+
+        .step-item .step-label.active-label {
+            color: #454545;
         }
 
         .step-content {
@@ -207,20 +496,86 @@
         }
 
         .step-title {
+            font-family: 'Source Han Sans CN', 'PingFang SC', -apple-system, sans-serif;
             font-size: 16px;
-            font-weight: 600;
-            color: #333;
+            font-weight: 700;
+            color: #252525;
             margin-bottom: 8px;
         }
 
         .step-desc {
             font-size: 12px;
-            color: #999;
-            line-height: 1.5;
+            color: #979797;
+            line-height: 18px;
             margin-bottom: 16px;
         }
 
         .form-group {
+            margin-bottom: 0;
+        }
+
+        /* Inline form row for steps 2 & 3 */
+        .form-row-inline {
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 0.5px solid #EEEEEE;
+            position: relative;
+        }
+
+        .form-row-inline.has-error {
+            border-bottom-color: #ff3e3e;
+        }
+
+        .form-row-inline .form-label-inline {
+            font-family: 'PingFang SC', -apple-system, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #454545;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-row-inline .form-label-inline .form-required {
+            font-family: 'PingFang SC', -apple-system, sans-serif;
+            font-size: 10px;
+            font-weight: 300;
+            color: #ff3e3e;
+            margin-right: 2px;
+        }
+
+        .form-row-inline .form-input-inline {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            padding: 0;
+            margin: 0;
+            height: auto;
+            caret-color: #4d144a;
+        }
+
+        .form-row-inline .form-input-inline::placeholder {
+            color: #bdbdbd;
+        }
+
+        .form-error-inline {
+            display: none;
+            font-size: 11px;
+            color: #ff3e3e;
+            padding-top: 4px;
+            padding-bottom: 6px;
+        }
+
+        .form-error-inline.show {
+            display: block;
+        }
+
+        /* Legacy form styles for step 4 */
+        .form-group-legacy {
             margin-bottom: 16px;
         }
 
@@ -235,7 +590,7 @@
         }
 
         .form-required {
-            color: #6B1B3F;
+            color: #ff3e3e;
         }
 
         .form-hint {
@@ -277,15 +632,15 @@
         }
 
         .form-input::placeholder {
-            color: #ccc;
+            color: #bdbdbd;
         }
 
         .form-input:focus,
         .form-select:focus {
             outline: none;
-            border-color: #0066ff;
+            border-color: #4d144a;
             background: #fff;
-            box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.08);
+            box-shadow: none;
         }
 
         /* 自定义下拉菜单样式 */
@@ -298,16 +653,16 @@
         }
 
         .custom-select-value.active {
-            border-color: #0066ff;
+            border-color: #4d144a;
             background: #fff;
         }
 
         .custom-option {
-            padding: 10px 12px;
+            padding: 15px 12px;
             cursor: pointer;
             font-size: 14px;
             color: #333;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f5f5f5;
             transition: background 0.2s;
         }
 
@@ -320,14 +675,229 @@
         }
 
         .custom-option.selected {
-            background: #f0f5ff;
-            color: #0066ff;
+            background: transparent;
+            color: #333;
+            font-weight: 400;
+            position: relative;
+        }
+
+        .custom-option.selected::after {
+            content: '';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234d144a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        /* Industry picker bottom sheet */
+        .industry-sheet-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .industry-sheet-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .industry-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 12px 12px 0 0;
+            z-index: 201;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            max-height: 60vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .industry-sheet.active {
+            transform: translateY(0);
+        }
+        .industry-sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-shrink: 0;
+        }
+        .industry-sheet-cancel {
+            font-size: 14px;
+            color: #979797;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .industry-sheet-title {
+            font-size: 16px;
             font-weight: 500;
+            color: #252525;
+        }
+        .industry-sheet-confirm {
+            font-size: 14px;
+            color: #4d144a;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            font-weight: 500;
+        }
+        .industry-sheet-body {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .industry-sheet-option {
+            padding: 15px 20px;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .industry-sheet-option.selected {
+            color: #4d144a;
+        }
+        .industry-sheet-option.selected::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234d144a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        /* Company search dropdown Figma style */
+        .company-dropdown-figma {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ede8f7;
+            box-shadow: 0 6px 24px rgba(77,20,74,0.13);
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+
+        .company-dropdown-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            font-size: 10px;
+            color: #4d144a;
+            border-bottom: 1px solid #f0eaf8;
+        }
+
+        .company-dropdown-header .icon-circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #4d144a 11.896%, #b8252e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .company-result-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .company-result-item:hover {
+            background: #fcfaff;
+        }
+
+        .company-result-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #4d144a 11.896%, #b8252e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .company-result-name {
+            font-size: 13px;
+            color: #333;
+        }
+
+        .company-result-name .highlight {
+            color: #4d144a;
+        }
+
+        .company-no-result {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            font-size: 12px;
+            color: #979797;
+        }
+
+        .company-no-result .x-circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #999;
+            flex-shrink: 0;
+        }
+
+        /* Company input clear button */
+        .company-clear-btn {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            border: none;
+            padding: 0;
+        }
+        .company-clear-btn svg {
+            width: 8px;
+            height: 8px;
         }
 
         .form-input.error,
         .form-select.error {
-            border-color: #6B1B3F;
+            border-color: #ff3e3e;
             background: #fff5f5;
         }
 
@@ -339,7 +909,7 @@
         .error-msg {
             display: none;
             font-size: 11px;
-            color: #6B1B3F;
+            color: #ff3e3e;
             margin-top: 4px;
         }
 
@@ -357,7 +927,7 @@
         .option-item {
             display: flex;
             align-items: flex-start;
-            padding: 12px;
+            padding: 13px;
             background: #fafafa;
             border: 1px solid #e8e8e8;
             border-radius: 6px;
@@ -366,8 +936,8 @@
         }
 
         .option-item.selected {
-            background: #f5e8eb;
-            border-color: #6B1B3F;
+            background: #fcfaff;
+            border-color: #6b1b3f;
         }
 
         .option-check,
@@ -378,17 +948,29 @@
             margin-right: 10px;
             margin-top: 2px;
             cursor: pointer;
-            accent-color: #C83F5F;
+            accent-color: #4d144a;
             appearance: none;
-            border: 2px solid #C83F5F;
+            border: 2px solid #4d144a;
             border-radius: 50%;
             background: white;
             position: relative;
         }
 
         .option-radio:checked {
-            background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%);
-            border-color: transparent;
+            border-color: #4d144a;
+            background: white;
+        }
+
+        .option-radio:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10.8px;
+            height: 10.8px;
+            border-radius: 50%;
+            background: #4d144a;
         }
 
         .option-content {
@@ -396,15 +978,24 @@
         }
 
         .option-title {
+            font-family: 'PingFang SC', -apple-system, sans-serif;
             font-size: 13px;
             font-weight: 500;
             color: #333;
             margin-bottom: 3px;
         }
 
+        .option-benefits {
+            font-family: 'PingFang SC', -apple-system, sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            color: #4d144a;
+            margin-bottom: 3px;
+        }
+
         .option-desc {
             font-size: 11px;
-            color: #999;
+            color: #979797;
             line-height: 1.4;
         }
 
@@ -417,7 +1008,7 @@
             border-radius: 4px;
             margin-bottom: 16px;
             font-size: 12px;
-            color: #0066ff;
+            color: #979797;
             line-height: 1.5;
         }
 
@@ -489,39 +1080,38 @@
             right: 0;
             width: 100%;
             background: #fff;
-            border-top: 1px solid #e8e8e8;
-            padding: 12px 16px;
-            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            border-top: none;
+            padding: 0 12px 30px 12px;
+            padding-bottom: max(30px, env(safe-area-inset-bottom));
             display: flex;
             gap: 8px;
             z-index: 100;
         }
 
         .btn {
-            flex: 1;
-            padding: 11px 16px;
+            padding: 0 16px;
             border: none;
-            border-radius: 20px;
+            border-radius: 100px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             -webkit-user-select: none;
             user-select: none;
-            height: 44px;
+            height: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .btn-primary {
-            background: linear-gradient(90deg, #6B1B3F 0%, #C83F5F 100%);
+            background: linear-gradient(to right, #4d144a 11.896%, #b8252e);
             color: white;
-            flex: 2;
+            flex: 1;
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: linear-gradient(90deg, #5a1535 0%, #b63450 100%);
+            background: linear-gradient(to right, #3d1040 11.896%, #a02026);
         }
 
         .btn-primary:disabled {
@@ -531,13 +1121,15 @@
 
         .btn-secondary {
             background: #fff;
-            color: #6B1B3F;
-            border: 2px solid #6B1B3F;
-            flex: 1;
+            color: #4e1646;
+            border: 1px solid #4e1646;
+            width: 112px;
+            flex-shrink: 0;
+            flex-grow: 0;
         }
 
         .btn-secondary:hover {
-            background: #f5f5f5;
+            background: #f9f5fa;
         }
 
         /* Modal */
@@ -614,21 +1206,171 @@
             margin-top: 8px;
         }
 
+        /* Agreement checkbox Figma style */
+        .agreement-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 0 12px 0;
+            cursor: pointer;
+        }
+
+        .agreement-circle {
+            width: 15px;
+            height: 15px;
+            min-width: 15px;
+            border-radius: 50%;
+            border: 1px solid #e6e0ee;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .agreement-circle.checked {
+            background: #4d144a;
+            border-color: #4d144a;
+        }
+
+        .agreement-circle svg {
+            width: 9px;
+            height: 9px;
+            display: none;
+        }
+
+        .agreement-circle.checked svg {
+            display: block;
+        }
+
+        .agreement-text {
+            font-size: 11px;
+            color: #494949;
+        }
+
+        .agreement-text a {
+            color: #4d144a;
+            text-decoration: none;
+        }
+
+        /* Send code text button style */
+        .send-code-btn {
+            font-size: 14px;
+            color: #4e1646;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
         .hidden {
             display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- 乐享对话背景 -->
+    <div class="lexiang-chat">
+        <div class="lexiang-header">
+            <span class="lexiang-back">‹</span>
+            <div class="lexiang-header-logo">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#E31937"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">L</text></svg>
+            </div>
+            <div class="lexiang-title">联想乐享</div>
+            <div class="lexiang-actions">
+                <span>⊞</span>
+            </div>
+        </div>
+        <div class="lexiang-body">
+            <div class="chat-msg user">
+                <div class="chat-bubble user">在职员工购机有什么优惠吗？</div>
+            </div>
+            <div class="chat-msg ai">
+                <div class="chat-avatar">
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#E31937"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">L</text></svg>
+                </div>
+                <div class="chat-bubble ai">
+                    <div class="mcp-tag">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="#16a34a" stroke-width="2"/></svg>
+                        已完成1个MCP工具调用 ∨
+                    </div>
+                    <h4>在职员工购机可享受的优惠如下：</h4>
+
+                    <div class="chat-section">
+                        <div class="chat-section-title">1. 企业员工认证专属优惠</div>
+                        <div class="chat-section-desc">完成职场身份认证后，可一键升级为企业用户，额外享受企业会员2000元优惠券礼包，适用于联想商城全系列产品。</div>
+                    </div>
+
+                    <div class="chat-section">
+                        <div class="chat-section-title">2. 优惠叠加</div>
+                        <div class="chat-section-desc">企业员工优惠可以与会员专享的新人优惠叠加使用。如有特殊情况，可咨询官网客服解决。</div>
+                    </div>
+
+                    <div class="chat-section">
+                        <div class="chat-section-title">3. 认证方式</div>
+                        <div class="chat-section-desc">• <strong>企业邮箱认证</strong>：使用企业邮箱接收验证码，即时通过<br>• <strong>在职证明上传</strong>：上传劳动合同/个人所得税App截图，OCR自动审核</div>
+                    </div>
+
+                    <div class="chat-section">
+                        <div class="chat-section-title">4. 认证有效期</div>
+                        <div class="chat-section-desc">认证有效期为1年，到期后需重新认证。</div>
+                    </div>
+
+                    <div class="chat-activity-card">
+                        <div class="chat-activity-banner">企业员工专属福利<br>至高立减 2000 元</div>
+                        <div class="chat-activity-info">
+                            <span>职场认证，专属福利</span>
+                            <a href="javascript:void(0)" onclick="showCertSheet()">了解详情 ></a>
+                        </div>
+                    </div>
+
+                    <button class="chat-cert-btn" onclick="showCertSheet()">立即认证职场身份</button>
+
+                    <div class="chat-actions">
+                        <span>📋</span>
+                        <span>🔊</span>
+                        <span>↗</span>
+                        <span>👍</span>
+                        <span>👎</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="lexiang-footer-hint">内容由联想乐享AI生成</div>
+        <div class="lexiang-input">
+            <div class="lexiang-input-row">
+                <input type="text" placeholder="我想问..." readonly>
+                <button class="lexiang-send-btn">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="#999" stroke-width="2" stroke-linecap="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+            <div class="lexiang-input-tabs">
+                <span class="active">快速</span>
+                <span>思考</span>
+                <span>🔧 技能</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="sheet-overlay" id="sheet-overlay" onclick="closeSheet()"></div>
+
+    <div class="container" id="cert-container">
         <div class="status-bar"></div>
 
         <div class="header">
-            <div class="header-logo">
-                <div class="logo-box">Lenovo</div>
-                <span>联想</span>
+            <div class="header-info">
+                <div class="header-title">企业职工认证</div>
+                <div class="header-subtitle">获取更多权益</div>
             </div>
-            <button class="header-close" onclick="closeSheet()">×</button>
+            <button class="header-close" onclick="closeSheet()">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M1 1L11 11M11 1L1 11" stroke="#606060" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
         </div>
 
         <div class="content">
@@ -638,7 +1380,7 @@
                     <div class="step-progress">
                         <div class="step-item">
                             <div class="step-circle active">1</div>
-                            <div class="step-label">认证类型</div>
+                            <div class="step-label active-label">认证类型</div>
                         </div>
                         <div class="step-item">
                             <div class="step-circle">2</div>
@@ -657,65 +1399,20 @@
 
                 <div class="step-content">
                     <div id="step1-first-time">
-                        <!-- 权益展示 -->
-                        <div style="padding: 12px; background: #f5f5f5; border-radius: 8px; margin-bottom: 20px;">
-                            <div style="font-size: 12px; color: #999; margin-bottom: 8px;">可解锁权益</div>
-                            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #333;">采购权益专享</div>
-                                <div style="padding: 6px 12px; background: white; border-radius: 4px; font-size: 13px; color: #333;">身份标识</div>
-                            </div>
-                        </div>
-
-                        <!-- 企业职工认证选项 -->
-                        <div class="step-title">企业职工认证</div>
-                        <div class="step-desc">验证你的企业员工身份</div>
-
                         <div class="option-group">
                             <label class="option-item selected">
                                 <input type="radio" name="cert-type" value="enterprise" class="option-radio" checked>
                                 <div class="option-content">
                                     <div class="option-title">企业职工认证</div>
-                                    <div class="option-desc">适用于企业在职员工<br>权益：采购权益专享、身份标识</div>
+                                    <div class="option-benefits">获得权益：1.采购权益专享  2.身份标识</div>
+                                    <div class="option-desc">适用于企业在职员工</div>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <!-- 已认证用户的升级/更新入口 -->
-                    <div id="step1-upgrade" class="hidden">
-                        <div class="step-title">继续认证</div>
-                        <div class="step-desc">选择升级认证或更新在职信息</div>
-
-                        <!-- 升级认证入口 -->
-                        <div id="upgrade-option"
-                             class="option-item"
-                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: all 0.3s;"
-                             onclick="startUpgradeFlow()"
-                             onmouseover="this.style.borderColor='#C83F5F'; this.style.backgroundColor='#fff5f7';"
-                             onmouseout="this.style.borderColor='#e0e0e0'; this.style.backgroundColor='white';">
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5.5"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 500; color: #333; margin-bottom: 4px;">升级：专业职称认证</div>
-                                <div style="font-size: 12px; color: #999;">从基础认证升级为专业职称认证，获得专业身份和特权</div>
-                            </div>
-                            <div style="color: #999; font-size: 18px;">›</div>
-                        </div>
-
-                        <!-- 更新认证入口 -->
-                        <div id="update-option"
-                             class="option-item"
-                             style="display: flex; align-items: center; padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;"
-                             onclick="startUpdateFlow()"
-                             onmouseover="this.style.borderColor='#C83F5F'; this.style.backgroundColor='#fff5f7';"
-                             onmouseout="this.style.borderColor='#e0e0e0'; this.style.backgroundColor='white';">
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #6B1B3F 0%, #C83F5F 100%); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path></svg></div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 500; color: #333; margin-bottom: 4px;">更新在职认证信息</div>
-                                <div style="font-size: 12px; color: #999;">更新您的企业、职位、行业等基本信息</div>
-                            </div>
-                            <div style="color: #999; font-size: 18px;">›</div>
-                        </div>
-                    </div>
+                    <!-- V1.0：暂不展示升级/更新入口 -->
+                    <div id="step1-upgrade" class="hidden"></div>
                 </div>
             </div>
 
@@ -724,12 +1421,12 @@
                 <div class="step-header">
                     <div class="step-progress">
                         <div class="step-item">
-                            <div class="step-circle done">✓</div>
+                            <div class="step-circle done"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M8.95833 2.29167L3.51563 7.70833L1.04167 5.24621" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                             <div class="step-label">认证类型</div>
                         </div>
                         <div class="step-item">
                             <div class="step-circle active">2</div>
-                            <div class="step-label">实名认证</div>
+                            <div class="step-label active-label">实名认证</div>
                         </div>
                         <div class="step-item">
                             <div class="step-circle">3</div>
@@ -746,54 +1443,52 @@
                     <!-- 未完成状态 -->
                     <div id="realname-pending">
                         <div class="step-title">第2步：实名认证</div>
+                        <div class="step-desc">实名认证对会员的身份证、银行卡、资格证等个人信息进行验证，请认真填写。</div>
 
-                        <div style="padding: 12px; background: linear-gradient(135deg, rgba(107, 27, 63, 0.08) 0%, rgba(200, 63, 95, 0.08) 100%); border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #666; line-height: 1.6; border-left: 3px solid #C83F5F;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="url(#gradient11)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient11" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>实名认证对会员的身份证、银行卡、资格证等个人信息进行验证，请认真填写。
-                        </div>
-
-                        <!-- 身份证认证表单 -->
+                        <!-- 身份证认证表单 - inline style -->
                         <div>
                             <div class="form-group">
-                                <label class="form-label">
-                                    <span>姓名 <span class="form-required">*</span></span>
-                                </label>
-                                <input type="text" class="form-input" placeholder="请填写您的真实姓名" id="realname" oninput="validate()">
-                                <div class="error-msg" id="realname-error"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <span>身份证号 <span class="form-required">*</span></span>
-                                </label>
-                                <input type="text" class="form-input" placeholder="请填写您的身份证号" id="idcard" oninput="validate()" maxlength="18">
-                                <div class="error-msg" id="idcard-error"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <span>手机/关联手机 <span class="form-required">*</span></span>
-                                </label>
-                                <input type="text" class="form-input" placeholder="默认为注册手机号" id="phone" oninput="validate()">
-                                <div class="error-msg" id="phone-error"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <span>验证码 <span class="form-required">*</span></span>
-                                </label>
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="text" class="form-input" placeholder="请输入验证码" id="code" oninput="validate()" maxlength="6" style="flex: 1;">
-                                    <button class="btn btn-secondary" style="white-space: nowrap;" onclick="sendCode()">发送验证码</button>
+                                <div class="form-row-inline">
+                                    <div class="form-label-inline" style="width: 56px;"><span class="form-required">*</span>姓名</div>
+                                    <input type="text" class="form-input-inline" placeholder="请填写您的真实姓名" id="realname" oninput="validate()">
                                 </div>
-                                <div class="error-msg" id="code-error"></div>
+                                <div class="form-error-inline error-msg" id="realname-error"></div>
                             </div>
 
-                            <div class="form-group" style="margin-bottom: 16px;">
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                    <input type="checkbox" id="agreement" style="width: 18px; height: 18px; cursor: pointer;">
-                                    <span style="font-size: 13px; color: #666;">我同意 <a href="#" style="color: #6B1B3F; text-decoration: none;">《实名认证协议》</a></span>
-                                </label>
-                                <div class="error-msg" id="agreement-error"></div>
+                            <div class="form-group">
+                                <div class="form-row-inline">
+                                    <div class="form-label-inline" style="width: 70px;"><span class="form-required">*</span>身份证号</div>
+                                    <input type="text" class="form-input-inline" placeholder="请填写您的身份证号" id="idcard" oninput="validate()" maxlength="18">
+                                </div>
+                                <div class="form-error-inline error-msg" id="idcard-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-row-inline">
+                                    <div class="form-label-inline" style="width: 56px;"><span class="form-required">*</span>手机</div>
+                                    <input type="text" class="form-input-inline" placeholder="默认为注册手机号" id="phone" oninput="validate()">
+                                </div>
+                                <div class="form-error-inline error-msg" id="phone-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-row-inline">
+                                    <div class="form-label-inline" style="width: 56px;"><span class="form-required">*</span>验证码</div>
+                                    <input type="text" class="form-input-inline" placeholder="请输入验证码" id="code" oninput="validate()" maxlength="6" style="flex: 1;">
+                                    <button class="send-code-btn" onclick="sendCode()">获取验证码</button>
+                                </div>
+                                <div class="form-error-inline error-msg" id="code-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="agreement-row" onclick="toggleAgreement()">
+                                    <div class="agreement-circle" id="agreement-circle">
+                                        <svg viewBox="0 0 10 10" fill="none"><path d="M8.5 2.5L3.5 7.5L1.5 5.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </div>
+                                    <input type="checkbox" id="agreement" style="display: none;">
+                                    <span class="agreement-text">我同意 <a href="#" onclick="event.stopPropagation()">《实名认证协议》</a></span>
+                                </div>
+                                <div class="form-error-inline error-msg" id="agreement-error"></div>
                             </div>
                         </div>
                     </div>
@@ -801,7 +1496,7 @@
                     <!-- 已完成状态 -->
                     <div id="realname-completed" class="hidden">
                         <div class="success-box" style="padding: 40px 20px 0;">
-                            <div class="success-icon"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="url(#gradient1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><polyline points="20 6 9 17 4 12"></polyline><circle cx="12" cy="12" r="11"></circle></svg></div>
+                            <div class="success-icon"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
                             <div class="success-title">实名认证已完成</div>
                             <div class="success-desc">你已完成个人实名认证，可以继续进行职工认证</div>
                         </div>
@@ -814,16 +1509,16 @@
                 <div class="step-header">
                     <div class="step-progress">
                         <div class="step-item">
-                            <div class="step-circle done">✓</div>
+                            <div class="step-circle done"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M8.95833 2.29167L3.51563 7.70833L1.04167 5.24621" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                             <div class="step-label">认证类型</div>
                         </div>
                         <div class="step-item">
-                            <div class="step-circle done">✓</div>
+                            <div class="step-circle done"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M8.95833 2.29167L3.51563 7.70833L1.04167 5.24621" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                             <div class="step-label">实名认证</div>
                         </div>
                         <div class="step-item">
                             <div class="step-circle active">3</div>
-                            <div class="step-label">在职认证</div>
+                            <div class="step-label active-label">在职认证</div>
                         </div>
                         <div class="step-item">
                             <div class="step-circle">4</div>
@@ -833,63 +1528,54 @@
                 </div>
 
                 <div class="step-content">
-                    <!-- 升级认证的提示信息 -->
-                    <div id="specialty-upgrade-tips" class="hidden" style="padding: 12px; background: #fff3e0; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #d46b08; line-height: 1.6; border-left: 3px solid #ff9800;">
-                        <div style="font-weight: 500; margin-bottom: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="url(#gradient5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>专业职称认证资料要求</div>
-                        <div>请上传包含您的职称信息的相关文件，例如：</div>
-                        <div style="margin-top: 6px;">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="url(#gradient6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><polyline points="20 6 9 17 4 12"></polyline></svg>设计师 → 设计相关的项目文件、作品集、资格证书等截图<br>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="url(#gradient7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><polyline points="20 6 9 17 4 12"></polyline></svg>律师 → 律师证、执业证、法律相关文件截图<br>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="url(#gradient8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><polyline points="20 6 9 17 4 12"></polyline></svg>编程开发 → 技术认证证书、代码贡献证明、项目经验等截图<br>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="url(#gradient9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><polyline points="20 6 9 17 4 12"></polyline></svg>工业设计 → 设计专利、获奖证书、设计作品等截图
-                        </div>
-                    </div>
-
                     <div class="step-title">第3步：企业在职认证</div>
                     <div class="step-desc">填写你的企业信息和职位，帮助我们验证你的在职身份</div>
-
-                    <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
-                        填写下列信息以完成认证。如有疑问，可参考个人认证常见问题说明。
-                    </div>
 
                     <!-- 企业信息部分 -->
                     <div id="company-section">
                     <div class="form-group">
-                        <label class="form-label">
-                            <span>企业名称 <span class="form-required">*</span></span>
-                        </label>
-                        <div style="position: relative;">
-                            <input type="text" class="form-input" placeholder="请输入企业名称（如：联想、测试）" id="company" oninput="searchCompanies(this.value)" onblur="hideCompanyDropdown()" autocomplete="off">
-                            <div id="company-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e8e8e8; border-top: none; border-radius: 0 0 6px 6px; max-height: 250px; overflow-y: auto; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <!-- 搜索结果列表会动态插入 -->
+                        <div class="form-row-inline">
+                            <div class="form-label-inline" style="width: 63px;"><span class="form-required">*</span>企业名称</div>
+                            <div style="flex: 1; display: flex; align-items: center; position: relative;">
+                                <input type="text" class="form-input-inline" placeholder="请输入企业名称关键词" id="company" oninput="searchCompanies(this.value)" onblur="hideCompanyDropdown()" autocomplete="off" style="flex: 1;">
+                                <button class="company-clear-btn" id="company-clear-btn" style="display: none;" onmousedown="event.preventDefault(); document.getElementById('company').value=''; document.getElementById('company-clear-btn').style.display='none'; searchCompanies(''); validate();">
+                                    <svg viewBox="0 0 10 10" fill="none"><path d="M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5" stroke="#999" stroke-width="1.2" stroke-linecap="round"/></svg>
+                                </button>
+                                <div id="company-dropdown" class="company-dropdown-figma">
+                                    <!-- 搜索结果列表会动态插入 -->
+                                </div>
                             </div>
                         </div>
                         <div id="company-verify-status" style="display: none; margin-top: 6px;"></div>
-                        <div class="error-msg" id="company-error"></div>
+                        <div class="form-error-inline error-msg" id="company-error"></div>
                     </div>
                     </div>
 
                     <!-- 职位信息部分 -->
                     <div id="position-section">
                     <div class="form-group">
-                        <label class="form-label">
-                            <span>职位信息 <span class="form-required">*</span></span>
-                        </label>
-                        <div style="position: relative;">
-                            <input type="text" class="form-input" placeholder="输入职位，如：产品经理" id="position" oninput="filterPositions(this.value); validate()" onblur="hidePositionSuggestions()" maxlength="50" autocomplete="off">
-                            <div id="position-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e8e8e8; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 10;">
-                                <!-- 建议列表会动态插入 -->
+                        <div class="form-row-inline">
+                            <div class="form-label-inline" style="width: 63px;"><span class="form-required">*</span>职位信息</div>
+                            <div style="flex: 1; position: relative;">
+                                <input type="text" class="form-input-inline" placeholder="输入职位，如律师/设计师/POC" id="position" oninput="filterPositions(this.value); validate()" onblur="hidePositionSuggestions()" maxlength="50" autocomplete="off">
+                                <div id="position-suggestions" style="display: none; position: absolute; top: calc(100% + 8px); left: -63px; right: 0; background: white; border: 1px solid #ede8f7; border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 10; box-shadow: 0 6px 24px rgba(77,20,74,0.13);">
+                                    <!-- 建议列表会动态插入 -->
+                                </div>
                             </div>
                         </div>
-                        <div class="error-msg" id="position-error"></div>
+                        <div class="form-error-inline error-msg" id="position-error"></div>
                     </div>
 
                     <!-- 行业部分 -->
                     <div id="industry-section">
                     <div class="form-group">
-                        <label class="form-label">
-                            <span>所属行业 <span class="form-required">*</span></span>
-                        </label>
+                        <div class="form-row-inline" id="industry-row" style="cursor: pointer;" onclick="openIndustrySheet()">
+                            <div class="form-label-inline" style="width: 63px;"><span class="form-required">*</span>所属行业</div>
+                            <div style="flex: 1; display: flex; align-items: center; justify-content: space-between;">
+                                <span id="industry-label" style="font-size: 14px; color: #ccc;">请选择行业</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                        </div>
                         <!-- 隐藏的原生select用于数据存储 -->
                         <select id="industry" style="display: none;" onchange="validate()">
                             <option value="">请选择行业</option>
@@ -901,13 +1587,13 @@
                             <option value="real-estate">房地产</option>
                             <option value="other">其他</option>
                         </select>
-                        <!-- 自定义下拉菜单 -->
-                        <div class="custom-select" id="industry-dropdown" style="position: relative; width: 100%; cursor: pointer;">
+                        <!-- Hidden custom-select for backwards compatibility with initIndustrySelect JS -->
+                        <div class="custom-select" id="industry-dropdown" style="display: none; position: relative; width: 100%; cursor: pointer;">
                             <div class="custom-select-value" style="width: 100%; padding: 10px 12px; border: 1px solid #d9d9d9; background: #fafafa; border-radius: 4px; font-size: 14px; color: #333; height: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;">
-                                <span id="industry-label">请选择行业</span>
+                                <span>请选择行业</span>
                                 <span style="font-size: 12px; color: #999;">▼</span>
                             </div>
-                            <div class="custom-select-dropdown" id="industry-menu" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d9d9d9; border-top: none; border-radius: 0 0 4px 4px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: -1px;">
+                            <div class="custom-select-dropdown" id="industry-menu" style="display: none;">
                                 <div class="custom-option" data-value="">请选择行业</div>
                                 <div class="custom-option" data-value="tech">互联网/信息技术</div>
                                 <div class="custom-option" data-value="finance">金融</div>
@@ -918,7 +1604,7 @@
                                 <div class="custom-option" data-value="other">其他</div>
                             </div>
                         </div>
-                        <div class="error-msg" id="industry-error"></div>
+                        <div class="form-error-inline error-msg" id="industry-error"></div>
                     </div>
                     </div>
                     </div>
@@ -982,17 +1668,13 @@
                             <input type="radio" name="method" value="other" class="option-radio">
                             <div class="option-content">
                                 <div class="option-title">其他材料认证</div>
-                                <div class="option-desc">上传其他可证明在职身份的材料</div>
+                                <div class="option-desc">上传您的工卡、名片等照片或者截图，证明您的在职状态</div>
                             </div>
                         </label>
                     </div>
 
                     <!-- 企业邮箱方式 -->
                     <div id="email-method">
-                        <div style="padding: 12px; background: linear-gradient(135deg, rgba(107, 27, 63, 0.1) 0%, rgba(200, 63, 95, 0.1) 100%); border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #666; line-height: 1.6; border-left: 3px solid #C83F5F;">
-                            <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="url(#gradient10)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>认证说明：</strong><br>
-                            使用企业邮箱认证，仅可认证为xX企业员工(L1认证)。如需认证具体职务请上传其他证明材料或选择其他认证方式。可上传可以证明在职公司、目前职位和在职时效的材料，如社保缴费证明、职称材料等(可多项组合)，通过OCR识别可升级为L2指定的四个行业认证(法律、工业设计、媒体设计、编程开发)。
-                        </div>
                         <div class="form-group">
                             <label class="form-label">
                                 <span>企业邮箱 <span class="form-required">*</span></span>
@@ -1003,7 +1685,7 @@
                                 </div>
                                 <div style="flex: 1; display: flex; align-items: center;">
                                     <span style="color: #666;">@</span>
-                                    <input type="text" class="form-input" placeholder="邮箱后缀(从企业信息自动获取)" id="email-domain" disabled style="background: #f5f5f5; margin-left: 4px;">
+                                    <input type="text" class="form-input" placeholder="请输入邮箱后缀" id="email-domain" style="margin-left: 4px;" oninput="validate()">
                                 </div>
                             </div>
                             <div class="error-msg" id="email-error"></div>
@@ -1019,19 +1701,6 @@
                             <div class="error-msg" id="code-error"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span>辅助职位认证 <span style="color: #999;">(非必填)</span></span>
-                                <span class="form-hint">上传带有资质、行业特性的资料可升级为L2认证</span>
-                            </label>
-                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;" onclick="document.getElementById('position-file').click()">
-                                <div style="font-size: 32px; margin-bottom: 8px;">+</div>
-                                <div style="font-size: 12px; color: #999;">点击或拖拽上传资格证书、职称证明等资料</div>
-                                <div style="font-size: 11px; color: #ccc; margin-top: 8px;">支持JPG/PNG/PDF，单张最大5MB</div>
-                            </div>
-                            <input type="file" id="position-file" style="display: none;" accept=".jpg,.png,.pdf" onchange="validate()">
-                            <div class="error-msg" id="position-error"></div>
-                        </div>
                     </div>
 
                     <!-- 劳动合同/在职证明方式 -->
@@ -1055,12 +1724,12 @@
                     <!-- 个人所得税APP方式 -->
                     <div id="tax-method" class="hidden">
                         <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
-                            请上传个人所得税APP由「个人中心」进入「在职受雇信息」页面的录屏视频。使用个人所得税材料认证，仅可认证为所属企业员工。如需认证具体职务请上传其他证明材料或选择其他认证方式。
+                            请上传个人所得税APP由「个人中心」进入「在职受雇信息」页面进行截图。
                         </div>
                         <div class="form-group">
                             <label class="form-label">
                                 <span>上传认证材料 <span class="form-required">*</span></span>
-                                <span class="form-hint">支持上传视频</span>
+                                <span class="form-hint">支持上传截图</span>
                             </label>
                             <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
                                 <div style="font-size: 32px; margin-bottom: 8px;">+</div>
@@ -1088,31 +1757,21 @@
                         </div>
                     </div>
 
-                    <div class="legal-box">
-                        <div class="legal-title">⚖️ 法律声明</div>
-                        • 提交信息仅用于身份验证<br>
-                        • 材料在审核后将被删除<br>
-                        • 虚假信息将承担法律责任
-                    </div>
                 </div>
             </div>
 
             <!-- 成功页面 -->
             <div id="success" class="page hidden">
                 <div class="success-box">
-                    <div class="success-icon"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="url(#gradient2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><polyline points="20 6 9 17 4 12"></polyline><circle cx="12" cy="12" r="11"></circle></svg></div>
+                    <div class="success-icon"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
                     <div class="success-title">认证成功！</div>
                     <div class="success-desc">恭喜！你已获得职工认证，可以享受相应权益</div>
 
                     <div class="privilege-item">
-                        <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="url(#gradient3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><polyline points="12 1 12 23"></polyline><path d="M2 8.5h20V19c0 1.105-.895 2-2 2H4c-1.105 0-2-.895-2-2v-10.5z"></path><path d="M12 8.5V4.5L2 7.5"></path><path d="M12 8.5v-4L22 7.5"></path></svg>基础职员认证</strong>
-                        全系列产品95折优惠
+                        <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF2F2F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><polyline points="12 1 12 23"></polyline><path d="M2 8.5h20V19c0 1.105-.895 2-2 2H4c-1.105 0-2-.895-2-2v-10.5z"></path><path d="M12 8.5V4.5L2 7.5"></path><path d="M12 8.5v-4L22 7.5"></path></svg>一键升级成为企业用户</strong>
+                        额外享受企业会员2000元优惠券礼包
                     </div>
 
-                    <div class="privilege-item" id="specialist-privilege" class="hidden">
-                        <strong><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="url(#gradient4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; margin-right: 6px; vertical-align: text-bottom;"><defs><linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6B1B3F;stop-opacity:1" /><stop offset="100%" style="stop-color:#C83F5F;stop-opacity:1" /></linearGradient></defs><path d="M6 9c0-1 1-2 2-2h8c1 0 2 1 2 2"></path><line x1="6" y1="9" x2="6" y2="12"></line><line x1="18" y1="9" x2="18" y2="12"></line><path d="M7 12h10v5c0 1-1 2-2 2h-6c-1 0-2-1-2-2v-5z"></path><line x1="9" y1="3" x2="9" y2="9"></line><line x1="15" y1="3" x2="15" y2="9"></line><line x1="3" y1="21" x2="21" y2="21"></line></svg>专业职称认证</strong>
-                        专项机型定制优惠和推荐
-                    </div>
                 </div>
             </div>
         </div>
@@ -1120,6 +1779,25 @@
         <div class="button-group">
             <button class="btn btn-secondary" id="btn-back" onclick="goBack()" style="display: none;">返回</button>
             <button class="btn btn-primary" id="btn-next" onclick="goNext()">下一步</button>
+        </div>
+    </div>
+
+    <!-- Industry Bottom Sheet -->
+    <div class="industry-sheet-overlay" id="industry-sheet-overlay" onclick="closeIndustrySheet()"></div>
+    <div class="industry-sheet" id="industry-sheet">
+        <div class="industry-sheet-header">
+            <button class="industry-sheet-cancel" onclick="closeIndustrySheet()">取消</button>
+            <span class="industry-sheet-title">选择行业</span>
+            <button class="industry-sheet-confirm" onclick="confirmIndustrySheet()">确定</button>
+        </div>
+        <div class="industry-sheet-body">
+            <div class="industry-sheet-option" data-value="tech">互联网/信息技术</div>
+            <div class="industry-sheet-option" data-value="finance">金融</div>
+            <div class="industry-sheet-option" data-value="design">设计</div>
+            <div class="industry-sheet-option" data-value="legal">法律</div>
+            <div class="industry-sheet-option" data-value="transport">运输/仓储</div>
+            <div class="industry-sheet-option" data-value="real-estate">房地产</div>
+            <div class="industry-sheet-option" data-value="other">其他</div>
         </div>
     </div>
 
@@ -1133,9 +1811,7 @@
     </div>
 
     <script>
-        // 初始化：禁用body overflow
         document.addEventListener('DOMContentLoaded', () => {
-            document.body.style.overflow = 'hidden';
             initIndustrySelect();
         });
 
@@ -1189,6 +1865,90 @@
                 }
             });
         }
+
+        // ========== Agreement checkbox toggle ==========
+        function toggleAgreement() {
+            const checkbox = document.getElementById('agreement');
+            const circle = document.getElementById('agreement-circle');
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                circle.classList.add('checked');
+            } else {
+                circle.classList.remove('checked');
+            }
+            validate();
+        }
+
+        // ========== Industry Bottom Sheet ==========
+        let industrySheetSelected = '';
+
+        function openIndustrySheet() {
+            const overlay = document.getElementById('industry-sheet-overlay');
+            const sheet = document.getElementById('industry-sheet');
+            overlay.classList.add('active');
+            setTimeout(() => sheet.classList.add('active'), 10);
+
+            // Mark current selection
+            const currentVal = document.getElementById('industry').value;
+            const options = sheet.querySelectorAll('.industry-sheet-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.getAttribute('data-value') === currentVal && currentVal) {
+                    opt.classList.add('selected');
+                }
+            });
+            industrySheetSelected = currentVal;
+
+            // Add click handlers
+            options.forEach(opt => {
+                opt.onclick = function() {
+                    options.forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    industrySheetSelected = this.getAttribute('data-value');
+                };
+            });
+        }
+
+        function closeIndustrySheet() {
+            const overlay = document.getElementById('industry-sheet-overlay');
+            const sheet = document.getElementById('industry-sheet');
+            sheet.classList.remove('active');
+            setTimeout(() => overlay.classList.remove('active'), 300);
+        }
+
+        function confirmIndustrySheet() {
+            if (industrySheetSelected) {
+                const hiddenSelect = document.getElementById('industry');
+                hiddenSelect.value = industrySheetSelected;
+
+                const label = document.getElementById('industry-label');
+                const selectedOpt = document.querySelector('.industry-sheet-option.selected');
+                if (selectedOpt) {
+                    label.textContent = selectedOpt.textContent;
+                    label.style.color = '#333';
+                }
+                validate();
+            }
+            closeIndustrySheet();
+        }
+
+        // ========== Company clear button show/hide ==========
+        const companyInputObserver = new MutationObserver(() => {
+            const input = document.getElementById('company');
+            const btn = document.getElementById('company-clear-btn');
+            if (input && btn) {
+                btn.style.display = input.value.length > 0 ? 'flex' : 'none';
+            }
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const companyInput = document.getElementById('company');
+            if (companyInput) {
+                companyInput.addEventListener('input', function() {
+                    const btn = document.getElementById('company-clear-btn');
+                    if (btn) btn.style.display = this.value.length > 0 ? 'flex' : 'none';
+                });
+            }
+        });
 
         let currentStep = 1;
         let selectedType = 'enterprise';  // 企业职工认证
@@ -1792,44 +2552,11 @@
         }
 
         // 企业搜索函数
-        // ========== 后端代理 API 集成 ==========
-        const API_PROXY_URL = 'http://101.132.158.166:3000/api/search-company';
-
+        // ========== 使用本地测试数据 ==========
         async function searchCompaniesFromTianyancha(keyword) {
-            try {
-                console.log('调用后端代理 API:', API_PROXY_URL, '搜索关键词:', keyword);
-
-                const response = await fetch(API_PROXY_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ keyword: keyword })
-                });
-
-                const data = await response.json();
-                console.log('后端 API 响应:', data);
-
-                if (data.error_code === 0 && data.result) {
-                    // API 返回单个企业结果
-                    console.log('API 返回成功，企业数据:', data.result);
-                    return [{
-                        name: data.result.name,
-                        creditCode: data.result.creditCode,
-                        email: data.result.email || null,
-                        emailList: data.result.emailList || [],
-                        phoneNumber: data.result.phoneNumber || ''
-                    }];
-                } else if (data.error_code !== 0) {
-                    console.warn('API 错误:', data.error_code, data.error_message);
-                }
-                return [];
-            } catch (error) {
-                console.error('API 调用失败:', error);
-                // 回退到本地数据
-                console.log('使用本地数据...');
-                return fallbackToLocalCompanyData(keyword);
-            }
+            console.log('搜索企业:', keyword);
+            // 直接使用本地数据
+            return fallbackToLocalCompanyData(keyword);
         }
 
         function fallbackToLocalCompanyData(keyword) {
@@ -1839,7 +2566,7 @@
                     results.push(...companies.map(c => ({
                         name: c.fullName,
                         creditCode: '本地数据-无信用代码',
-                        email: null,
+                        email: c.emailDomain || null,
                         emailList: c.emailDomain ? [c.emailDomain] : [],
                         phoneNumber: '',
                         isLocal: true
@@ -1860,7 +2587,7 @@
             }
 
             // 显示加载状态
-            dropdown.innerHTML = '<div style="padding: 12px; text-align: center; color: #999;">搜索中...</div>';
+            dropdown.innerHTML = '<div style="padding: 12px; text-align: center; color: #979797; font-size: 12px;">搜索中...</div>';
             dropdown.style.display = 'block';
 
             // 调用天眼查 API
@@ -1874,22 +2601,44 @@
             const errorMsg = document.getElementById('company-error');
 
             if (!results || results.length === 0) {
-                dropdown.style.display = 'none';
-                errorMsg.textContent = '未找到相关企业，请确认企业名称';
-                errorMsg.classList.add('show');
+                // Show "no result" in Figma style
+                dropdown.innerHTML = `
+                    <div class="company-dropdown-header">
+                        <div class="icon-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M21 21L16.5 16.5M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0z" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+                        <span>企业库匹配 · 0 条结果</span>
+                    </div>
+                    <div class="company-no-result">
+                        <span class="x-circle">×</span>
+                        <span>未找到匹配企业，可直接填写</span>
+                    </div>`;
+                dropdown.style.display = 'block';
+                errorMsg.classList.remove('show');
                 return;
             }
 
-            // 显示搜索结果列表
-            dropdown.innerHTML = results.slice(0, 10).map(company =>
-                `<div style="padding: 12px 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 13px; color: #333; transition: background 0.2s;"
-                      onmouseover="this.style.background='#f5f5f5'"
-                      onmouseout="this.style.background='transparent'"
-                      onclick="selectCompany('${company.name.replace(/'/g, "\\'")}', '${(company.email || '').replace(/'/g, "\\'")}', '${(company.creditCode || '').replace(/'/g, "\\'")}')">
-                    <div style="font-weight: 500; margin-bottom: 4px;">${company.name}</div>
-                    <div style="font-size: 12px; color: #999;">信用代码: ${company.creditCode || '暂无'} | 邮箱: ${company.email ? company.email : '暂无'}</div>
-                </div>`
-            ).join('');
+            // 显示搜索结果列表 - Figma style
+            const headerHTML = `
+                <div class="company-dropdown-header">
+                    <div class="icon-circle"><svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M21 21L16.5 16.5M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0z" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+                    <span>企业库匹配 · ${results.length} 条结果</span>
+                </div>`;
+
+            const resultsHTML = results.slice(0, 10).map(company => {
+                const firstChar = company.name.charAt(0);
+                // Highlight keyword in company name
+                let displayName = company.name;
+                if (keyword) {
+                    const regex = new RegExp('(' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                    displayName = company.name.replace(regex, '<span class="highlight">$1</span>');
+                }
+                return `<div class="company-result-item"
+                      onmousedown="event.preventDefault(); selectCompany('${company.name.replace(/'/g, "\\'")}', '${(company.email || '').replace(/'/g, "\\'")}', '${(company.creditCode || '').replace(/'/g, "\\'")}')">
+                    <div class="company-result-icon">${firstChar}</div>
+                    <div class="company-result-name">${displayName}</div>
+                </div>`;
+            }).join('');
+
+            dropdown.innerHTML = headerHTML + resultsHTML;
             dropdown.style.display = 'block';
             errorMsg.classList.remove('show');
         }
@@ -1901,8 +2650,11 @@
             // 提取邮箱后缀
             let emailDomain = null;
             if (email) {
-                const parts = email.split('@');
-                emailDomain = parts.length > 1 ? parts[1] : null;
+                if (email.includes('@')) {
+                    emailDomain = email.split('@')[1];
+                } else {
+                    emailDomain = email;
+                }
             }
 
             // 设置已选择的企业信息
@@ -1914,14 +2666,8 @@
             };
 
             // 构建企业信息展示
-            let statusHTML = '<div style="color: #6B1B3F; font-size: 12px;">';
-            statusHTML += '<div style="margin-bottom: 6px;">✓ 企业信息已确认';
-            if (email) {
-                statusHTML += '（支持邮箱认证）';
-            } else {
-                statusHTML += '（不支持邮箱认证）';
-            }
-            statusHTML += '</div>';
+            let statusHTML = '<div style="color: #4d144a; font-size: 12px;">';
+            statusHTML += '<div style="margin-bottom: 6px;">✓ 企业信息已确认</div>';
             statusHTML += '<div style="color: #454545; font-size: 12px; margin-bottom: 4px;">企业名称：' + fullName + '</div>';
             statusHTML += '<div style="color: #454545; font-size: 12px;">税号/信用代码：' + (creditCode || '暂无') + '</div>';
             statusHTML += '</div>';
@@ -2146,7 +2892,7 @@
                     }
 
                     if (!emailDomain) {
-                        document.getElementById('email-error').textContent = '邮箱后缀未获取，请检查企业信息';
+                        document.getElementById('email-error').textContent = '请输入邮箱后缀';
                         document.getElementById('email-error').classList.add('show');
                     }
 
@@ -2323,34 +3069,18 @@
                     const taxOption = document.querySelector('input[name="method"][value="tax"]').closest('.option-item');
                     const otherOption = document.querySelector('input[name="method"][value="other"]').closest('.option-item');
 
-                    if (flowType === 'upgrade') {
-                        // 升级流程：仅显示"其他材料补充"
-                        if (emailOption) emailOption.classList.add('hidden');
-                        if (contractOption) contractOption.classList.add('hidden');
-                        if (taxOption) taxOption.classList.add('hidden');
-                        if (otherOption) {
-                            otherOption.classList.remove('hidden');
-                            selectMethod(otherOption, 'other');
-                            console.log('✓ 升级认证流程：仅显示其他材料补充');
-                        }
-                    } else {
-                        // 首次或更新流程：显示所有选项
-                        if (emailOption) emailOption.classList.remove('hidden');
-                        if (contractOption) contractOption.classList.remove('hidden');
-                        if (taxOption) taxOption.classList.remove('hidden');
-                        if (otherOption) otherOption.classList.remove('hidden');
+                    if (contractOption) contractOption.classList.remove('hidden');
+                    if (taxOption) taxOption.classList.remove('hidden');
+                    if (otherOption) otherOption.classList.remove('hidden');
 
-                        if (verifiedCompanyInfo && verifiedCompanyInfo.emailDomain) {
-                            // 有邮箱后缀：显示邮箱选项，设为默认选中
-                            document.getElementById('email-domain').value = verifiedCompanyInfo.emailDomain;
-                            document.getElementById('email-user').focus();
-                            selectMethod(emailOption, 'email');
-                        } else {
-                            // 无邮箱后缀：隐藏邮箱选项，默认选择劳动合同
-                            emailOption.classList.add('hidden');
-                            const contractLabel = document.querySelector('input[name="method"][value="contract"]').closest('.option-item');
-                            selectMethod(contractLabel, 'contract');
-                        }
+                    if (verifiedCompanyInfo && verifiedCompanyInfo.emailDomain) {
+                        emailOption.classList.remove('hidden');
+                        document.getElementById('email-domain').value = verifiedCompanyInfo.emailDomain;
+                        document.getElementById('email-user').focus();
+                        selectMethod(emailOption, 'email');
+                    } else {
+                        emailOption.classList.add('hidden');
+                        selectMethod(contractOption, 'contract');
                     }
                 }
             } else {
@@ -2429,12 +3159,22 @@
         // ========== 页面加载初始化 ==========
         initUserStatus();
 
+        function showCertSheet() {
+            const container = document.getElementById('cert-container');
+            const overlay = document.getElementById('sheet-overlay');
+            container.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
         function closeSheet() {
-            // 关闭半弹层
-            document.body.style.overflow = 'auto';
-            document.querySelector('.container').style.animation = 'slideDown 0.3s ease forwards';
+            const container = document.getElementById('cert-container');
+            const overlay = document.getElementById('sheet-overlay');
+            container.style.animation = 'slideDown 0.3s ease forwards';
             setTimeout(() => {
-                window.history.back();
+                container.classList.remove('active');
+                container.style.animation = '';
+                overlay.classList.remove('active');
             }, 300);
         }
     </script>
