@@ -1311,7 +1311,7 @@
 
                     <div class="chat-section">
                         <div class="chat-section-title">3. 认证方式</div>
-                        <div class="chat-section-desc">• <strong>企业邮箱认证</strong>：使用企业邮箱接收验证码，即时通过<br>• <strong>在职证明上传</strong>：上传劳动合同/个人所得税App截图，OCR自动审核</div>
+                        <div class="chat-section-desc">• <strong>企业邮箱认证</strong>：使用企业邮箱接收验证码，即时通过<br>• <strong>在职证明上传</strong>：上传劳动合同或在职证明，OCR自动审核</div>
                     </div>
 
                     <div class="chat-section">
@@ -1656,14 +1656,6 @@
                             </div>
                         </label>
 
-                        <label class="option-item" onclick="selectMethod(this, 'tax')">
-                            <input type="radio" name="method" value="tax" class="option-radio">
-                            <div class="option-content">
-                                <div class="option-title">个人所得税APP认证</div>
-                                <div class="option-desc">上传个人所得税APP的在职受雇信息页面</div>
-                            </div>
-                        </label>
-
                         <label class="option-item" onclick="selectMethod(this, 'other')">
                             <input type="radio" name="method" value="other" class="option-radio">
                             <div class="option-content">
@@ -1706,7 +1698,7 @@
                     <!-- 劳动合同/在职证明方式 -->
                     <div id="contract-method" class="hidden">
                         <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
-                            请上传劳动合同或企业在职证明。在职证明需为六个月内开具，需包含真实、清晰、完整的关键信息，无遮挡。
+                            请上传劳动合同或企业在职证明。仅需包含真实姓名及企业名称，在职证明需为六个月内开具。涉及个人薪资或其他敏感信息可以遮挡后上传。
                         </div>
                         <div class="form-group">
                             <label class="form-label">
@@ -1718,24 +1710,6 @@
                                 <div style="font-size: 12px; color: #999;">点击或拖拽上传劳动合同或在职证明文件</div>
                             </div>
                             <div class="error-msg" id="contract-error"></div>
-                        </div>
-                    </div>
-
-                    <!-- 个人所得税APP方式 -->
-                    <div id="tax-method" class="hidden">
-                        <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 16px; font-size: 12px; color: #999; line-height: 1.6;">
-                            请上传个人所得税APP由「个人中心」进入「在职受雇信息」页面进行截图。
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">
-                                <span>上传认证材料 <span class="form-required">*</span></span>
-                                <span class="form-hint">支持上传截图</span>
-                            </label>
-                            <div style="border: 2px dashed #d9d9d9; border-radius: 4px; padding: 20px; text-align: center; cursor: pointer; background: #fafafa;">
-                                <div style="font-size: 32px; margin-bottom: 8px;">+</div>
-                                <div style="font-size: 12px; color: #999;">点击或拖拽上传个人所得税APP的在职受雇信息页面</div>
-                            </div>
-                            <div class="error-msg" id="tax-error"></div>
                         </div>
                     </div>
 
@@ -2527,7 +2501,6 @@
             // 隐藏所有方式
             document.getElementById('email-method').classList.add('hidden');
             document.getElementById('contract-method').classList.add('hidden');
-            document.getElementById('tax-method').classList.add('hidden');
             document.getElementById('other-method').classList.add('hidden');
 
             // 显示选中的方式
@@ -2535,8 +2508,6 @@
                 document.getElementById('email-method').classList.remove('hidden');
             } else if (method === 'contract') {
                 document.getElementById('contract-method').classList.remove('hidden');
-            } else if (method === 'tax') {
-                document.getElementById('tax-method').classList.remove('hidden');
             } else if (method === 'other') {
                 document.getElementById('other-method').classList.remove('hidden');
             }
@@ -3066,11 +3037,9 @@
                 if (step === 4) {
                     const emailOption = document.getElementById('email-option');
                     const contractOption = document.querySelector('input[name="method"][value="contract"]').closest('.option-item');
-                    const taxOption = document.querySelector('input[name="method"][value="tax"]').closest('.option-item');
                     const otherOption = document.querySelector('input[name="method"][value="other"]').closest('.option-item');
 
                     if (contractOption) contractOption.classList.remove('hidden');
-                    if (taxOption) taxOption.classList.remove('hidden');
                     if (otherOption) otherOption.classList.remove('hidden');
 
                     if (verifiedCompanyInfo && verifiedCompanyInfo.emailDomain) {
